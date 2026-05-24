@@ -1,26 +1,46 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { seoHead } from "@/components/common/SEO";
+import { Hero } from "@/components/home/Hero";
+import { ToolGrid } from "@/components/home/ToolGrid";
+import { Features } from "@/components/home/Features";
+import { HowItWorks } from "@/components/home/HowItWorks";
+import { FAQ } from "@/components/home/FAQ";
+import { faqs } from "@/data/faqs";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    ...seoHead({
+      title: "MY PDF FIX — Free Online PDF Tools, In Your Browser",
+      description:
+        "Every tool you need to work with PDFs in one place. Merge, split, compress, convert and edit PDFs for free — all processed locally in your browser.",
+      path: "/",
+    }),
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }),
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
-
 function Index() {
-  return <PlaceholderIndex />;
+  return (
+    <>
+      <Hero />
+      <ToolGrid />
+      <Features />
+      <HowItWorks />
+      <FAQ />
+    </>
+  );
 }
