@@ -45,7 +45,7 @@ function Guide() {
       <h1 className="mt-4 text-4xl font-bold sm:text-5xl">{post.title}</h1>
       <div className="mt-4 text-sm text-muted-foreground">{post.readTime}</div>
       <div className="mt-8 space-y-5 text-lg leading-relaxed text-foreground">
-        {post.body.map((para, i) => (
+        {post.body.map((para: string, i: number) => (
           <p key={i}>{para}</p>
         ))}
       </div>

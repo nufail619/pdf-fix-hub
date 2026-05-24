@@ -52,7 +52,7 @@ function Post() {
         · {post.author} · {post.readTime}
       </div>
       <div className="mt-8 space-y-5 text-lg leading-relaxed text-foreground">
-        {post.body.map((para, i) => (
+        {post.body.map((para: string, i: number) => (
           <p key={i}>{para}</p>
         ))}
       </div>
