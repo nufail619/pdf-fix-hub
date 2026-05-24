@@ -9,8 +9,110 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WordToPdfRouteImport } from './routes/word-to-pdf'
+import { Route as WatermarkPdfRouteImport } from './routes/watermark-pdf'
+import { Route as SplitPdfRouteImport } from './routes/split-pdf'
+import { Route as RotatePdfRouteImport } from './routes/rotate-pdf'
+import { Route as ReorderPdfPagesRouteImport } from './routes/reorder-pdf-pages'
+import { Route as RemovePdfPagesRouteImport } from './routes/remove-pdf-pages'
+import { Route as PngToPdfRouteImport } from './routes/png-to-pdf'
+import { Route as PdfToJpgRouteImport } from './routes/pdf-to-jpg'
+import { Route as MergePdfRouteImport } from './routes/merge-pdf'
+import { Route as JpgToPdfRouteImport } from './routes/jpg-to-pdf'
+import { Route as FlattenPdfRouteImport } from './routes/flatten-pdf'
+import { Route as ExtractPdfPagesRouteImport } from './routes/extract-pdf-pages'
+import { Route as CompressPdfRouteImport } from './routes/compress-pdf'
+import { Route as AddTextToPdfRouteImport } from './routes/add-text-to-pdf'
+import { Route as AddPageNumbersToPdfRouteImport } from './routes/add-page-numbers-to-pdf'
+import { Route as AddMarginToPdfRouteImport } from './routes/add-margin-to-pdf'
+import { Route as AddBlankPageToPdfRouteImport } from './routes/add-blank-page-to-pdf'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WordToPdfRoute = WordToPdfRouteImport.update({
+  id: '/word-to-pdf',
+  path: '/word-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WatermarkPdfRoute = WatermarkPdfRouteImport.update({
+  id: '/watermark-pdf',
+  path: '/watermark-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplitPdfRoute = SplitPdfRouteImport.update({
+  id: '/split-pdf',
+  path: '/split-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RotatePdfRoute = RotatePdfRouteImport.update({
+  id: '/rotate-pdf',
+  path: '/rotate-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReorderPdfPagesRoute = ReorderPdfPagesRouteImport.update({
+  id: '/reorder-pdf-pages',
+  path: '/reorder-pdf-pages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RemovePdfPagesRoute = RemovePdfPagesRouteImport.update({
+  id: '/remove-pdf-pages',
+  path: '/remove-pdf-pages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PngToPdfRoute = PngToPdfRouteImport.update({
+  id: '/png-to-pdf',
+  path: '/png-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PdfToJpgRoute = PdfToJpgRouteImport.update({
+  id: '/pdf-to-jpg',
+  path: '/pdf-to-jpg',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MergePdfRoute = MergePdfRouteImport.update({
+  id: '/merge-pdf',
+  path: '/merge-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JpgToPdfRoute = JpgToPdfRouteImport.update({
+  id: '/jpg-to-pdf',
+  path: '/jpg-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FlattenPdfRoute = FlattenPdfRouteImport.update({
+  id: '/flatten-pdf',
+  path: '/flatten-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExtractPdfPagesRoute = ExtractPdfPagesRouteImport.update({
+  id: '/extract-pdf-pages',
+  path: '/extract-pdf-pages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompressPdfRoute = CompressPdfRouteImport.update({
+  id: '/compress-pdf',
+  path: '/compress-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AddTextToPdfRoute = AddTextToPdfRouteImport.update({
+  id: '/add-text-to-pdf',
+  path: '/add-text-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AddPageNumbersToPdfRoute = AddPageNumbersToPdfRouteImport.update({
+  id: '/add-page-numbers-to-pdf',
+  path: '/add-page-numbers-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AddMarginToPdfRoute = AddMarginToPdfRouteImport.update({
+  id: '/add-margin-to-pdf',
+  path: '/add-margin-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AddBlankPageToPdfRoute = AddBlankPageToPdfRouteImport.update({
+  id: '/add-blank-page-to-pdf',
+  path: '/add-blank-page-to-pdf',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +121,270 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/add-blank-page-to-pdf': typeof AddBlankPageToPdfRoute
+  '/add-margin-to-pdf': typeof AddMarginToPdfRoute
+  '/add-page-numbers-to-pdf': typeof AddPageNumbersToPdfRoute
+  '/add-text-to-pdf': typeof AddTextToPdfRoute
+  '/compress-pdf': typeof CompressPdfRoute
+  '/extract-pdf-pages': typeof ExtractPdfPagesRoute
+  '/flatten-pdf': typeof FlattenPdfRoute
+  '/jpg-to-pdf': typeof JpgToPdfRoute
+  '/merge-pdf': typeof MergePdfRoute
+  '/pdf-to-jpg': typeof PdfToJpgRoute
+  '/png-to-pdf': typeof PngToPdfRoute
+  '/remove-pdf-pages': typeof RemovePdfPagesRoute
+  '/reorder-pdf-pages': typeof ReorderPdfPagesRoute
+  '/rotate-pdf': typeof RotatePdfRoute
+  '/split-pdf': typeof SplitPdfRoute
+  '/watermark-pdf': typeof WatermarkPdfRoute
+  '/word-to-pdf': typeof WordToPdfRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/add-blank-page-to-pdf': typeof AddBlankPageToPdfRoute
+  '/add-margin-to-pdf': typeof AddMarginToPdfRoute
+  '/add-page-numbers-to-pdf': typeof AddPageNumbersToPdfRoute
+  '/add-text-to-pdf': typeof AddTextToPdfRoute
+  '/compress-pdf': typeof CompressPdfRoute
+  '/extract-pdf-pages': typeof ExtractPdfPagesRoute
+  '/flatten-pdf': typeof FlattenPdfRoute
+  '/jpg-to-pdf': typeof JpgToPdfRoute
+  '/merge-pdf': typeof MergePdfRoute
+  '/pdf-to-jpg': typeof PdfToJpgRoute
+  '/png-to-pdf': typeof PngToPdfRoute
+  '/remove-pdf-pages': typeof RemovePdfPagesRoute
+  '/reorder-pdf-pages': typeof ReorderPdfPagesRoute
+  '/rotate-pdf': typeof RotatePdfRoute
+  '/split-pdf': typeof SplitPdfRoute
+  '/watermark-pdf': typeof WatermarkPdfRoute
+  '/word-to-pdf': typeof WordToPdfRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/add-blank-page-to-pdf': typeof AddBlankPageToPdfRoute
+  '/add-margin-to-pdf': typeof AddMarginToPdfRoute
+  '/add-page-numbers-to-pdf': typeof AddPageNumbersToPdfRoute
+  '/add-text-to-pdf': typeof AddTextToPdfRoute
+  '/compress-pdf': typeof CompressPdfRoute
+  '/extract-pdf-pages': typeof ExtractPdfPagesRoute
+  '/flatten-pdf': typeof FlattenPdfRoute
+  '/jpg-to-pdf': typeof JpgToPdfRoute
+  '/merge-pdf': typeof MergePdfRoute
+  '/pdf-to-jpg': typeof PdfToJpgRoute
+  '/png-to-pdf': typeof PngToPdfRoute
+  '/remove-pdf-pages': typeof RemovePdfPagesRoute
+  '/reorder-pdf-pages': typeof ReorderPdfPagesRoute
+  '/rotate-pdf': typeof RotatePdfRoute
+  '/split-pdf': typeof SplitPdfRoute
+  '/watermark-pdf': typeof WatermarkPdfRoute
+  '/word-to-pdf': typeof WordToPdfRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/add-blank-page-to-pdf'
+    | '/add-margin-to-pdf'
+    | '/add-page-numbers-to-pdf'
+    | '/add-text-to-pdf'
+    | '/compress-pdf'
+    | '/extract-pdf-pages'
+    | '/flatten-pdf'
+    | '/jpg-to-pdf'
+    | '/merge-pdf'
+    | '/pdf-to-jpg'
+    | '/png-to-pdf'
+    | '/remove-pdf-pages'
+    | '/reorder-pdf-pages'
+    | '/rotate-pdf'
+    | '/split-pdf'
+    | '/watermark-pdf'
+    | '/word-to-pdf'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/add-blank-page-to-pdf'
+    | '/add-margin-to-pdf'
+    | '/add-page-numbers-to-pdf'
+    | '/add-text-to-pdf'
+    | '/compress-pdf'
+    | '/extract-pdf-pages'
+    | '/flatten-pdf'
+    | '/jpg-to-pdf'
+    | '/merge-pdf'
+    | '/pdf-to-jpg'
+    | '/png-to-pdf'
+    | '/remove-pdf-pages'
+    | '/reorder-pdf-pages'
+    | '/rotate-pdf'
+    | '/split-pdf'
+    | '/watermark-pdf'
+    | '/word-to-pdf'
+  id:
+    | '__root__'
+    | '/'
+    | '/add-blank-page-to-pdf'
+    | '/add-margin-to-pdf'
+    | '/add-page-numbers-to-pdf'
+    | '/add-text-to-pdf'
+    | '/compress-pdf'
+    | '/extract-pdf-pages'
+    | '/flatten-pdf'
+    | '/jpg-to-pdf'
+    | '/merge-pdf'
+    | '/pdf-to-jpg'
+    | '/png-to-pdf'
+    | '/remove-pdf-pages'
+    | '/reorder-pdf-pages'
+    | '/rotate-pdf'
+    | '/split-pdf'
+    | '/watermark-pdf'
+    | '/word-to-pdf'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AddBlankPageToPdfRoute: typeof AddBlankPageToPdfRoute
+  AddMarginToPdfRoute: typeof AddMarginToPdfRoute
+  AddPageNumbersToPdfRoute: typeof AddPageNumbersToPdfRoute
+  AddTextToPdfRoute: typeof AddTextToPdfRoute
+  CompressPdfRoute: typeof CompressPdfRoute
+  ExtractPdfPagesRoute: typeof ExtractPdfPagesRoute
+  FlattenPdfRoute: typeof FlattenPdfRoute
+  JpgToPdfRoute: typeof JpgToPdfRoute
+  MergePdfRoute: typeof MergePdfRoute
+  PdfToJpgRoute: typeof PdfToJpgRoute
+  PngToPdfRoute: typeof PngToPdfRoute
+  RemovePdfPagesRoute: typeof RemovePdfPagesRoute
+  ReorderPdfPagesRoute: typeof ReorderPdfPagesRoute
+  RotatePdfRoute: typeof RotatePdfRoute
+  SplitPdfRoute: typeof SplitPdfRoute
+  WatermarkPdfRoute: typeof WatermarkPdfRoute
+  WordToPdfRoute: typeof WordToPdfRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/word-to-pdf': {
+      id: '/word-to-pdf'
+      path: '/word-to-pdf'
+      fullPath: '/word-to-pdf'
+      preLoaderRoute: typeof WordToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/watermark-pdf': {
+      id: '/watermark-pdf'
+      path: '/watermark-pdf'
+      fullPath: '/watermark-pdf'
+      preLoaderRoute: typeof WatermarkPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/split-pdf': {
+      id: '/split-pdf'
+      path: '/split-pdf'
+      fullPath: '/split-pdf'
+      preLoaderRoute: typeof SplitPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rotate-pdf': {
+      id: '/rotate-pdf'
+      path: '/rotate-pdf'
+      fullPath: '/rotate-pdf'
+      preLoaderRoute: typeof RotatePdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reorder-pdf-pages': {
+      id: '/reorder-pdf-pages'
+      path: '/reorder-pdf-pages'
+      fullPath: '/reorder-pdf-pages'
+      preLoaderRoute: typeof ReorderPdfPagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/remove-pdf-pages': {
+      id: '/remove-pdf-pages'
+      path: '/remove-pdf-pages'
+      fullPath: '/remove-pdf-pages'
+      preLoaderRoute: typeof RemovePdfPagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/png-to-pdf': {
+      id: '/png-to-pdf'
+      path: '/png-to-pdf'
+      fullPath: '/png-to-pdf'
+      preLoaderRoute: typeof PngToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pdf-to-jpg': {
+      id: '/pdf-to-jpg'
+      path: '/pdf-to-jpg'
+      fullPath: '/pdf-to-jpg'
+      preLoaderRoute: typeof PdfToJpgRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/merge-pdf': {
+      id: '/merge-pdf'
+      path: '/merge-pdf'
+      fullPath: '/merge-pdf'
+      preLoaderRoute: typeof MergePdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jpg-to-pdf': {
+      id: '/jpg-to-pdf'
+      path: '/jpg-to-pdf'
+      fullPath: '/jpg-to-pdf'
+      preLoaderRoute: typeof JpgToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/flatten-pdf': {
+      id: '/flatten-pdf'
+      path: '/flatten-pdf'
+      fullPath: '/flatten-pdf'
+      preLoaderRoute: typeof FlattenPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/extract-pdf-pages': {
+      id: '/extract-pdf-pages'
+      path: '/extract-pdf-pages'
+      fullPath: '/extract-pdf-pages'
+      preLoaderRoute: typeof ExtractPdfPagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compress-pdf': {
+      id: '/compress-pdf'
+      path: '/compress-pdf'
+      fullPath: '/compress-pdf'
+      preLoaderRoute: typeof CompressPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/add-text-to-pdf': {
+      id: '/add-text-to-pdf'
+      path: '/add-text-to-pdf'
+      fullPath: '/add-text-to-pdf'
+      preLoaderRoute: typeof AddTextToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/add-page-numbers-to-pdf': {
+      id: '/add-page-numbers-to-pdf'
+      path: '/add-page-numbers-to-pdf'
+      fullPath: '/add-page-numbers-to-pdf'
+      preLoaderRoute: typeof AddPageNumbersToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/add-margin-to-pdf': {
+      id: '/add-margin-to-pdf'
+      path: '/add-margin-to-pdf'
+      fullPath: '/add-margin-to-pdf'
+      preLoaderRoute: typeof AddMarginToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/add-blank-page-to-pdf': {
+      id: '/add-blank-page-to-pdf'
+      path: '/add-blank-page-to-pdf'
+      fullPath: '/add-blank-page-to-pdf'
+      preLoaderRoute: typeof AddBlankPageToPdfRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,7 +397,34 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AddBlankPageToPdfRoute: AddBlankPageToPdfRoute,
+  AddMarginToPdfRoute: AddMarginToPdfRoute,
+  AddPageNumbersToPdfRoute: AddPageNumbersToPdfRoute,
+  AddTextToPdfRoute: AddTextToPdfRoute,
+  CompressPdfRoute: CompressPdfRoute,
+  ExtractPdfPagesRoute: ExtractPdfPagesRoute,
+  FlattenPdfRoute: FlattenPdfRoute,
+  JpgToPdfRoute: JpgToPdfRoute,
+  MergePdfRoute: MergePdfRoute,
+  PdfToJpgRoute: PdfToJpgRoute,
+  PngToPdfRoute: PngToPdfRoute,
+  RemovePdfPagesRoute: RemovePdfPagesRoute,
+  ReorderPdfPagesRoute: ReorderPdfPagesRoute,
+  RotatePdfRoute: RotatePdfRoute,
+  SplitPdfRoute: SplitPdfRoute,
+  WatermarkPdfRoute: WatermarkPdfRoute,
+  WordToPdfRoute: WordToPdfRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
