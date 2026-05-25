@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { ChevronRight, ShieldCheck } from "lucide-react";
@@ -24,6 +24,29 @@ export function ToolPage({
   const [options, setOptions] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<{ blob: Blob; filename: string } | null>(null);
+  const [content, setContent] = useState<string | null>(null);
+  const [contentLoading, setContentLoading] = useState(true);
+
+  useEffect(() => {
+    let ignore = false;
+    setContentLoading(true);
+    fetch(`/api/tool/${slug}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (ignore) return;
+        const html = data && typeof data.content === "string" ? data.content : null;
+        setContent(html && html.trim() ? html : null);
+      })
+      .catch(() => {
+        if (!ignore) setContent(null);
+      })
+      .finally(() => {
+        if (!ignore) setContentLoading(false);
+      });
+    return () => {
+      ignore = true;
+    };
+  }, [slug]);
 
   async function handleProcess() {
     if (tool.processingType === "placeholder") {
@@ -123,7 +146,16 @@ export function ToolPage({
           </>
         )}
 
-        <div className="mt-16">{children}{/* CONTENT GOES HERE */}</div>
+        <div className="mt-16">
+          {contentLoading ? null : content ? (
+            <div
+              className="max-w-3xl mx-auto py-12 space-y-8 prose prose-slate"
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
+          ) : (
+            children
+          )}
+        </div>
       </div>
 
       <section className="bg-section py-16">

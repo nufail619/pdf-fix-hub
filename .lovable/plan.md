@@ -1,57 +1,46 @@
-## Convert TanStack Start project to static SPA build
+## Plan: Fetch long-form content from backend in ToolPage
 
-Switch the project from a Cloudflare Worker SSR build to a fully static SPA bundle that any static server (Express, nginx) can serve from `dist/`.
+Add a client-side fetch in `src/components/tools/ToolPage.tsx` that loads tool content from the Express backend at `/api/tool/{slug}` on mount, with graceful fallback to the existing `{children}` slot.
 
-### 1. Enable SPA mode in TanStack Start
+### Changes to `src/components/tools/ToolPage.tsx`
 
-Update `vite.config.ts` to disable SSR and enable SPA prerender mode. TanStack Start supports this via the `spa` option:
+1. Add imports: `useEffect` (alongside existing `useState`).
+2. Add two state hooks:
+   - `const [content, setContent] = useState<string | null>(null);`
+   - `const [loading, setLoading] = useState(true);`
+3. Add a `useEffect` keyed on `slug`:
+   - `fetch(\`/api/tool/${slug}\`)`
+   - On ok response, parse JSON and set `content` to `data.content` (string) if truthy, else `null`.
+   - On any error or non-ok response, set `content` to `null` (silent fallback).
+   - Always set `loading` to `false` in `finally`.
+   - Use an `ignore` flag to avoid setting state after unmount.
+4. Replace the content slot:
+   ```tsx
+   <div className="mt-16">{children}{/* CONTENT GOES HERE */}</div>
+   ```
+   with:
+   ```tsx
+   <div className="mt-16">
+     {loading ? null : content ? (
+       <div
+         className="max-w-3xl mx-auto py-12 space-y-8 prose prose-slate"
+         dangerouslySetInnerHTML={{ __html: content }}
+       />
+     ) : (
+       children
+     )}
+   </div>
+   ```
+   (No spinner shown during loading to avoid flicker; falls through to children/content once resolved.)
 
-```ts
-export default defineConfig({
-  tanstackStart: {
-    spa: { enabled: true },
-    // remove the `server: { entry: "server" }` override
-  },
-});
-```
+### Behavior
 
-This makes the build emit a static `index.html` shell that hydrates client-side. All routes resolve through client-side routing.
-
-### 2. Remove Cloudflare/Worker artifacts from the build output
-
-- The Lovable preset includes the `@cloudflare/vite-plugin` for the production build, which targets Workers (`dist/_worker.js`, `wrangler.jsonc`). For a pure static SPA, override the Vite build target so the output is a plain `dist/` with `index.html` + `assets/`.
-- Pass `vite: { build: { ssr: false } }` plus an explicit `outDir: "dist"` through `@lovable.dev/vite-tanstack-config`'s `defineConfig`.
-- Keep `wrangler.jsonc` and `src/server.ts` in the repo (they're harmless and used only when the Worker plugin runs), but rely on the SPA build output for deployment.
-
-### 3. Head/SEO behaviour
-
-No code changes required to route files. Every route already uses `head: () => seoHead(...)` or `head: ({ loaderData }) => ...`. In SPA mode TanStack Router runs `head()` client-side on navigation and updates `<title>` and `<meta>` through `<HeadContent />`, which is already wired in `src/routes/__root.tsx`. AdSense and analytics in `HeadScripts.tsx` continue to work (they already run in `useEffect`).
-
-Note: the initial HTML served by Express will have a generic title/description until React hydrates. This is acceptable for AdSense; for crawler SEO we'd need prerendering (out of scope for this task).
-
-### 4. 404 fallback
-
-The SPA build emits a single `index.html`. The Express server should be configured to serve `index.html` for any unmatched route — the existing `NotFoundComponent` in `__root.tsx` then handles the 404 UI client-side. No code change needed in the app.
-
-### 5. Scripts
-
-`npm run build` already runs `vite build`. With the SPA config it will output to `dist/`. No script changes required, but verify `dist/index.html` + `dist/assets/` are produced (and no `_worker.js`).
-
-### 6. Verification
-
-After the config change:
-- Run the build and confirm it completes without errors.
-- List `dist/` contents and confirm: one `index.html`, an `assets/` folder with hashed JS/CSS, and the static files from `public/` (favicon, robots.txt, ads.txt, logo.svg, og-default.svg).
-- Spot-check by serving `dist/` with a static server and navigating to `/`, `/merge-pdf`, `/split-pdf`, and an unknown route to confirm client-side routing and the 404 fallback both work.
-- Report the final `dist/` size and file tree.
-
-### Files touched
-
-- `vite.config.ts` — switch to SPA mode, set `dist` outDir, disable Worker SSR output.
-- (Possibly) `package.json` — only if a build script tweak is needed; expected: no change.
-- No changes to any route files, components, or `src/routes/__root.tsx`.
+- API returns `{ content: "<h2>...</h2>..." }` → render injected HTML, hide JSX children.
+- API returns empty/missing content, 404, or network error → render existing `{children}` (the long-form JSX already in `merge-pdf.tsx` and `split-pdf.tsx`).
+- During SPA dev (no backend) → fetch fails silently → JSX children render as today. No behavior change.
 
 ### Out of scope
 
-- True prerendering of each route's HTML (would require enabling TanStack's prerender list — can be added later if SEO crawlers need per-route HTML).
-- Express server code itself (user is hosting separately).
+- No changes to `ToolPage` props, route files, or any other component.
+- No sanitization library — content is trusted to come from the user's own backend (as implied by the request using `dangerouslySetInnerHTML`).
+- No loading skeleton or error UI.
