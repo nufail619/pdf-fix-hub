@@ -1,46 +1,28 @@
-## Plan: Fetch long-form content from backend in ToolPage
 
-Add a client-side fetch in `src/components/tools/ToolPage.tsx` that loads tool content from the Express backend at `/api/tool/{slug}` on mount, with graceful fallback to the existing `{children}` slot.
+## Audit results
 
-### Changes to `src/components/tools/ToolPage.tsx`
+I reviewed the relevant files. All 6 items in the request are **already implemented correctly**. No code changes are needed.
 
-1. Add imports: `useEffect` (alongside existing `useState`).
-2. Add two state hooks:
-   - `const [content, setContent] = useState<string | null>(null);`
-   - `const [loading, setLoading] = useState(true);`
-3. Add a `useEffect` keyed on `slug`:
-   - `fetch(\`/api/tool/${slug}\`)`
-   - On ok response, parse JSON and set `content` to `data.content` (string) if truthy, else `null`.
-   - On any error or non-ok response, set `content` to `null` (silent fallback).
-   - Always set `loading` to `false` in `finally`.
-   - Use an `ignore` flag to avoid setting state after unmount.
-4. Replace the content slot:
-   ```tsx
-   <div className="mt-16">{children}{/* CONTENT GOES HERE */}</div>
-   ```
-   with:
-   ```tsx
-   <div className="mt-16">
-     {loading ? null : content ? (
-       <div
-         className="max-w-3xl mx-auto py-12 space-y-8 prose prose-slate"
-         dangerouslySetInnerHTML={{ __html: content }}
-       />
-     ) : (
-       children
-     )}
-   </div>
-   ```
-   (No spinner shown during loading to avoid flicker; falls through to children/content once resolved.)
+### 1. ToolPage fetch ✅ Already present
+`src/components/tools/ToolPage.tsx` has the `useEffect` keyed on `slug` that calls `fetch('/api/tool/${slug}')`, parses JSON, and renders `data.content` via `dangerouslySetInnerHTML`. Falls back to `{children}` when API returns nothing or fails.
 
-### Behavior
+### 2. 17 tool routes wired to ToolPage ✅ All correct
+Counted 17 tool route files in `src/routes/`: merge-pdf, split-pdf, compress-pdf, jpg-to-pdf, png-to-pdf, pdf-to-jpg, word-to-pdf, rotate-pdf, extract-pdf-pages, remove-pdf-pages, reorder-pdf-pages, add-blank-page-to-pdf, add-margin-to-pdf, add-page-numbers-to-pdf, add-text-to-pdf, watermark-pdf, flatten-pdf. Each renders `<ToolPage slug="..." />` with the slug matching its filename and the `tools` array in `src/data/tools.ts`.
 
-- API returns `{ content: "<h2>...</h2>..." }` → render injected HTML, hide JSX children.
-- API returns empty/missing content, 404, or network error → render existing `{children}` (the long-form JSX already in `merge-pdf.tsx` and `split-pdf.tsx`).
-- During SPA dev (no backend) → fetch fails silently → JSX children render as today. No behavior change.
+### 3. Homepage category filter ✅ Works
+`src/components/home/ToolGrid.tsx` uses `useState` with `filter` state, pills for `All` + `TOOL_CATEGORIES`, and filters via `tools.filter(t => t.category === filter)`. `aria-pressed` is wired and active-state styling applied.
 
-### Out of scope
+### 4. Mobile hamburger menu ✅ Works
+`src/components/layout/Navbar.tsx` has `open` state, a hamburger button (md:hidden) that sets `open=true`, a backdrop and close button (X) that set `open=false`, and link `onClick` handlers that close the menu on navigation.
 
-- No changes to `ToolPage` props, route files, or any other component.
-- No sanitization library — content is trusted to come from the user's own backend (as implied by the request using `dangerouslySetInnerHTML`).
-- No loading skeleton or error UI.
+### 5. Related tools section ✅ Works
+`ToolPage.tsx` maps `tool.related`, resolves to tool objects, filters falsy, and `.slice(0, 3)`. Every tool in `src/data/tools.ts` has 3 entries in its `related` array.
+
+### 6. Build verification — the only outstanding step
+Run `npm run build` (which now includes the SPA finalize script) and confirm it completes without errors. If anything fails, fix it then.
+
+## What I'll do in build mode
+
+1. Run `npm run build` and report output (dist size, file listing, single `index.html` entry).
+2. If the build fails, diagnose and patch the specific error.
+3. Report final status — no preemptive code changes since the audited features are already correct.
