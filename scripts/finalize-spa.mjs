@@ -3,7 +3,7 @@
 //
 // Before: dist/client/ (assets) + dist/client/_shell.html + dist/server/
 // After:  dist/index.html + dist/assets/ + static files
-import { existsSync, rmSync, renameSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, copyFileSync, rmSync, renameSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const dist = "dist";
@@ -32,6 +32,9 @@ const shell = join(dist, "_shell.html");
 const index = join(dist, "index.html");
 if (existsSync(shell)) {
   if (existsSync(index)) rmSync(index);
+  // Cloudflare Pages serves 404.html (with a 404 status) for unknown URLs;
+  // the client router then renders the "Page not found" screen.
+  copyFileSync(shell, join(dist, "404.html"));
   renameSync(shell, index);
 }
 

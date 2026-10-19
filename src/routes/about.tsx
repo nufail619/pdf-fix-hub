@@ -6,52 +6,89 @@ export const Route = createFileRoute("/about")({
     seoHead({
       title: "About — MY PDF FIX",
       description:
-        "MY PDF FIX is a free, browser-based PDF toolkit. Learn who we are, what we believe, and how we keep your files private.",
+        "MY PDF FIX offers free PDF tools that run in your browser, so your files never leave your device. Built by Mohamed Nufail, Sri Lanka.",
       path: "/about",
     }),
   component: About,
 });
 
+const link = "text-primary hover:underline";
+
 function About() {
   return (
-    <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6 prose-content">
+    <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <h1 className="text-4xl font-bold sm:text-5xl">About MY PDF FIX</h1>
       <p className="mt-6 text-lg text-muted-foreground">
-        MY PDF FIX exists because working with PDFs in 2026 still shouldn't require
-        installing software, signing up for an account, or handing your files to a
-        company you've never heard of.
+        MY PDF FIX is a set of free PDF tools that run in your web browser. Your files are processed
+        on your own device and never leave it.
       </p>
-      <h2 className="mt-12 text-2xl font-bold">Our story</h2>
+
+      <h2 className="mt-12 text-2xl font-bold">Why it exists</h2>
       <p className="mt-3 text-muted-foreground">
-        We started MY PDF FIX after one too many afternoons spent searching for a
-        free, trustworthy way to merge a few PDFs. The popular options were either
-        slow, ad-riddled, or quietly uploaded our files to servers we couldn't audit.
-        The good options cost a subscription. So we built the tool we wanted — one
-        that runs entirely in your browser, costs nothing, and never asks you to
-        sign up.
+        Many online PDF tools ask you to upload your files to a server you know nothing about, or to
+        sign up and pay. Contracts, ID copies and bank statements are not something most of us want
+        to hand over for a quick merge or compress. So MY PDF FIX does the work inside your browser.
+        Nothing is uploaded, and no account is needed.
       </p>
-      <h2 className="mt-10 text-2xl font-bold">What we believe</h2>
+
+      <h2 className="mt-10 text-2xl font-bold">Who builds it</h2>
       <p className="mt-3 text-muted-foreground">
-        Software for everyday tasks should be invisible. You should be able to open
-        a website, get the thing done, and close the tab a minute later — without
-        thinking about cookies, accounts, or where your file went. Every tool on
-        MY PDF FIX is designed around that idea. If a tool can be done in your
-        browser, we do it in your browser. If a tool genuinely needs a server, we
-        say so up front and we work on a privacy-first server implementation rather
-        than borrowing someone else's.
+        MY PDF FIX is built and run by Mohamed Nufail, a Digital Product Strategist and the Founder
+        of WOWZOO (PVT) LTD in Sri Lanka. You can learn more about my work at{" "}
+        <a className={link} href="https://nufail.cc" target="_blank" rel="noopener noreferrer">
+          nufail.cc
+        </a>
+        .
       </p>
-      <h2 className="mt-10 text-2xl font-bold">How we pay the bills</h2>
+      <p className="mt-3 text-muted-foreground">Other projects I work on:</p>
+      <ul className="mt-2 list-disc space-y-1 pl-6 text-muted-foreground">
+        <li>
+          <a className={link} href="https://wowzoo.lk" target="_blank" rel="noopener noreferrer">
+            wowzoo.lk
+          </a>{" "}
+          — my company, WOWZOO (PVT) LTD
+        </li>
+        <li>
+          <a
+            className={link}
+            href="https://wpshopefy.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            wpshopefy.com
+          </a>{" "}
+          — WordPress and online store work
+        </li>
+        <li>
+          <a
+            className={link}
+            href="https://nufail360.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            nufail360.com
+          </a>{" "}
+          — digital services and projects
+        </li>
+      </ul>
+
+      <h2 className="mt-10 text-2xl font-bold">How the site pays for itself</h2>
       <p className="mt-3 text-muted-foreground">
-        We may run modest, clearly-labelled ads on some pages to cover hosting and
-        development. We do not sell user data, because we don't collect it — there
-        is nothing to sell. We don't use trackers that follow you across the web.
-        We measure aggregate usage to know which tools are popular, and that's it.
+        The tools are free. To cover hosting and my time, the site may show Google ads. We never see
+        your files, so they are never used for ads. Read the{" "}
+        <a className={link} href="/privacy">
+          Privacy Policy
+        </a>{" "}
+        for details.
       </p>
+
       <h2 className="mt-10 text-2xl font-bold">Get in touch</h2>
       <p className="mt-3 text-muted-foreground">
-        We love hearing from people who use these tools. Whether you've found a
-        bug, want to suggest a new feature, or just want to say hello — the contact
-        form is the fastest way to reach us.
+        Found a bug or have an idea? Visit the{" "}
+        <a className={link} href="/contact">
+          contact page
+        </a>
+        . I read every message.
       </p>
     </article>
   );

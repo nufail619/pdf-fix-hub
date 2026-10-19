@@ -19,12 +19,12 @@ const env = import.meta.env;
 
 export const defaultSiteConfig: SiteConfig = {
   siteName: "MY PDF FIX",
-  siteUrl: (env.VITE_SITE_URL ?? "").replace(/\/$/, ""),
+  siteUrl: (env.VITE_SITE_URL || "https://mypdffix.com").replace(/\/$/, ""),
   defaultTitle: "MY PDF FIX — Free Online PDF Tools",
   defaultDescription:
     "Every tool you need to work with PDFs in one place. Merge, split, compress, convert and edit PDFs for free, right in your browser.",
   defaultOgImage: "/og-default.svg",
-  contactEmail: env.VITE_CONTACT_EMAIL || "hello@example.com",
+  contactEmail: env.VITE_CONTACT_EMAIL || "mypdffix@gmail.com",
   adsenseId: env.VITE_ADSENSE_ID ?? "",
   adsenseAutoAdsCode: "",
   gaId: env.VITE_GA_ID ?? "",

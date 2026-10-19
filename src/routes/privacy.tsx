@@ -1,91 +1,103 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { seoHead } from "@/components/common/SEO";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 
 export const Route = createFileRoute("/privacy")({
   head: () =>
     seoHead({
       title: "Privacy Policy — MY PDF FIX",
       description:
-        "Our privacy policy explains exactly what data MY PDF FIX collects and how we handle your files.",
+        "How MY PDF FIX handles your files and data. Your files are processed in your browser and never uploaded.",
       path: "/privacy",
     }),
   component: Privacy,
 });
 
 function Privacy() {
+  const { contactEmail } = useSiteConfig();
   return (
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <h1 className="text-4xl font-bold">Privacy Policy</h1>
-      <p className="mt-2 text-sm text-muted-foreground">Last updated: May 2026</p>
-
+      <p className="mt-2 text-sm text-muted-foreground">Last updated: 19 October 2026</p>
       <section className="mt-10 space-y-4 text-muted-foreground">
         <p>
-          MY PDF FIX is designed around a single privacy promise: your files stay on
-          your device. Every tool labelled "Processed locally in your browser" runs
-          entirely in your web browser using WebAssembly. We do not receive, store,
-          or have access to those files at any point.
+          MY PDF FIX (mypdffix.com) is operated by Mohamed Nufail, Founder of WOWZOO (PVT) LTD, Sri
+          Lanka. This policy explains what happens to your files and your data when you use the
+          site.
         </p>
-
-        <h2 className="mt-8 text-2xl font-bold text-foreground">Files you upload</h2>
+        <h2 className="mt-8 text-2xl font-bold text-foreground">Your files stay on your device</h2>
         <p>
-          Client-side tools load your file into your browser's memory, process it
-          locally, and produce a download. Nothing about the file — neither its
-          contents, its name, its size, nor metadata — is transmitted to our
-          servers. You can verify this by disconnecting from the internet after
-          loading the page; the tool will continue to work.
+          All PDF tools on MY PDF FIX run inside your web browser. When you choose a file, it is
+          read into your browser’s memory, processed on your own device, and offered back to you as
+          a download. Your files are never uploaded to our servers or to any third party. We cannot
+          see them, store them or share them.
+        </p>
+        <h2 className="mt-8 text-2xl font-bold text-foreground">Information we collect</h2>
+        <p>
+          We do not ask you to create an account, and we do not collect your name, email address or
+          files through the tools. If you email us, we receive your email address and the message
+          you send, and we use them only to reply to you.
+        </p>
+        <h2 className="mt-8 text-2xl font-bold text-foreground">Analytics and advertising</h2>
+        <p>
+          We may use Google Analytics to understand, in aggregate, which pages and tools are used.
+          We may also show ads served by Google AdSense. Google and its partners may use cookies or
+          similar technologies to measure traffic, and to show and measure ads, including ads based
+          on your earlier visits to this or other websites.
         </p>
         <p>
-          A small number of tools are labelled "Coming soon — requires server
-          processing." Those tools are not active. If we enable them in the future,
-          we will update this policy to describe exactly what happens to files
-          processed through them, with the same plain-language commitment to delete
-          files immediately after processing.
+          You can read how Google handles data from sites that use its services at{" "}
+          <a
+            className="text-primary hover:underline"
+            href="https://policies.google.com/technologies/partner-sites"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            How Google uses data from sites that use our services
+          </a>
+          . You can manage personalised advertising in{" "}
+          <a
+            className="text-primary hover:underline"
+            href="https://adssettings.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Google Ads Settings
+          </a>
+          .
         </p>
-
-        <h2 className="mt-8 text-2xl font-bold text-foreground">Analytics</h2>
-        <p>
-          We may use privacy-friendly analytics to count page views and understand
-          which tools are most popular. These analytics record only aggregate
-          information — country-level location, device type, referring page. We do
-          not use cookies that track you across other websites. Where analytics are
-          enabled, no personal information is captured.
-        </p>
-
         <h2 className="mt-8 text-2xl font-bold text-foreground">Cookies</h2>
         <p>
-          We do not set tracking cookies. We may use a single technical cookie to
-          remember user interface preferences such as your last-used filter on the
-          home page. See our Cookie Policy for the full breakdown.
+          See our{" "}
+          <a className="text-primary hover:underline" href="/cookie-policy">
+            Cookie Policy
+          </a>{" "}
+          for details about the cookies used on this site.
         </p>
-
-        <h2 className="mt-8 text-2xl font-bold text-foreground">Advertising</h2>
+        <h2 className="mt-8 text-2xl font-bold text-foreground">Your choices and rights</h2>
         <p>
-          We may display contextual ads on certain pages to fund hosting and
-          development. Ad networks may use their own cookies; please review their
-          policies. We never share information about your files with advertisers
-          because we don't have any to share.
+          Because we do not store your files or build profiles about you, there is very little
+          personal data for us to hold. If you have emailed us and want your message deleted, write
+          to us at{" "}
+          <a className="text-primary hover:underline" href={`mailto:${contactEmail}`}>
+            {contactEmail}
+          </a>{" "}
+          and we will remove it.
         </p>
-
-        <h2 className="mt-8 text-2xl font-bold text-foreground">Contact form</h2>
+        <h2 className="mt-8 text-2xl font-bold text-foreground">Children</h2>
         <p>
-          If you write to us through the contact form, we receive your name, email,
-          and message. We use that information only to reply to you and keep it for
-          as long as needed to handle the conversation. We do not add you to any
-          marketing list.
+          MY PDF FIX is not directed at children under 13, and we do not knowingly collect personal
+          information from them.
         </p>
-
-        <h2 className="mt-8 text-2xl font-bold text-foreground">Your rights</h2>
-        <p>
-          Because we don't store your files or build profiles about you, most data
-          rights requests don't apply. If you've contacted us by email and want
-          your message deleted, write to us and we'll remove it.
-        </p>
-
         <h2 className="mt-8 text-2xl font-bold text-foreground">Changes to this policy</h2>
+        <p>If we change this policy, we will update the date at the top of this page.</p>
+        <h2 className="mt-8 text-2xl font-bold text-foreground">Contact</h2>
         <p>
-          We may update this policy as the product evolves. Material changes will
-          be announced on the homepage. The "last updated" date at the top will
-          always reflect the current version.
+          Questions about privacy? Email{" "}
+          <a className="text-primary hover:underline" href={`mailto:${contactEmail}`}>
+            {contactEmail}
+          </a>
+          .
         </p>
       </section>
     </article>

@@ -22,8 +22,6 @@ export function ToolPage({ slug, children }: { slug: string; children?: React.Re
   const [result, setResult] = useState<{ blob: Blob; filename: string; note?: string } | null>(
     null,
   );
-  const [content, setContent] = useState<string | null>(null);
-  const [contentLoading, setContentLoading] = useState(true);
 
   useEffect(() => {
     setFiles([]);
@@ -43,34 +41,7 @@ export function ToolPage({ slug, children }: { slug: string; children?: React.Re
     };
   }, [slug, files]);
 
-  useEffect(() => {
-    let ignore = false;
-    setContentLoading(true);
-    fetch(`/api/tool/${slug}`)
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (ignore) return;
-        const html = data && typeof data.content === "string" ? data.content : null;
-        setContent(html && html.trim() ? html : null);
-      })
-      .catch(() => {
-        if (!ignore) setContent(null);
-      })
-      .finally(() => {
-        if (!ignore) setContentLoading(false);
-      });
-    return () => {
-      ignore = true;
-    };
-  }, [slug]);
-
   async function handleProcess() {
-    if (tool.processingType === "placeholder") {
-      toast.message("Coming soon", {
-        description: "This tool requires server processing — coming soon.",
-      });
-      return;
-    }
     if (files.length === 0) {
       toast.error("Please add at least one file.");
       return;
@@ -149,30 +120,14 @@ export function ToolPage({ slug, children }: { slug: string; children?: React.Re
                 Process
               </Button>
             </div>
-            {tool.processingType === "client" && (
-              <p className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                <ShieldCheck className="h-4 w-4 text-green-600" aria-hidden />
-                Processed locally in your browser — your files never leave your device.
-              </p>
-            )}
-            {tool.processingType === "placeholder" && (
-              <p className="mt-6 rounded-lg bg-section p-4 text-center text-sm text-muted-foreground">
-                Coming soon — this tool requires server-side processing.
-              </p>
-            )}
+            <p className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+              <ShieldCheck className="h-4 w-4 text-green-600" aria-hidden />
+              Processed locally in your browser — your files never leave your device.
+            </p>
           </>
         )}
 
-        <div className="mt-16">
-          {!contentLoading && content ? (
-            <div
-              className="max-w-3xl mx-auto py-12 space-y-8 prose prose-slate"
-              dangerouslySetInnerHTML={{ __html: content }}
-            />
-          ) : (
-            (children ?? <ToolContent slug={tool.slug} />)
-          )}
-        </div>
+        <div className="mt-16">{children ?? <ToolContent slug={tool.slug} />}</div>
       </div>
 
       <section className="bg-section py-16">

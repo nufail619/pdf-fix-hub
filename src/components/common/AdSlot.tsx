@@ -1,15 +1,7 @@
 import { useEffect } from "react";
 import { useSiteConfig } from "@/context/SiteConfigContext";
 
-export function AdSlot({
-  slotId,
-  className = "",
-  label = "Ad",
-}: {
-  slotId: string;
-  className?: string;
-  label?: string;
-}) {
+export function AdSlot({ slotId, className = "" }: { slotId: string; className?: string }) {
   const { adsenseId } = useSiteConfig();
 
   useEffect(() => {
@@ -22,16 +14,7 @@ export function AdSlot({
     }
   }, [adsenseId, slotId]);
 
-  if (!adsenseId) {
-    return (
-      <div
-        className={`flex min-h-[120px] items-center justify-center rounded-lg border-2 border-dashed border-border text-sm text-muted-foreground ${className}`}
-        aria-label="Ad slot placeholder"
-      >
-        {label} slot
-      </div>
-    );
-  }
+  if (!adsenseId) return null;
 
   return (
     <ins

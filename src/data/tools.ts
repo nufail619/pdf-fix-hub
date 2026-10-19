@@ -17,7 +17,7 @@ export type Tool = {
   category: ToolCategory;
   accent: ToolAccent;
   icon: string; // Lucide icon name (PascalCase)
-  processingType: "client" | "placeholder";
+  processingType: "client";
   accepts: string[]; // mime types or extensions
   multiple: boolean;
   related: string[]; // related slugs
