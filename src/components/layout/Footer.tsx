@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Github, Twitter, Linkedin, Mail, FileText } from "lucide-react";
+import { Mail, FileText } from "lucide-react";
 import { tools } from "@/data/tools";
 import { useSiteConfig } from "@/context/SiteConfigContext";
 
@@ -18,7 +18,7 @@ export function Footer() {
               {topTools.map((t) => (
                 <li key={t.slug}>
                   <Link
-                    to={"/" + t.slug as never}
+                    to={("/" + t.slug) as never}
                     className="text-muted-foreground hover:text-primary"
                   >
                     {t.name}
@@ -85,29 +85,6 @@ export function Footer() {
             >
               <Mail className="h-4 w-4" aria-hidden /> {contactEmail}
             </a>
-            <div className="mt-4 flex gap-3">
-              <a
-                href="#"
-                aria-label="Twitter"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-background text-muted-foreground hover:text-primary"
-              >
-                <Twitter className="h-4 w-4" aria-hidden />
-              </a>
-              <a
-                href="#"
-                aria-label="GitHub"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-background text-muted-foreground hover:text-primary"
-              >
-                <Github className="h-4 w-4" aria-hidden />
-              </a>
-              <a
-                href="#"
-                aria-label="LinkedIn"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-background text-muted-foreground hover:text-primary"
-              >
-                <Linkedin className="h-4 w-4" aria-hidden />
-              </a>
-            </div>
           </div>
         </div>
 

@@ -1,73 +1,64 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { seoHead } from "@/components/common/SEO";
+import { useSiteConfig } from "@/context/SiteConfigContext";
 
 export const Route = createFileRoute("/terms")({
   head: () =>
     seoHead({
       title: "Terms of Service — MY PDF FIX",
-      description:
-        "The terms that govern your use of MY PDF FIX. Plain language, no surprises.",
+      description: "The terms for using MY PDF FIX, in plain English.",
       path: "/terms",
     }),
   component: Terms,
 });
 
 function Terms() {
+  const { contactEmail } = useSiteConfig();
   return (
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <h1 className="text-4xl font-bold">Terms of Service</h1>
-      <p className="mt-2 text-sm text-muted-foreground">Last updated: May 2026</p>
-
+      <p className="mt-2 text-sm text-muted-foreground">Last updated: 19 October 2026</p>
       <section className="mt-10 space-y-4 text-muted-foreground">
         <p>
-          By using MY PDF FIX, you agree to these terms. They are intentionally
-          short and written in plain English, so please take a moment to read them.
+          By using MY PDF FIX (mypdffix.com) you agree to these terms. The site is operated by
+          Mohamed Nufail / WOWZOO (PVT) LTD, Sri Lanka.
         </p>
-
         <h2 className="mt-8 text-2xl font-bold text-foreground">The service</h2>
         <p>
-          MY PDF FIX provides browser-based tools for working with PDF files. The
-          tools are provided "as is" without warranty. We do our best to keep them
-          working correctly, but we make no guarantees about specific outputs or
-          uninterrupted availability.
+          MY PDF FIX offers free tools for working with PDF files in your browser. The tools are
+          provided “as is”. We try to keep them working well, but we do not guarantee specific
+          results or uninterrupted availability.
         </p>
-
         <h2 className="mt-8 text-2xl font-bold text-foreground">Acceptable use</h2>
         <p>
-          You may use MY PDF FIX for any lawful purpose. You may not use it to
-          process content that is illegal where you are located, to harass others,
-          or to attempt to interfere with the service for other users. Automated
-          scraping at a rate that degrades the service is not allowed.
+          You may use the site for any lawful purpose. Do not use it to process content you have no
+          right to handle, to break the law, or to interfere with the site or other users.
         </p>
-
-        <h2 className="mt-8 text-2xl font-bold text-foreground">Your content</h2>
+        <h2 className="mt-8 text-2xl font-bold text-foreground">Your files</h2>
         <p>
-          You retain all rights to the files you process. Because client-side tools
-          run in your browser, we never receive a copy of your file and have no
-          claim to it. For tools that may eventually require server processing,
-          your file is used only to produce the requested output and is deleted
-          immediately afterward.
+          You keep all rights to your files. They are processed on your own device and are never
+          sent to us.
         </p>
-
         <h2 className="mt-8 text-2xl font-bold text-foreground">Liability</h2>
         <p>
-          To the maximum extent allowed by law, MY PDF FIX is not liable for any
-          indirect, incidental, or consequential damages arising from your use of
-          the service. Always keep a backup of important files before processing
-          them with any tool, including ours.
+          To the extent allowed by law, we are not liable for any loss or damage arising from use of
+          the site, including loss of data. Please keep a backup of important files before
+          processing them.
         </p>
-
+        <h2 className="mt-8 text-2xl font-bold text-foreground">Governing law</h2>
+        <p>These terms are governed by the laws of Sri Lanka.</p>
         <h2 className="mt-8 text-2xl font-bold text-foreground">Changes</h2>
         <p>
-          We may update these terms from time to time. If we make material changes,
-          we'll note it on the homepage. Continued use of the service after a
-          change constitutes acceptance of the new terms.
+          We may update these terms. The date at the top of the page shows the latest version.
+          Continued use of the site means you accept the updated terms.
         </p>
-
         <h2 className="mt-8 text-2xl font-bold text-foreground">Contact</h2>
         <p>
-          Questions about these terms? Reach out through the contact page and we'll
-          do our best to clarify.
+          Questions about these terms? Email{" "}
+          <a className="text-primary hover:underline" href={`mailto:${contactEmail}`}>
+            {contactEmail}
+          </a>
+          .
         </p>
       </section>
     </article>

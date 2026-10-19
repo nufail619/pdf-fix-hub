@@ -9,60 +9,47 @@ import { FileUpload } from "./FileUpload";
 import { ResultPanel } from "./ResultPanel";
 import { ToolCard } from "@/components/home/ToolCard";
 import { runTool } from "./toolRunner";
+import { readMetadata } from "@/lib/pdf/metadata";
+import { ToolContent } from "./ToolContent";
 
-export function ToolPage({
-  slug,
-  children,
-}: {
-  slug: string;
-  children?: React.ReactNode;
-}) {
+export function ToolPage({ slug, children }: { slug: string; children?: React.ReactNode }) {
   const tool = toolBySlug(slug)!;
   const accent = ACCENT_CLASSES[tool.accent];
 
   const [files, setFiles] = useState<File[]>([]);
   const [options, setOptions] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
-  const [result, setResult] = useState<{ blob: Blob; filename: string } | null>(null);
-  const [content, setContent] = useState<string | null>(null);
-  const [contentLoading, setContentLoading] = useState(true);
+  const [result, setResult] = useState<{ blob: Blob; filename: string; note?: string } | null>(
+    null,
+  );
 
   useEffect(() => {
+    setFiles([]);
+    setOptions({});
+    setResult(null);
+  }, [slug]);
+
+  // Edit-metadata: pre-fill the form with the file's current values.
+  useEffect(() => {
+    if (slug !== "edit-pdf-metadata" || !files[0]) return;
     let ignore = false;
-    setContentLoading(true);
-    fetch(`/api/tool/${slug}`)
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (ignore) return;
-        const html = data && typeof data.content === "string" ? data.content : null;
-        setContent(html && html.trim() ? html : null);
-      })
-      .catch(() => {
-        if (!ignore) setContent(null);
-      })
-      .finally(() => {
-        if (!ignore) setContentLoading(false);
-      });
+    readMetadata(files[0])
+      .then((m) => !ignore && setOptions(m))
+      .catch(() => undefined);
     return () => {
       ignore = true;
     };
-  }, [slug]);
+  }, [slug, files]);
 
   async function handleProcess() {
-    if (tool.processingType === "placeholder") {
-      toast.message("Coming soon", {
-        description: "This tool requires server processing — coming soon.",
-      });
-      return;
-    }
     if (files.length === 0) {
       toast.error("Please add at least one file.");
       return;
     }
     setBusy(true);
     try {
-      const { blob, filename } = await runTool(tool, files, options);
-      setResult({ blob, filename });
+      const res = await runTool(tool, files, options);
+      setResult(res);
       toast.success("Done! Your file is ready to download.");
     } catch (err) {
       console.error(err);
@@ -113,6 +100,7 @@ export function ToolPage({
           <ResultPanel
             blob={result.blob}
             filename={result.filename}
+            note={result.note}
             onReset={() => {
               setResult(null);
               setFiles([]);
@@ -132,30 +120,14 @@ export function ToolPage({
                 Process
               </Button>
             </div>
-            {tool.processingType === "client" && (
-              <p className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                <ShieldCheck className="h-4 w-4 text-green-600" aria-hidden />
-                Processed locally in your browser — your files never leave your device.
-              </p>
-            )}
-            {tool.processingType === "placeholder" && (
-              <p className="mt-6 rounded-lg bg-section p-4 text-center text-sm text-muted-foreground">
-                Coming soon — this tool requires server-side processing.
-              </p>
-            )}
+            <p className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+              <ShieldCheck className="h-4 w-4 text-green-600" aria-hidden />
+              Processed locally in your browser — your files never leave your device.
+            </p>
           </>
         )}
 
-        <div className="mt-16">
-          {contentLoading ? null : content ? (
-            <div
-              className="max-w-3xl mx-auto py-12 space-y-8 prose prose-slate"
-              dangerouslySetInnerHTML={{ __html: content }}
-            />
-          ) : (
-            children
-          )}
-        </div>
+        <div className="mt-16">{children ?? <ToolContent slug={tool.slug} />}</div>
       </div>
 
       <section className="bg-section py-16">
@@ -188,9 +160,7 @@ function ToolOptions({
   if (slug === "split-pdf" || slug === "extract-pdf-pages" || slug === "remove-pdf-pages") {
     return (
       <div className="mt-6">
-        <label className="mb-2 block text-sm font-semibold">
-          Page ranges (e.g. 1-3, 5, 7-9)
-        </label>
+        <label className="mb-2 block text-sm font-semibold">Page ranges (e.g. 1-3, 5, 7-9)</label>
         <input
           className={input}
           placeholder="1-3, 5"
@@ -314,9 +284,7 @@ function ToolOptions({
   if (slug === "add-blank-page-to-pdf") {
     return (
       <div className="mt-6">
-        <label className="mb-2 block text-sm font-semibold">
-          Insert after page (0 = start)
-        </label>
+        <label className="mb-2 block text-sm font-semibold">Insert after page (0 = start)</label>
         <input
           type="number"
           className={input}
@@ -336,9 +304,7 @@ function ToolOptions({
           value={options.margin ?? "36"}
           onChange={(e) => set("margin", e.target.value)}
         />
-        <p className="mt-1 text-xs text-muted-foreground">
-          1 point = 1/72 inch. 36 pt ≈ 0.5 in.
-        </p>
+        <p className="mt-1 text-xs text-muted-foreground">1 point = 1/72 inch. 36 pt ≈ 0.5 in.</p>
       </div>
     );
   }
@@ -377,6 +343,162 @@ function ToolOptions({
             />
           </div>
         </div>
+      </div>
+    );
+  }
+  if (slug === "compress-pdf") {
+    const level = options.level ?? "recommended";
+    const levels = [
+      { v: "light", t: "Light", d: "Lossless clean-up. Text stays selectable." },
+      { v: "recommended", t: "Recommended", d: "Good quality, much smaller file." },
+      { v: "strong", t: "Strong", d: "Smallest file, lower image quality." },
+    ];
+    return (
+      <fieldset className="mt-6">
+        <legend className="mb-2 block text-sm font-semibold">Compression level</legend>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {levels.map((l) => (
+            <label
+              key={l.v}
+              className={`cursor-pointer rounded-lg border p-3 text-sm ${
+                level === l.v ? "border-primary bg-primary/5" : "border-border"
+              }`}
+            >
+              <input
+                type="radio"
+                name="level"
+                className="sr-only"
+                checked={level === l.v}
+                onChange={() => set("level", l.v)}
+              />
+              <span className="block font-semibold">{l.t}</span>
+              <span className="mt-1 block text-muted-foreground">{l.d}</span>
+            </label>
+          ))}
+        </div>
+        {level !== "light" && (
+          <p className="mt-2 text-xs text-muted-foreground">
+            Recommended and Strong redraw pages as images, so text can no longer be selected or
+            searched. Use Light if you need to copy text later.
+          </p>
+        )}
+      </fieldset>
+    );
+  }
+  if (slug === "pdf-to-jpg" || slug === "pdf-to-png") {
+    return (
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <label className="mb-2 block text-sm font-semibold">Image quality</label>
+          <select
+            className={input}
+            value={options.dpi ?? "150"}
+            onChange={(e) => set("dpi", e.target.value)}
+          >
+            <option value="72">Screen (72 dpi)</option>
+            <option value="150">Standard (150 dpi)</option>
+            <option value="300">Print (300 dpi)</option>
+          </select>
+        </div>
+        <div>
+          <label className="mb-2 block text-sm font-semibold">Pages (optional)</label>
+          <input
+            className={input}
+            placeholder="All pages, or e.g. 1-3, 5"
+            value={options.ranges ?? ""}
+            onChange={(e) => set("ranges", e.target.value)}
+          />
+        </div>
+      </div>
+    );
+  }
+  if (slug === "flatten-pdf") {
+    const mode = options.mode ?? "forms";
+    return (
+      <div className="mt-6">
+        <label className="mb-2 block text-sm font-semibold">What to flatten</label>
+        <select className={input} value={mode} onChange={(e) => set("mode", e.target.value)}>
+          <option value="forms">Form fields only (text stays selectable)</option>
+          <option value="full">
+            Everything — forms, comments and stamps (pages become images)
+          </option>
+        </select>
+      </div>
+    );
+  }
+  if (slug === "crop-pdf") {
+    const sides = [
+      ["top", "Top"],
+      ["right", "Right"],
+      ["bottom", "Bottom"],
+      ["left", "Left"],
+    ] as const;
+    return (
+      <div className="mt-6 space-y-4">
+        <div>
+          <p className="mb-2 text-sm font-semibold">Trim from each edge (mm)</p>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            {sides.map(([k, label]) => (
+              <div key={k}>
+                <label className="mb-1 block text-xs text-muted-foreground" htmlFor={`crop-${k}`}>
+                  {label}
+                </label>
+                <input
+                  id={`crop-${k}`}
+                  type="number"
+                  min="0"
+                  className={input}
+                  value={options[k] ?? "10"}
+                  onChange={(e) => set(k, e.target.value)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label className="mb-2 block text-sm font-semibold">Pages (optional)</label>
+          <input
+            className={input}
+            placeholder="All pages, or e.g. 1-3, 5"
+            value={options.ranges ?? ""}
+            onChange={(e) => set("ranges", e.target.value)}
+          />
+        </div>
+      </div>
+    );
+  }
+  if (slug === "edit-pdf-metadata") {
+    const clear = options.clear === "true";
+    const fields = [
+      ["title", "Title"],
+      ["author", "Author"],
+      ["subject", "Subject"],
+      ["keywords", "Keywords (comma separated)"],
+    ] as const;
+    return (
+      <div className="mt-6 space-y-4">
+        {fields.map(([k, label]) => (
+          <div key={k}>
+            <label className="mb-2 block text-sm font-semibold" htmlFor={`meta-${k}`}>
+              {label}
+            </label>
+            <input
+              id={`meta-${k}`}
+              className={input}
+              disabled={clear}
+              value={options[k] ?? ""}
+              onChange={(e) => set(k, e.target.value)}
+            />
+          </div>
+        ))}
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={clear}
+            onChange={(e) => set("clear", e.target.checked ? "true" : "false")}
+          />
+          Remove all metadata (for privacy before sharing)
+        </label>
       </div>
     );
   }

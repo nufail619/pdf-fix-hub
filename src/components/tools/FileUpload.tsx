@@ -16,6 +16,13 @@ export function FileUpload({
   const [dragOver, setDragOver] = useState(false);
 
   const acceptAttr = accepts.join(",");
+  const LABELS: Record<string, string> = {
+    "application/pdf": "PDF",
+    "image/jpeg": "JPG",
+    "image/png": "PNG",
+    ".docx": "Word (.docx)",
+  };
+  const acceptLabel = Array.from(new Set(accepts.map((a) => LABELS[a]).filter(Boolean))).join(", ");
 
   function handleFiles(list: FileList | null) {
     if (!list) return;
@@ -43,7 +50,9 @@ export function FileUpload({
         onDragLeave={() => setDragOver(false)}
         onDrop={onDrop}
         className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center transition-colors ${
-          dragOver ? "border-primary bg-primary/5" : "border-border bg-section hover:border-primary/40"
+          dragOver
+            ? "border-primary bg-primary/5"
+            : "border-border bg-section hover:border-primary/40"
         }`}
         aria-label="Upload files"
       >
@@ -51,9 +60,7 @@ export function FileUpload({
         <p className="text-base font-semibold">
           Drop {multiple ? "files" : "a file"} here, or click to browse
         </p>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Accepted: {accepts.join(", ")}
-        </p>
+        <p className="mt-1 text-sm text-muted-foreground">Accepted: {acceptLabel}</p>
         <input
           ref={inputRef}
           type="file"
