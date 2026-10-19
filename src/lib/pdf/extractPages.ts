@@ -8,7 +8,10 @@ export async function extractPages(file: File, ranges: string): Promise<Blob> {
   const pages = parsePageRanges(ranges, total);
   if (pages.length === 0) throw new Error("No valid pages selected.");
   const out = await PDFDocument.create();
-  const copied = await out.copyPages(src, pages.map((n) => n - 1));
+  const copied = await out.copyPages(
+    src,
+    pages.map((n) => n - 1),
+  );
   copied.forEach((p) => out.addPage(p));
   const data = await out.save();
   return new Blob([data as BlobPart], { type: "application/pdf" });

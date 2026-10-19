@@ -1,4 +1,4 @@
-import { useSiteConfig } from "@/context/SiteConfigContext";
+import { defaultSiteConfig, useSiteConfig } from "@/context/SiteConfigContext";
 
 /**
  * Returns a TanStack Router head() payload. Use:
@@ -12,7 +12,10 @@ export function seoHead(opts: {
   ogImage?: string;
   ogType?: string;
 }) {
-  const { title, description, path, ogImage, ogType = "website" } = opts;
+  const { title, description, ogImage, ogType = "website" } = opts;
+  // Absolute URLs for canonical/og:url when VITE_SITE_URL is set.
+  const base = defaultSiteConfig.siteUrl;
+  const path = base ? base + opts.path : opts.path;
   const meta = [
     { title },
     { name: "description", content: description },

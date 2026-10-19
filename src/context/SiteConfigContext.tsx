@@ -14,19 +14,22 @@ export type SiteConfig = {
   clarityId: string;
 };
 
+// Values come from .env (VITE_*) at build time. See .env.example.
+const env = import.meta.env;
+
 export const defaultSiteConfig: SiteConfig = {
   siteName: "MY PDF FIX",
-  siteUrl: "",
+  siteUrl: (env.VITE_SITE_URL ?? "").replace(/\/$/, ""),
   defaultTitle: "MY PDF FIX — Free Online PDF Tools",
   defaultDescription:
     "Every tool you need to work with PDFs in one place. Merge, split, compress, convert and edit PDFs for free, right in your browser.",
   defaultOgImage: "/og-default.svg",
-  contactEmail: "hello@example.com",
-  adsenseId: "",
+  contactEmail: env.VITE_CONTACT_EMAIL || "hello@example.com",
+  adsenseId: env.VITE_ADSENSE_ID ?? "",
   adsenseAutoAdsCode: "",
-  gaId: "",
-  gtmId: "",
-  clarityId: "",
+  gaId: env.VITE_GA_ID ?? "",
+  gtmId: env.VITE_GTM_ID ?? "",
+  clarityId: env.VITE_CLARITY_ID ?? "",
 };
 
 const SiteConfigContext = createContext<SiteConfig>(defaultSiteConfig);
