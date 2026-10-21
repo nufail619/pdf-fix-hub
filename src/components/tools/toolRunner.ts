@@ -31,11 +31,14 @@ export async function runTool(
   switch (tool.slug) {
     case "merge-pdf":
       return { blob: await mergePdfs(files), filename: "merged.pdf" };
-    case "split-pdf":
-      return {
-        blob: await splitPdf(files[0], options.ranges ?? ""),
-        filename: `${base}-split.pdf`,
-      };
+    case "split-pdf": {
+      const res = await splitPdf(files[0], options.ranges ?? "", "multiple");
+      if (Array.isArray(res)) {
+        // This shouldn't happen with my new implementation as it zips inside splitPdf if multiple
+        return res[0]; // Fallback
+      }
+      return res;
+    }
     case "jpg-to-pdf":
       return { blob: await imagesToPdf(files, "jpg"), filename: "images.pdf" };
     case "png-to-pdf":
