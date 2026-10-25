@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { seoHead } from "@/components/common/SEO";
 import { guides } from "@/data/guides";
 
-export const Route = createFileRoute("/guides")({
+export const Route = createFileRoute("/guides/")({
   head: () =>
     seoHead({
       title: "Guides — MY PDF FIX",
@@ -31,6 +31,14 @@ function Guides() {
             <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               {p.readTime}
             </div>
+            {p.featuredImage && (
+              <img
+                src={p.featuredImage}
+                alt={p.featuredImageAlt}
+                loading="lazy"
+                className="mt-4 aspect-video w-full rounded-lg object-cover"
+              />
+            )}
             <h2 className="mt-3 text-xl font-bold group-hover:text-primary">{p.title}</h2>
             <p className="mt-3 flex-1 text-muted-foreground">{p.excerpt}</p>
             <span className="mt-4 font-semibold text-primary">Read guide →</span>

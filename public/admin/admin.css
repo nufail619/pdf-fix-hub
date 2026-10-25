@@ -1,0 +1,17 @@
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  color: #182235;
+  background: #fff;
+}
+.setup {
+  max-width: 42rem;
+  margin: 12vh auto;
+  padding: 2rem;
+  border: 1px solid #dce1e8;
+  border-radius: 1rem;
+  line-height: 1.7;
+}
+.setup a {
+  color: #b42318;
+}

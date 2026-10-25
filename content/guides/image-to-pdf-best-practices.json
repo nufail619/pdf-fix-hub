@@ -1,0 +1,16 @@
+{
+  "slug": "image-to-pdf-best-practices",
+  "title": "Image to PDF: best practices for sharper, smaller files",
+  "excerpt": "JPGs, PNGs, and a clean PDF on the other side. Small choices about resolution and color depth make a huge difference.",
+  "date": "2026-01-30",
+  "author": "The MY PDF FIX Team",
+  "readTime": "6 min read",
+  "body": "Converting images to PDF is one of the most common workflows in modern offices, especially for receipts, whiteboard photos, and signed documents captured with a phone camera. The mechanics are simple, but the choices you make before conversion determine whether the output is a crisp 200 KB file or a bloated 20 MB monster.\n\nStart with resolution. A phone camera shoots 12 megapixels or more, which is wildly excessive for a printed page. For most document use cases, 150–200 DPI is plenty — you can read the text comfortably and print without seeing pixels. A standard letter-size page at 200 DPI is roughly 1700×2200, or about 3.7 megapixels. Anything more than that is wasted bytes.\n\nNext, pick the right source format. JPG is best for photos and anything with continuous color gradients — receipts, signs, photographed documents. PNG is best for screenshots, line art, and anything with sharp edges or transparency. Mixing them in the same PDF is fine, but be aware that PNG files are typically larger for the same content.\n\nColor depth is the silent killer. A scanned receipt converted to PDF in full color is often 10 times larger than the same receipt converted to grayscale. If your image is monochrome anyway — black text on a white background — convert it to grayscale before making the PDF. Most image apps have a one-click grayscale conversion.\n\nOrder your images deliberately. Most image-to-PDF tools combine in the order you upload, so drag and drop in the order you want the pages to appear. If you have a long sequence, name your files numerically (01.jpg, 02.jpg, 03.jpg) so they sort correctly when selected together.\n\nFinally, think about the destination. If the PDF is going to be printed, match the page size to the printer's paper (US letter or A4). If it's going to be viewed on screen, the original image's aspect ratio is fine — it's actually easier to read because there's no scaling.\n\nMY PDF FIX's image conversion tools support both JPG and PNG, accept multiple files in a single batch, and embed images at their original resolution so you can decide upstream whether to downscale. Drag your images in the order you want, click Process, and you're done.",
+  "seoDescription": "JPGs, PNGs, and a clean PDF on the other side. Small choices about resolution and color depth make a huge difference.",
+  "status": "published",
+  "featuredImage": "",
+  "featuredImageAlt": "",
+  "categories": [
+    "PDF guides"
+  ]
+}

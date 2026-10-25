@@ -1,0 +1,16 @@
+{
+  "slug": "pdf-privacy-where-files-go",
+  "title": "Where do your PDFs actually go? A plain-English guide to PDF privacy",
+  "excerpt": "Free online tools are everywhere — but most of them upload your files to a server. Here's what that means for you, and how to avoid it.",
+  "date": "2026-03-10",
+  "author": "The MY PDF FIX Team",
+  "readTime": "7 min read",
+  "body": "Every week, millions of PDFs are uploaded to free conversion sites. Tax returns, medical records, signed contracts, family photos — all of it leaves the safety of the person's laptop and lands on a server somewhere. Most users have no idea this is happening, and even when they do, the trade-off feels acceptable. After all, the tool worked, the file converted, and nothing bad obviously happened.\n\nThe trouble is that nothing bad usually happens visibly. The privacy cost is silent: copies of your file accumulate in caches, backup systems, and the occasional security incident. Most services have policies that say files are deleted after 24 hours, and many honor those policies — but you have no way to verify it, and the policy can change without notice.\n\nThere's a simpler, safer alternative: tools that run entirely in your browser. Modern web standards like WebAssembly let JavaScript do real work — including PDF manipulation — without uploading anything. The file is opened, read, and written back, all on your own device. The 'server' in this case is your laptop.\n\nHow can you tell which is which? Three signals. First, check the privacy policy or FAQ — reputable tools say so explicitly. Second, watch your network tab in developer tools: a browser-based tool will not send your file's bytes anywhere. Third, try the tool offline. If it still works without an internet connection, it's running locally.\n\nThere are legitimate cases where a server is necessary — heavy OCR, complex format conversion, anything that needs proprietary fonts. In those cases, look for tools that delete files immediately after processing and don't keep logs. But for the bread-and-butter tasks — merging, splitting, rotating, watermarking, adding page numbers — there's no reason to send your file across the internet.\n\nMY PDF FIX is built around this principle. Every tool labeled 'Processed locally in your browser' does exactly that, no asterisks. When we eventually add tools that need server processing, we'll label them clearly so you can make an informed choice.",
+  "seoDescription": "Free online tools are everywhere — but most of them upload your files to a server. Here's what that means for you, and how to avoid it.",
+  "status": "published",
+  "featuredImage": "",
+  "featuredImageAlt": "",
+  "categories": [
+    "PDF workflows"
+  ]
+}

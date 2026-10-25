@@ -36,3 +36,9 @@ dist-ssr
 # Browser test artifacts and generated fixtures
 test-results/
 playwright-report/
+
+# Generated public CMS assets and published-only content manifest
+public/admin/vendor/
+public/admin/config.yml
+public/admin/runtime.json
+src/generated/

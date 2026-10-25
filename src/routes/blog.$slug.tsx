@@ -1,4 +1,6 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { serializeStructuredData } from "@/lib/structured-data";
+import { ArticleBody } from "@/components/common/ArticleBody";
 import { seoHead } from "@/components/common/SEO";
 import { blogPosts } from "@/data/blogPosts";
 
@@ -13,18 +15,19 @@ export const Route = createFileRoute("/blog/$slug")({
       ? {
           ...seoHead({
             title: `${loaderData.title} — MY PDF FIX Blog`,
-            description: loaderData.excerpt,
+            description: loaderData.seoDescription,
             path: `/blog/${loaderData.slug}`,
             ogType: "article",
+            ogImage: loaderData.featuredImage || undefined,
           }),
           scripts: [
             {
               type: "application/ld+json",
-              children: JSON.stringify({
+              children: serializeStructuredData({
                 "@context": "https://schema.org",
                 "@type": "Article",
                 headline: loaderData.title,
-                description: loaderData.excerpt,
+                description: loaderData.seoDescription,
                 datePublished: loaderData.date,
                 author: { "@type": "Organization", name: loaderData.author },
               }),
@@ -51,11 +54,17 @@ function Post() {
         })}{" "}
         · {post.author} · {post.readTime}
       </div>
-      <div className="mt-8 space-y-5 text-lg leading-relaxed text-foreground">
-        {post.body.map((para: string, i: number) => (
-          <p key={i}>{para}</p>
-        ))}
-      </div>
+      {post.featuredImage && (
+        <img
+          src={post.featuredImage}
+          alt={post.featuredImageAlt}
+          className="mt-8 w-full rounded-xl"
+        />
+      )}
+      {post.categories.length > 0 && (
+        <p className="mt-4 text-sm text-muted-foreground">{post.categories.join(" · ")}</p>
+      )}
+      <ArticleBody body={post.body} />
     </article>
   );
 }

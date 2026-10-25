@@ -12,7 +12,11 @@ export function seoHead(opts: {
   ogImage?: string;
   ogType?: string;
 }) {
-  const { title, description, ogImage, ogType = "website" } = opts;
+  const { title, description, ogType = "website" } = opts;
+  const ogImage =
+    opts.ogImage?.startsWith("/") && defaultSiteConfig.siteUrl
+      ? defaultSiteConfig.siteUrl + opts.ogImage
+      : opts.ogImage;
   // Absolute URLs for canonical/og:url when VITE_SITE_URL is set.
   const base = defaultSiteConfig.siteUrl;
   const path = base ? base + opts.path : opts.path;

@@ -1,0 +1,16 @@
+{
+  "slug": "merge-pdfs-without-losing-quality",
+  "title": "How to merge PDFs without losing quality",
+  "excerpt": "Combining PDFs sounds simple, but a careless merge can balloon file size or scramble bookmarks. Here's the right way.",
+  "date": "2026-04-12",
+  "author": "The MY PDF FIX Team",
+  "readTime": "6 min read",
+  "body": "Merging PDFs is one of the most common tasks in any office. You finish a report, your colleague sends over the appendix, and you need to deliver a single polished document by end of day. The temptation is to grab the first tool that pops up in a search result — and that's usually where things go wrong.\n\nThe single biggest cause of quality loss during a merge is unnecessary re-encoding. Many free desktop apps and online tools rasterize PDF pages into images before stitching them back together. That converts crisp vector text into pixels, breaks searchable text, and triples the file size. The fix is to use a tool that copies pages byte-for-byte instead.\n\nMY PDF FIX's merge tool uses pdf-lib in your browser, which preserves the original page streams without re-encoding. That means your text stays sharp, your fonts stay embedded, and your file size stays close to the sum of the inputs.\n\nIf you're combining files that came from different sources — say, a scan from a copier and a born-digital invoice — the scan will always be larger because it's an image. That's expected. What you want to avoid is the digital invoice becoming larger after the merge, which is the tell-tale sign of an inferior tool.\n\nA few small practices help even more. First, run a quick rotate pass on any scans that came in sideways before merging — it's much easier to fix one file than the combined result. Second, decide on page order before you start. Reordering after a merge is possible but tedious. Third, name your output something meaningful instead of leaving it as 'merged.pdf'; future-you will thank present-you.\n\nFinally, if confidentiality matters, double-check that the tool you use is processing the file locally. Anything that uploads your document to a server is creating a copy outside your control. Browser-based tools like ours run entirely on your device — nothing crosses the wire.",
+  "seoDescription": "Combining PDFs sounds simple, but a careless merge can balloon file size or scramble bookmarks. Here's the right way.",
+  "status": "published",
+  "featuredImage": "",
+  "featuredImageAlt": "",
+  "categories": [
+    "PDF workflows"
+  ]
+}

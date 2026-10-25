@@ -1,0 +1,16 @@
+{
+  "slug": "complete-guide-to-pdf-page-numbers",
+  "title": "The complete guide to adding page numbers to a PDF",
+  "excerpt": "Where to place them, what format to use, and how to handle a mix of portrait and landscape pages without making a mess.",
+  "date": "2026-04-05",
+  "author": "The MY PDF FIX Team",
+  "readTime": "8 min read",
+  "body": "Page numbers seem like a tiny detail, but they're the most-requested formatting fix in legal, academic, and corporate workflows. A 300-page document without numbers is almost impossible to navigate, reference, or cite. This guide walks through every decision you need to make.\n\nStart with position. The default for most documents is bottom-center: easy to find, doesn't fight with content, and works in both portrait and landscape orientations. Bottom-right is the second-most-common choice, especially for documents that will be printed and bound on the left edge — the page number stays visible after binding. Bottom-left is unusual outside of academic typesetting. Top-of-page numbers are reserved for documents with deep headers that already use the bottom margin for footnotes.\n\nNext, format. The simplest is just '1', '2', '3' and so on. For longer documents, 'Page 1 of 50' is friendlier because the reader always knows how much is left. Legal and academic documents often use Roman numerals for front matter (i, ii, iii) and Arabic numerals for the body (1, 2, 3) — that's a two-pass operation: number the front matter, then start numbering the body at page 1.\n\nFont size and color matter more than people realize. 10–12 points is the sweet spot for most documents. Too small and they vanish; too large and they become an eyesore. Use a dark gray (#333) rather than pure black — it draws less attention to the chrome and more to the content. Avoid bold unless you have a specific reason; page numbers should disappear into the design.\n\nMixed orientations need extra care. If your document has landscape pages interspersed with portrait pages, a page number placed at the bottom of a portrait page will appear on the long edge of a landscape page when bound. Most tools place page numbers relative to the page rotation, which is what you want — but verify the output, especially on the first landscape page after a portrait run.\n\nFinally, think about reprints. If you add numbers and later need to add or remove pages, every page number after the change will be wrong. Consider using a tool that lets you re-run the numbering pass quickly, and always keep an unnumbered master copy of the document.\n\nMY PDF FIX's page numbers tool covers the four most common positions and any font size you need. Numbering is non-destructive: we draw the numbers on top of the existing page, so the original content is untouched and you can re-run if needed.",
+  "seoDescription": "Where to place them, what format to use, and how to handle a mix of portrait and landscape pages without making a mess.",
+  "status": "published",
+  "featuredImage": "",
+  "featuredImageAlt": "",
+  "categories": [
+    "PDF guides"
+  ]
+}

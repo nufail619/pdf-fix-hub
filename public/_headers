@@ -1,0 +1,16 @@
+/admin
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+/admin/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://esm.sh https://cdn.jsdelivr.net 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: blob: https://*.githubusercontent.com; font-src 'self' data: https://cdn.jsdelivr.net; connect-src 'self' data: blob: https://api.github.com https://raw.githubusercontent.com https://*.githubusercontent.com https://esm.sh https://cdn.jsdelivr.net https://registry.npmjs.org https://unpkg.com https://www.githubstatus.com https://api.iconify.design; worker-src 'self' blob:; frame-src 'self' blob:; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'none'
+/uploads/*
+  X-Content-Type-Options: nosniff
+  Content-Security-Policy: default-src 'none'; sandbox

@@ -1,0 +1,16 @@
+{
+  "slug": "splitting-pdfs-the-right-way",
+  "title": "Splitting PDFs the right way: ranges, chunks, and bookmarks",
+  "excerpt": "There's more than one way to split a PDF. Picking the right method saves you minutes per file and avoids painful mistakes.",
+  "date": "2026-03-28",
+  "author": "The MY PDF FIX Team",
+  "readTime": "5 min read",
+  "body": "When most people say 'split a PDF', they actually mean one of four very different things: extracting a single section, breaking a long file into individual pages, splitting at every bookmark, or chopping a document into equal-sized chunks. Using the wrong approach for your goal is the most common source of frustration.\n\nExtracting a section is the simplest case. You know you want pages 5 through 12, and that's it. Use a page-range syntax like '5-12' and you're done. This is the right approach for pulling a chapter out of a book or a specific report out of a binder.\n\nSplitting into individual pages is useful when you need to email or share single pages without exposing the rest of the document. Think tax forms, contract signature pages, or evidence exhibits. Look for a tool that lets you do this in one click rather than running 200 individual extracts.\n\nSplitting at bookmarks is the power move for long structured documents — textbooks, government reports, technical manuals. If the original PDF has a clean table of contents wired to bookmarks, you can produce one file per section automatically. This is a server-side feature in most tools because bookmark parsing is finicky.\n\nFinally, chunking by size matters when you're sending files through systems that have upload limits, like email attachments capped at 25 MB. Split-by-size tools target a maximum file size and produce as many output files as needed to fit.\n\nWhichever method you choose, name your outputs carefully. 'document-pages-5-12.pdf' is much more useful than 'document_split_1.pdf' three months from now.",
+  "seoDescription": "There's more than one way to split a PDF. Picking the right method saves you minutes per file and avoids painful mistakes.",
+  "status": "published",
+  "featuredImage": "",
+  "featuredImageAlt": "",
+  "categories": [
+    "PDF workflows"
+  ]
+}

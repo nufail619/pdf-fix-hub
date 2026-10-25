@@ -23,7 +23,6 @@ import { Route as PdfToPngRouteImport } from './routes/pdf-to-png'
 import { Route as PdfToJpgRouteImport } from './routes/pdf-to-jpg'
 import { Route as MergePdfRouteImport } from './routes/merge-pdf'
 import { Route as JpgToPdfRouteImport } from './routes/jpg-to-pdf'
-import { Route as GuidesRouteImport } from './routes/guides'
 import { Route as GrayscalePdfRouteImport } from './routes/grayscale-pdf'
 import { Route as FlattenPdfRouteImport } from './routes/flatten-pdf'
 import { Route as ExtractPdfPagesRouteImport } from './routes/extract-pdf-pages'
@@ -33,13 +32,14 @@ import { Route as CropPdfRouteImport } from './routes/crop-pdf'
 import { Route as CookiePolicyRouteImport } from './routes/cookie-policy'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompressPdfRouteImport } from './routes/compress-pdf'
-import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AddTextToPdfRouteImport } from './routes/add-text-to-pdf'
 import { Route as AddPageNumbersToPdfRouteImport } from './routes/add-page-numbers-to-pdf'
 import { Route as AddMarginToPdfRouteImport } from './routes/add-margin-to-pdf'
 import { Route as AddBlankPageToPdfRouteImport } from './routes/add-blank-page-to-pdf'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as GuidesIndexRouteImport } from './routes/guides.index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 
@@ -113,11 +113,6 @@ const JpgToPdfRoute = JpgToPdfRouteImport.update({
   path: '/jpg-to-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GuidesRoute = GuidesRouteImport.update({
-  id: '/guides',
-  path: '/guides',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const GrayscalePdfRoute = GrayscalePdfRouteImport.update({
   id: '/grayscale-pdf',
   path: '/grayscale-pdf',
@@ -163,11 +158,6 @@ const CompressPdfRoute = CompressPdfRouteImport.update({
   path: '/compress-pdf',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BlogRoute = BlogRouteImport.update({
-  id: '/blog',
-  path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AddTextToPdfRoute = AddTextToPdfRouteImport.update({
   id: '/add-text-to-pdf',
   path: '/add-text-to-pdf',
@@ -198,15 +188,25 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GuidesIndexRoute = GuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GuidesSlugRoute = GuidesSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => GuidesRoute,
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => BlogRoute,
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -216,7 +216,6 @@ export interface FileRoutesByFullPath {
   '/add-margin-to-pdf': typeof AddMarginToPdfRoute
   '/add-page-numbers-to-pdf': typeof AddPageNumbersToPdfRoute
   '/add-text-to-pdf': typeof AddTextToPdfRoute
-  '/blog': typeof BlogRouteWithChildren
   '/compress-pdf': typeof CompressPdfRoute
   '/contact': typeof ContactRoute
   '/cookie-policy': typeof CookiePolicyRoute
@@ -226,7 +225,6 @@ export interface FileRoutesByFullPath {
   '/extract-pdf-pages': typeof ExtractPdfPagesRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
-  '/guides': typeof GuidesRouteWithChildren
   '/jpg-to-pdf': typeof JpgToPdfRoute
   '/merge-pdf': typeof MergePdfRoute
   '/pdf-to-jpg': typeof PdfToJpgRoute
@@ -243,6 +241,8 @@ export interface FileRoutesByFullPath {
   '/word-to-pdf': typeof WordToPdfRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/blog/': typeof BlogIndexRoute
+  '/guides/': typeof GuidesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -251,7 +251,6 @@ export interface FileRoutesByTo {
   '/add-margin-to-pdf': typeof AddMarginToPdfRoute
   '/add-page-numbers-to-pdf': typeof AddPageNumbersToPdfRoute
   '/add-text-to-pdf': typeof AddTextToPdfRoute
-  '/blog': typeof BlogRouteWithChildren
   '/compress-pdf': typeof CompressPdfRoute
   '/contact': typeof ContactRoute
   '/cookie-policy': typeof CookiePolicyRoute
@@ -261,7 +260,6 @@ export interface FileRoutesByTo {
   '/extract-pdf-pages': typeof ExtractPdfPagesRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
-  '/guides': typeof GuidesRouteWithChildren
   '/jpg-to-pdf': typeof JpgToPdfRoute
   '/merge-pdf': typeof MergePdfRoute
   '/pdf-to-jpg': typeof PdfToJpgRoute
@@ -278,6 +276,8 @@ export interface FileRoutesByTo {
   '/word-to-pdf': typeof WordToPdfRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/blog': typeof BlogIndexRoute
+  '/guides': typeof GuidesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -287,7 +287,6 @@ export interface FileRoutesById {
   '/add-margin-to-pdf': typeof AddMarginToPdfRoute
   '/add-page-numbers-to-pdf': typeof AddPageNumbersToPdfRoute
   '/add-text-to-pdf': typeof AddTextToPdfRoute
-  '/blog': typeof BlogRouteWithChildren
   '/compress-pdf': typeof CompressPdfRoute
   '/contact': typeof ContactRoute
   '/cookie-policy': typeof CookiePolicyRoute
@@ -297,7 +296,6 @@ export interface FileRoutesById {
   '/extract-pdf-pages': typeof ExtractPdfPagesRoute
   '/flatten-pdf': typeof FlattenPdfRoute
   '/grayscale-pdf': typeof GrayscalePdfRoute
-  '/guides': typeof GuidesRouteWithChildren
   '/jpg-to-pdf': typeof JpgToPdfRoute
   '/merge-pdf': typeof MergePdfRoute
   '/pdf-to-jpg': typeof PdfToJpgRoute
@@ -314,6 +312,8 @@ export interface FileRoutesById {
   '/word-to-pdf': typeof WordToPdfRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/guides/$slug': typeof GuidesSlugRoute
+  '/blog/': typeof BlogIndexRoute
+  '/guides/': typeof GuidesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -324,7 +324,6 @@ export interface FileRouteTypes {
     | '/add-margin-to-pdf'
     | '/add-page-numbers-to-pdf'
     | '/add-text-to-pdf'
-    | '/blog'
     | '/compress-pdf'
     | '/contact'
     | '/cookie-policy'
@@ -334,7 +333,6 @@ export interface FileRouteTypes {
     | '/extract-pdf-pages'
     | '/flatten-pdf'
     | '/grayscale-pdf'
-    | '/guides'
     | '/jpg-to-pdf'
     | '/merge-pdf'
     | '/pdf-to-jpg'
@@ -351,6 +349,8 @@ export interface FileRouteTypes {
     | '/word-to-pdf'
     | '/blog/$slug'
     | '/guides/$slug'
+    | '/blog/'
+    | '/guides/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -359,7 +359,6 @@ export interface FileRouteTypes {
     | '/add-margin-to-pdf'
     | '/add-page-numbers-to-pdf'
     | '/add-text-to-pdf'
-    | '/blog'
     | '/compress-pdf'
     | '/contact'
     | '/cookie-policy'
@@ -369,7 +368,6 @@ export interface FileRouteTypes {
     | '/extract-pdf-pages'
     | '/flatten-pdf'
     | '/grayscale-pdf'
-    | '/guides'
     | '/jpg-to-pdf'
     | '/merge-pdf'
     | '/pdf-to-jpg'
@@ -386,6 +384,8 @@ export interface FileRouteTypes {
     | '/word-to-pdf'
     | '/blog/$slug'
     | '/guides/$slug'
+    | '/blog'
+    | '/guides'
   id:
     | '__root__'
     | '/'
@@ -394,7 +394,6 @@ export interface FileRouteTypes {
     | '/add-margin-to-pdf'
     | '/add-page-numbers-to-pdf'
     | '/add-text-to-pdf'
-    | '/blog'
     | '/compress-pdf'
     | '/contact'
     | '/cookie-policy'
@@ -404,7 +403,6 @@ export interface FileRouteTypes {
     | '/extract-pdf-pages'
     | '/flatten-pdf'
     | '/grayscale-pdf'
-    | '/guides'
     | '/jpg-to-pdf'
     | '/merge-pdf'
     | '/pdf-to-jpg'
@@ -421,6 +419,8 @@ export interface FileRouteTypes {
     | '/word-to-pdf'
     | '/blog/$slug'
     | '/guides/$slug'
+    | '/blog/'
+    | '/guides/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -430,7 +430,6 @@ export interface RootRouteChildren {
   AddMarginToPdfRoute: typeof AddMarginToPdfRoute
   AddPageNumbersToPdfRoute: typeof AddPageNumbersToPdfRoute
   AddTextToPdfRoute: typeof AddTextToPdfRoute
-  BlogRoute: typeof BlogRouteWithChildren
   CompressPdfRoute: typeof CompressPdfRoute
   ContactRoute: typeof ContactRoute
   CookiePolicyRoute: typeof CookiePolicyRoute
@@ -440,7 +439,6 @@ export interface RootRouteChildren {
   ExtractPdfPagesRoute: typeof ExtractPdfPagesRoute
   FlattenPdfRoute: typeof FlattenPdfRoute
   GrayscalePdfRoute: typeof GrayscalePdfRoute
-  GuidesRoute: typeof GuidesRouteWithChildren
   JpgToPdfRoute: typeof JpgToPdfRoute
   MergePdfRoute: typeof MergePdfRoute
   PdfToJpgRoute: typeof PdfToJpgRoute
@@ -455,6 +453,10 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   WatermarkPdfRoute: typeof WatermarkPdfRoute
   WordToPdfRoute: typeof WordToPdfRoute
+  BlogSlugRoute: typeof BlogSlugRoute
+  GuidesSlugRoute: typeof GuidesSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+  GuidesIndexRoute: typeof GuidesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -557,13 +559,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JpgToPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/guides': {
-      id: '/guides'
-      path: '/guides'
-      fullPath: '/guides'
-      preLoaderRoute: typeof GuidesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/grayscale-pdf': {
       id: '/grayscale-pdf'
       path: '/grayscale-pdf'
@@ -627,13 +622,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompressPdfRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/blog': {
-      id: '/blog'
-      path: '/blog'
-      fullPath: '/blog'
-      preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/add-text-to-pdf': {
       id: '/add-text-to-pdf'
       path: '/add-text-to-pdf'
@@ -676,43 +664,36 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/guides/': {
+      id: '/guides/'
+      path: '/guides'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof GuidesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/guides/$slug': {
       id: '/guides/$slug'
-      path: '/$slug'
+      path: '/guides/$slug'
       fullPath: '/guides/$slug'
       preLoaderRoute: typeof GuidesSlugRouteImport
-      parentRoute: typeof GuidesRoute
+      parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
       id: '/blog/$slug'
-      path: '/$slug'
+      path: '/blog/$slug'
       fullPath: '/blog/$slug'
       preLoaderRoute: typeof BlogSlugRouteImport
-      parentRoute: typeof BlogRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
-
-interface BlogRouteChildren {
-  BlogSlugRoute: typeof BlogSlugRoute
-}
-
-const BlogRouteChildren: BlogRouteChildren = {
-  BlogSlugRoute: BlogSlugRoute,
-}
-
-const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
-
-interface GuidesRouteChildren {
-  GuidesSlugRoute: typeof GuidesSlugRoute
-}
-
-const GuidesRouteChildren: GuidesRouteChildren = {
-  GuidesSlugRoute: GuidesSlugRoute,
-}
-
-const GuidesRouteWithChildren =
-  GuidesRoute._addFileChildren(GuidesRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -721,7 +702,6 @@ const rootRouteChildren: RootRouteChildren = {
   AddMarginToPdfRoute: AddMarginToPdfRoute,
   AddPageNumbersToPdfRoute: AddPageNumbersToPdfRoute,
   AddTextToPdfRoute: AddTextToPdfRoute,
-  BlogRoute: BlogRouteWithChildren,
   CompressPdfRoute: CompressPdfRoute,
   ContactRoute: ContactRoute,
   CookiePolicyRoute: CookiePolicyRoute,
@@ -731,7 +711,6 @@ const rootRouteChildren: RootRouteChildren = {
   ExtractPdfPagesRoute: ExtractPdfPagesRoute,
   FlattenPdfRoute: FlattenPdfRoute,
   GrayscalePdfRoute: GrayscalePdfRoute,
-  GuidesRoute: GuidesRouteWithChildren,
   JpgToPdfRoute: JpgToPdfRoute,
   MergePdfRoute: MergePdfRoute,
   PdfToJpgRoute: PdfToJpgRoute,
@@ -746,6 +725,10 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   WatermarkPdfRoute: WatermarkPdfRoute,
   WordToPdfRoute: WordToPdfRoute,
+  BlogSlugRoute: BlogSlugRoute,
+  GuidesSlugRoute: GuidesSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
+  GuidesIndexRoute: GuidesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

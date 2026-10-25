@@ -1,0 +1,16 @@
+{
+  "slug": "rotating-scanned-pdfs",
+  "title": "Rotating scanned PDFs: a step-by-step guide for non-technical users",
+  "excerpt": "Scanners flip pages, document feeders mis-orient pages, and you end up with a 40-page PDF where half the pages are sideways. Here's how to fix it.",
+  "date": "2026-02-20",
+  "author": "The MY PDF FIX Team",
+  "readTime": "5 min read",
+  "body": "Sideways pages are the bane of scanned documents. Modern document feeders try to detect orientation automatically, but they're wrong more often than they're right, especially on mixed-content pages where text and images don't agree on which way is up. Here's how to fix the result without re-scanning.\n\nFirst, decide whether you need to rotate every page or only some. If the scan came from a duplex feeder where odd pages came out one way and even pages came out the other, you need to rotate only the wrong-facing pages. If the entire scan came out sideways because the original was loaded the wrong way, a single bulk rotation of the whole file is the fix.\n\nFor a bulk rotation, the choice is between 90° clockwise, 90° counter-clockwise (which is the same as 270° clockwise), and 180°. The easiest way to figure out which one you need: look at the top of a page. If the top of the text is on the right side of the screen, rotate counter-clockwise. If the top is on the left, rotate clockwise. If the text is upside down, rotate 180°.\n\nFor selective rotation — fixing only some pages — you have two options. Either rotate the whole document and then rotate the now-misaligned pages back, or rotate only the problem pages individually. Most browser-based tools support both approaches.\n\nAfter rotating, save and re-open the file to verify. Some PDF viewers cache page orientation and may show stale results until reloaded. If you're delivering the file to someone else, ask them to open it in their viewer of choice — different viewers respect rotation metadata differently.\n\nA final tip: if you scan documents often, take 30 seconds to learn your scanner's orientation settings. Most scanners have an 'auto-rotate' toggle that's off by default. Turning it on saves a step on every future scan.",
+  "seoDescription": "Scanners flip pages, document feeders mis-orient pages, and you end up with a 40-page PDF where half the pages are sideways. Here's how to fix it.",
+  "status": "published",
+  "featuredImage": "",
+  "featuredImageAlt": "",
+  "categories": [
+    "PDF guides"
+  ]
+}

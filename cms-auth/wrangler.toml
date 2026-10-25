@@ -1,0 +1,7 @@
+name = "pdf-fix-hub-cms-auth"
+main = "index.js"
+compatibility_date = "2025-09-24"
+workers_dev = true
+
+# Set ALLOWED_DOMAINS, GITHUB_CLIENT_ID and the encrypted GITHUB_CLIENT_SECRET
+# in this Worker's dashboard. Never put secret values in this file.

@@ -3,8 +3,17 @@
 //
 // Before: dist/client/ (assets) + dist/client/_shell.html + dist/server/
 // After:  dist/index.html + dist/assets/ + static files
-import { existsSync, copyFileSync, rmSync, renameSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  copyFileSync,
+  rmSync,
+  renameSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import { join } from "node:path";
+import { loadContent } from "./content.mjs";
 
 const dist = "dist";
 const clientDir = join(dist, "client");
@@ -58,15 +67,14 @@ const siteUrl = (env.VITE_SITE_URL || "").replace(/\/$/, "");
 // read from the data files.
 const routes = readdirSync("src/routes")
   .filter((f) => f.endsWith(".tsx") && !f.startsWith("__") && !f.includes("$"))
-  .map((f) => f.replace(/\.tsx$/, ""))
+  .map((f) => f.replace(/\.tsx$/, "").replace(/\.index$/, ""))
   .map((r) => (r === "index" ? "/" : "/" + r));
-for (const [file, prefix] of [
-  ["src/data/blogPosts.ts", "/blog/"],
-  ["src/data/guides.ts", "/guides/"],
+const published = await loadContent();
+for (const [collection, prefix] of [
+  ["blog", "/blog/"],
+  ["guides", "/guides/"],
 ]) {
-  if (!existsSync(file)) continue;
-  for (const m of readFileSync(file, "utf8").matchAll(/slug:\s*"([^"]+)"/g))
-    routes.push(prefix + m[1]);
+  for (const article of published[collection]) routes.push(prefix + article.slug);
 }
 
 if (siteUrl) {
@@ -83,7 +91,7 @@ if (siteUrl) {
   );
   writeFileSync(
     join(dist, "robots.txt"),
-    `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`,
+    `User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ${siteUrl}/sitemap.xml\n`,
   );
   console.log(`[finalize-spa] sitemap.xml written (${routes.length} URLs)`);
 } else {
