@@ -11,6 +11,9 @@ import { ToolCard } from "@/components/home/ToolCard";
 import { runTool } from "./toolRunner";
 import { readMetadata } from "@/lib/pdf/metadata";
 import { ToolContent } from "./ToolContent";
+import { BrightnessOptions } from "./BrightnessOptions";
+import { PdfEditor } from "./PdfEditor";
+import { UnlockOptions } from "./UnlockOptions";
 
 export function ToolPage({ slug, children }: { slug: string; children?: React.ReactNode }) {
   const tool = toolBySlug(slug)!;
@@ -19,6 +22,8 @@ export function ToolPage({ slug, children }: { slug: string; children?: React.Re
   const [files, setFiles] = useState<File[]>([]);
   const [options, setOptions] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
+  const [workspaceReady, setWorkspaceReady] = useState(false);
+  const [processingError, setProcessingError] = useState("");
   const [result, setResult] = useState<{ blob: Blob; filename: string; note?: string } | null>(
     null,
   );
@@ -27,6 +32,8 @@ export function ToolPage({ slug, children }: { slug: string; children?: React.Re
     setFiles([]);
     setOptions({});
     setResult(null);
+    setProcessingError("");
+    setWorkspaceReady(false);
   }, [slug]);
 
   // Edit-metadata: pre-fill the form with the file's current values.
@@ -47,15 +54,18 @@ export function ToolPage({ slug, children }: { slug: string; children?: React.Re
       return;
     }
     setBusy(true);
+    setProcessingError("");
     try {
       const res = await runTool(tool, files, options);
       setResult(res);
       toast.success("Done! Your file is ready to download.");
     } catch (err) {
-      console.error(err);
-      toast.error(err instanceof Error ? err.message : "Something went wrong.");
+      const message = err instanceof Error ? err.message : "Something went wrong.";
+      setProcessingError(message);
+      toast.error(message);
     } finally {
       setBusy(false);
+      if (slug === "unlock-pdf") setOptions((previous) => ({ ...previous, password: "" }));
     }
   }
 
@@ -108,18 +118,63 @@ export function ToolPage({ slug, children }: { slug: string; children?: React.Re
           />
         ) : (
           <>
-            <FileUpload
-              accepts={tool.accepts}
-              multiple={tool.multiple}
-              files={files}
-              onChange={setFiles}
-            />
-            <ToolOptions slug={tool.slug} options={options} setOptions={setOptions} />
-            <div className="mt-6 flex justify-center">
-              <Button size="lg" onClick={handleProcess} loading={busy} disabled={busy}>
-                Process
-              </Button>
-            </div>
+            <fieldset disabled={busy} className="min-w-0">
+              <FileUpload
+                accepts={tool.accepts}
+                multiple={tool.multiple}
+                files={files}
+                onChange={(next) => {
+                  setFiles(next);
+                  setProcessingError("");
+                  setWorkspaceReady(false);
+                  if (["adjust-pdf-brightness", "edit-pdf", "unlock-pdf"].includes(slug))
+                    setOptions({});
+                }}
+              />
+              {slug === "adjust-pdf-brightness" ? (
+                <BrightnessOptions
+                  file={files[0]}
+                  options={options}
+                  onChange={setOptions}
+                  onReady={setWorkspaceReady}
+                />
+              ) : slug === "edit-pdf" ? (
+                <PdfEditor
+                  file={files[0]}
+                  options={options}
+                  onChange={setOptions}
+                  onReady={setWorkspaceReady}
+                />
+              ) : slug === "unlock-pdf" ? (
+                <UnlockOptions options={options} onChange={setOptions} />
+              ) : (
+                <ToolOptions slug={tool.slug} options={options} setOptions={setOptions} />
+              )}
+              {processingError &&
+                ["adjust-pdf-brightness", "edit-pdf", "unlock-pdf"].includes(slug) && (
+                  <p role="alert" className="mt-4 text-sm text-red-700">
+                    {processingError}
+                  </p>
+                )}
+              <div className="mt-6 flex justify-center">
+                <Button
+                  size="lg"
+                  onClick={handleProcess}
+                  loading={busy}
+                  disabled={
+                    busy ||
+                    (["adjust-pdf-brightness", "edit-pdf"].includes(slug) && !workspaceReady)
+                  }
+                >
+                  Process
+                </Button>
+              </div>
+            </fieldset>
+            {busy && (
+              <p role="status" className="mt-3 text-center text-sm">
+                Processing your PDF locally. Please keep this page open…
+              </p>
+            )}
             <p className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <ShieldCheck className="h-4 w-4 text-green-600" aria-hidden />
               Processed locally in your browser — your files never leave your device.

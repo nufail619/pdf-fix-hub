@@ -1,0 +1,2 @@
+-r ../pdf-tools/requirements.txt
+cryptography

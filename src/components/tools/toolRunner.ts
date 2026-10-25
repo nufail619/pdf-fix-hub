@@ -19,6 +19,9 @@ import { cropPdf } from "@/lib/pdf/crop";
 import { editMetadata } from "@/lib/pdf/metadata";
 import { rasterizePdf } from "@/lib/pdf/rasterize";
 import { wordToPdf } from "@/lib/pdf/wordToPdf";
+import { adjustBrightness } from "@/lib/pdf/brightness";
+import { editPdf } from "@/lib/pdf/edit";
+import { unlockPdf } from "@/lib/pdf/unlock";
 
 export type RunResult = { blob: Blob; filename: string; note?: string };
 
@@ -51,6 +54,32 @@ export async function runTool(
   };
   const base = files[0]?.name?.replace(/\.[^.]+$/, "") ?? "document";
   switch (tool.slug) {
+    case "adjust-pdf-brightness":
+      return {
+        blob: await adjustBrightness(
+          files[0],
+          numberOption("brightness", 0, -100, 100),
+          numberOption("contrast", 0, -100, 100),
+        ),
+        filename: `${base}-adjusted.pdf`,
+        note: "All pages were rasterized at 144 dpi. Text is no longer selectable and interactive content is flattened. Keep the original PDF.",
+      };
+    case "edit-pdf":
+      return {
+        blob: await editPdf(
+          files[0],
+          JSON.parse(options.elements || "[]"),
+          options.flattenForms === "true",
+        ),
+        filename: `${base}-edited.pdf`,
+        note: "Added elements are saved as page overlays. Whiteout is not secure redaction: covered content remains extractable.",
+      };
+    case "unlock-pdf":
+      return {
+        blob: await unlockPdf(files[0], options.password || "", options.authorized === "true"),
+        filename: `${base}-unlocked.pdf`,
+        note: "Password protection has been removed from this copy. Store and share it carefully. The password was not saved or uploaded.",
+      };
     case "merge-pdf":
       return { blob: await mergePdfs(files), filename: "merged.pdf" };
     case "split-pdf": {

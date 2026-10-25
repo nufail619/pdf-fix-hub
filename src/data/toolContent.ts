@@ -17,6 +17,141 @@ const PRIVATE: [string, string] = [
 ];
 
 export const toolContent: Record<string, ToolContentEntry> = {
+  "adjust-pdf-brightness": {
+    heading: "Adjust brightness and contrast across your PDF",
+    intro: [
+      "Make dark scans easier to read or improve faint document images. Compare the original and adjusted page before exporting.",
+      "Every page is rendered as an image at 144 dpi with the same brightness and contrast settings. The visible page size and order are retained, including rotated pages.",
+    ],
+    steps: [
+      ["Add your PDF.", "Select one document to load its page preview."],
+      [
+        "Adjust the sliders.",
+        "Brightness lightens or darkens the image; contrast changes the separation between dark and light tones. Zero is neutral.",
+      ],
+      [
+        "Check every page.",
+        "Use Previous page and Next page to compare the Before and After images.",
+      ],
+      [
+        "Process and download.",
+        "The settings are applied to all pages, not just the previewed page.",
+      ],
+    ],
+    tipsTitle: "Before you export",
+    tips: [
+      [
+        "Keep your original.",
+        "Rasterizing removes selectable text, links and interactive form fields. Filled form appearances are included as pixels.",
+      ],
+      ["Start gently.", "Extreme settings can hide faint handwriting or wash out detail."],
+      PRIVATE,
+    ],
+    faqs: [
+      {
+        q: "Will the output have selectable text?",
+        a: "No. Every page becomes an image. Keep the original if you need search, copying or accessibility text.",
+      },
+      {
+        q: "Does this work with multipage PDFs?",
+        a: "Yes. The same settings are applied to all pages, and you can preview each page.",
+      },
+    ],
+  },
+  "edit-pdf": {
+    heading: "Add visual overlays to your PDF pages",
+    intro: [
+      "Add notes, rectangles, ellipses, highlights and whiteout overlays without uploading your document. Choose any page, then drag elements into place or use the percentage position controls.",
+      "Original page content stays in the PDF. This is an overlay editor, so it does not rewrite existing text, edit original images or securely redact information.",
+    ],
+    steps: [
+      ["Add a PDF.", "Wait for the visual page preview."],
+      [
+        "Add an element.",
+        "Choose text, rectangle, ellipse, highlight or whiteout. Select a text element to edit its wording, font size and color.",
+      ],
+      [
+        "Position and review.",
+        "Drag elements or adjust their position and size. Use Added elements to revisit an element on any page. Delete selected element removes an added overlay.",
+      ],
+      ["Export.", "Click Process and download the edited copy. The original file is preserved."],
+    ],
+    tipsTitle: "Understand the editing limits",
+    tips: [
+      [
+        "Whiteout is not secure redaction.",
+        "A white rectangle only covers content visually. Text underneath can still be searched, copied or recovered. Never use whiteout to hide secrets.",
+      ],
+      [
+        "Text support.",
+        "Added text uses a standard Latin font. Unsupported characters or text wider than its element are reported before export.",
+      ],
+      [
+        "Keep an editable original.",
+        "After downloading, the overlays become page content. Keep this browser session open until you finish editing.",
+      ],
+      [
+        "Existing form fields.",
+        "Fields stay interactive by default and can appear above overlays. Select Flatten form fields in edited copy when covering a field; its visible value remains but the field becomes static. Other existing annotations can still appear above overlays.",
+      ],
+      PRIVATE,
+    ],
+    faqs: [
+      {
+        q: "Can I change the original text?",
+        a: "No. You can add and arrange overlays. Existing text remains unchanged and selectable.",
+      },
+      {
+        q: "Can I remove confidential information with whiteout?",
+        a: "No. Whiteout is not secure redaction. Use a dedicated redaction tool that actually removes the underlying content.",
+      },
+    ],
+  },
+  "unlock-pdf": {
+    heading: "Remove PDF password protection with permission",
+    intro: [
+      "Use a valid password to create an unencrypted copy of a supported PDF that you own or are authorized to unlock. Standard password encryption is processed entirely on your device.",
+      "Passwords are used only in memory for the current attempt, cleared from the form afterwards and never saved or uploaded. This tool does not guess or recover passwords.",
+    ],
+    steps: [
+      ["Choose the protected PDF.", "Select a document you own or have permission to unlock."],
+      [
+        "Enter its password.",
+        "Enter the opening or owner password. Leave it empty only for a file that opens without a password.",
+      ],
+      ["Confirm permission.", "Check the authorization box, then click Process."],
+      [
+        "Download the unlocked copy.",
+        "The output opens without a password. Store it carefully because its protection has been removed.",
+      ],
+    ],
+    tipsTitle: "Supported files and privacy",
+    tips: [
+      [
+        "Supported password encryption.",
+        "Standard RC4 and AES password-encrypted PDFs are handled when the local engine supports them and the password is valid.",
+      ],
+      [
+        "Unsupported protection.",
+        "Certificate-encrypted files, DRM, corrupted files and unsupported security handlers produce an error instead of a download.",
+      ],
+      [
+        "Signed documents.",
+        "Rewriting a PDF can invalidate digital signatures. Keep the original signed document.",
+      ],
+      PRIVATE,
+    ],
+    faqs: [
+      {
+        q: "Can it recover a forgotten password?",
+        a: "No. Supply a valid password. An incorrect password produces a clear error.",
+      },
+      {
+        q: "Are passwords uploaded or remembered?",
+        a: "No. Processing is local. Passwords are not sent to a server, stored in browser storage or retained in the form after an attempt.",
+      },
+    ],
+  },
   "compress-pdf": {
     heading: "Compress PDF files online for free",
     intro: [

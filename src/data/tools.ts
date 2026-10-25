@@ -290,6 +290,43 @@ export const tools: Tool[] = [
     multiple: false,
     related: ["flatten-pdf", "watermark-pdf", "add-text-to-pdf"],
   },
+  {
+    slug: "adjust-pdf-brightness",
+    name: "Adjust PDF Brightness",
+    description: "Brighten scanned PDFs and adjust contrast with a before-and-after preview.",
+    category: "Optimize",
+    accent: "yellow",
+    icon: "Sun",
+    processingType: "client",
+    accepts: ["application/pdf"],
+    multiple: false,
+    related: ["grayscale-pdf", "compress-pdf", "edit-pdf"],
+  },
+  {
+    slug: "edit-pdf",
+    name: "Edit PDF",
+    description: "Add and position text, shapes, highlights and whiteout overlays visually.",
+    category: "Edit",
+    accent: "blue",
+    icon: "Pencil",
+    processingType: "client",
+    accepts: ["application/pdf"],
+    multiple: false,
+    related: ["add-text-to-pdf", "watermark-pdf", "adjust-pdf-brightness"],
+  },
+  {
+    slug: "unlock-pdf",
+    name: "Unlock PDF",
+    description:
+      "Remove supported PDF password protection locally with your password and permission.",
+    category: "Edit",
+    accent: "green",
+    icon: "LockOpen",
+    processingType: "client",
+    accepts: ["application/pdf"],
+    multiple: false,
+    related: ["merge-pdf", "edit-pdf", "pdf-to-text"],
+  },
 ];
 
 export const toolBySlug = (slug: string): Tool | undefined => tools.find((t) => t.slug === slug);
