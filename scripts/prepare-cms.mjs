@@ -100,7 +100,7 @@ export function createCmsConfig(authUrl = "") {
         },
       },
     },
-    logo: { src: "/logo.svg" },
+    logo: { src: "/admin/logo.svg" },
     show_preview_links: false,
     collections: [
       { name: "blog", label: "Blog posts", label_singular: "Blog post", folder: "content/blog" },

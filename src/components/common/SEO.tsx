@@ -13,10 +13,8 @@ export function seoHead(opts: {
   ogType?: string;
 }) {
   const { title, description, ogType = "website" } = opts;
-  const ogImage =
-    opts.ogImage?.startsWith("/") && defaultSiteConfig.siteUrl
-      ? defaultSiteConfig.siteUrl + opts.ogImage
-      : opts.ogImage;
+  const image = opts.ogImage || defaultSiteConfig.defaultOgImage;
+  const ogImage = image.startsWith("/") ? defaultSiteConfig.siteUrl + image : image;
   // Absolute URLs for canonical/og:url when VITE_SITE_URL is set.
   const base = defaultSiteConfig.siteUrl;
   const path = base ? base + opts.path : opts.path;
@@ -33,7 +31,9 @@ export function seoHead(opts: {
     ...(ogImage
       ? [
           { property: "og:image", content: ogImage },
+          { property: "og:image:alt", content: title },
           { name: "twitter:image", content: ogImage },
+          { name: "twitter:image:alt", content: title },
         ]
       : []),
   ];

@@ -18,7 +18,7 @@ function CookiePolicy() {
   return (
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <h1 className="text-4xl font-bold">Cookie Policy</h1>
-      <p className="mt-2 text-sm text-muted-foreground">Last updated: 19 October 2026</p>
+      <p className="mt-2 text-sm text-muted-foreground">Last updated: 25 October 2026</p>
       <section className="mt-10 space-y-4 text-muted-foreground">
         <p>
           A cookie is a small text file stored on your device by a website. This policy explains
@@ -29,6 +29,12 @@ function CookiePolicy() {
         <p>
           The site itself does not set cookies to track you. The PDF tools work entirely in your
           browser and do not need cookies.
+        </p>
+        <p>
+          Your privacy preference is stored locally in your browser for up to 180 days. It contains
+          only your analytics/advertising choices and the time saved, never your PDF files or
+          passwords. If browser storage is unavailable, your choice applies only to the current
+          visit.
         </p>
         <h2 className="mt-8 text-2xl font-bold text-foreground">Google Analytics</h2>
         <p>
@@ -62,8 +68,17 @@ function CookiePolicy() {
         <h2 className="mt-8 text-2xl font-bold text-foreground">Managing cookies</h2>
         <p>
           You can delete or block cookies in your browser settings. Blocking cookies will not stop
-          the PDF tools from working. Where required, a consent message will let you choose whether
-          non-essential cookies are used.
+          the PDF tools from working. When optional services are configured, a privacy message lets
+          you accept or reject them. Use Privacy settings in the footer to change your choices.
+          Withdrawing permission reloads the page to stop previously loaded optional scripts;
+          existing third-party cookies can be removed in browser settings. Global Privacy Control
+          and Do Not Track signals keep optional services off.
+        </p>
+        <h2 className="mt-8 text-2xl font-bold text-foreground">Admin authentication</h2>
+        <p>
+          The separate admin login uses a short-lived, secure authentication cookie to protect
+          GitHub sign-in. It is not used by the public PDF tools and is removed when the
+          authentication callback is handled.
         </p>
         <h2 className="mt-8 text-2xl font-bold text-foreground">Contact</h2>
         <p>

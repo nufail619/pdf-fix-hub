@@ -1,0 +1,83 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { siteSettings } from "../../scripts/site-settings.mjs";
+import { articleDate } from "../../src/lib/article-date.ts";
+import { parsePrivacyChoices, serviceIds } from "../../src/lib/privacy-consent.ts";
+
+test("privacy choices reject malformed, future, expired and unexpected records", () => {
+  const now = Date.now();
+  const valid = { version: 1, analytics: true, advertising: false, savedAt: now };
+  assert.deepEqual(parsePrivacyChoices(JSON.stringify(valid), now), valid);
+  for (const value of [
+    "invalid",
+    null,
+    JSON.stringify({ ...valid, version: 2 }),
+    JSON.stringify({ ...valid, analytics: "true" }),
+    JSON.stringify({ ...valid, savedAt: now + 1 }),
+    JSON.stringify({ ...valid, savedAt: now - 181 * 86400000 }),
+  ])
+    assert.equal(parsePrivacyChoices(value, now), null);
+});
+test("service identifiers cannot inject markup or arbitrary script URLs", () => {
+  assert.deepEqual(
+    serviceIds({
+      gaId: "G-TEST123",
+      gtmId: "GTM-TEST123",
+      clarityId: "test123",
+      adsenseId: "ca-pub-1234567890123456",
+    }),
+    { ga: "G-TEST123", gtm: "GTM-TEST123", clarity: "test123", adsense: "ca-pub-1234567890123456" },
+  );
+  assert.deepEqual(
+    serviceIds({
+      gaId: "G-TEST'><script>",
+      gtmId: "https://evil.test",
+      clarityId: "javascript:alert(1)",
+      adsenseId: "ca-pub-123&other=1",
+    }),
+    { ga: "", gtm: "", clarity: "", adsense: "" },
+  );
+});
+test("Cloudflare Preview always disables indexing and production keeps canonical origin", () => {
+  assert.equal(
+    siteSettings(process.cwd(), {
+      CF_PAGES_BRANCH: "develop/pdf-tools-repair",
+      VITE_NOINDEX: "false",
+    }).noIndex,
+    true,
+  );
+  const production = siteSettings(process.cwd(), {
+    CF_PAGES_BRANCH: "main",
+    VITE_NOINDEX: "false",
+  });
+  assert.equal(production.noIndex, false);
+  assert.equal(production.siteUrl, "https://mypdffix.com");
+  assert.equal(
+    siteSettings(process.cwd(), { CF_PAGES_BRANCH: "main", VITE_NOINDEX: "true" }).noIndex,
+    true,
+  );
+});
+test("canonical site origins reject insecure and credential-bearing URLs", () => {
+  for (const value of [
+    "http://example.test",
+    "https://user:example@example.test",
+    "https://example.test/path",
+    "https://example.test?value=1",
+  ])
+    assert.throws(
+      () => siteSettings(process.cwd(), { VITE_SITE_URL: value }),
+      /HTTPS website origin/,
+    );
+});
+test("CMS calendar dates are stable independently of reader timezone", () => {
+  const previous = process.env.TZ;
+  try {
+    for (const tz of ["Pacific/Honolulu", "Asia/Qatar", "Pacific/Auckland"]) {
+      process.env.TZ = tz;
+      assert.equal(articleDate("2026-04-12"), "April 12, 2026");
+    }
+  } finally {
+    if (previous) process.env.TZ = previous;
+    else delete process.env.TZ;
+  }
+});

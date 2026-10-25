@@ -178,7 +178,10 @@ for (const collection of ["blog", "guides"]) {
     await page.screenshot({ path: info.outputPath("cms-saved-draft.png") });
     await page.getByRole("row", { name: slug, exact: true }).getByRole("checkbox").check();
     await page.getByRole("button", { name: "Delete Selected Entry", exact: true }).click();
-    await page.getByRole("alertdialog").getByRole("button", { name: "Delete", exact: true }).click();
+    await page
+      .getByRole("alertdialog")
+      .getByRole("button", { name: "Delete", exact: true })
+      .click();
     await expect.poll(() => mock.files.has(path)).toBe(false);
     expect(mock.writes.length).toBe(4);
     expect(mock.unexpected).toEqual([]);

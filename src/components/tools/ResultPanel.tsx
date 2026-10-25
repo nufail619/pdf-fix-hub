@@ -16,10 +16,14 @@ export function ResultPanel({
   const url = useMemo(() => URL.createObjectURL(blob), [blob]);
   useEffect(() => () => URL.revokeObjectURL(url), [url]);
   return (
-    <div className="rounded-2xl border border-border bg-section p-8 text-center">
+    <div
+      role="region"
+      aria-label="Processing result"
+      className="rounded-2xl border border-border bg-section p-6 text-center sm:p-8"
+    >
       <CheckCircle2 className="mx-auto mb-4 h-12 w-12 text-green-600" aria-hidden />
       <h2 className="text-xl font-bold">Your file is ready</h2>
-      <p className="mt-1 text-sm text-muted-foreground">
+      <p className="mt-1 break-all text-sm text-muted-foreground">
         {filename} · {(blob.size / 1024).toFixed(1)} KB
       </p>
       {note && <p className="mx-auto mt-3 max-w-md text-sm text-foreground">{note}</p>}

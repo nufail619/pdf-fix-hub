@@ -14,6 +14,7 @@ export function FileUpload({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
+  const [error, setError] = useState("");
 
   const acceptAttr = accepts.join(",");
   const LABELS: Record<string, string> = {
@@ -27,7 +28,28 @@ export function FileUpload({
   function handleFiles(list: FileList | null) {
     if (!list) return;
     const incoming = Array.from(list);
-    onChange(multiple ? [...files, ...incoming] : incoming.slice(0, 1));
+    const extensions: Record<string, string[]> = {
+      "application/pdf": [".pdf"],
+      "image/jpeg": [".jpg", ".jpeg"],
+      "image/png": [".png"],
+    };
+    const valid = incoming.filter(
+      (file) =>
+        file.size > 0 &&
+        accepts.some((accept) => {
+          if (accept.startsWith(".")) return file.name.toLowerCase().endsWith(accept);
+          if (file.type && file.type !== "application/octet-stream") return file.type === accept;
+          return extensions[accept]?.some((extension) =>
+            file.name.toLowerCase().endsWith(extension),
+          );
+        }),
+    );
+    setError(
+      valid.length < incoming.length
+        ? `Some files were not added. Choose non-empty ${acceptLabel} files.`
+        : "",
+    );
+    if (valid.length) onChange(multiple ? [...files, ...valid] : valid.slice(0, 1));
   }
 
   function onDrop(e: DragEvent) {
@@ -38,18 +60,16 @@ export function FileUpload({
 
   return (
     <div>
-      <div
-        role="button"
-        tabIndex={0}
+      <button
+        type="button"
         onClick={() => inputRef.current?.click()}
-        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && inputRef.current?.click()}
         onDragOver={(e) => {
           e.preventDefault();
           setDragOver(true);
         }}
         onDragLeave={() => setDragOver(false)}
         onDrop={onDrop}
-        className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-center transition-colors ${
+        className={`flex w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 text-center transition-colors sm:p-10 ${
           dragOver
             ? "border-primary bg-primary/5"
             : "border-border bg-section hover:border-primary/40"
@@ -57,19 +77,28 @@ export function FileUpload({
         aria-label="Upload files"
       >
         <Upload className="mb-3 h-10 w-10 text-primary" aria-hidden />
-        <p className="text-base font-semibold">
+        <span className="text-base font-semibold">
           Drop {multiple ? "files" : "a file"} here, or click to browse
+        </span>
+        <span className="mt-1 text-sm text-muted-foreground">Accepted: {acceptLabel}</span>
+      </button>
+      <input
+        ref={inputRef}
+        type="file"
+        accept={acceptAttr}
+        multiple={multiple}
+        className="hidden"
+        aria-label="Choose files"
+        onChange={(event) => {
+          handleFiles(event.target.files);
+          event.target.value = "";
+        }}
+      />
+      {error && (
+        <p role="alert" className="mt-3 text-sm text-red-700">
+          {error}
         </p>
-        <p className="mt-1 text-sm text-muted-foreground">Accepted: {acceptLabel}</p>
-        <input
-          ref={inputRef}
-          type="file"
-          accept={acceptAttr}
-          multiple={multiple}
-          className="hidden"
-          onChange={(e) => handleFiles(e.target.files)}
-        />
-      </div>
+      )}
 
       {files.length > 0 && (
         <ul className="mt-4 space-y-2">

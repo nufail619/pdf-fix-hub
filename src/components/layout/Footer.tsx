@@ -2,11 +2,13 @@ import { Link } from "@tanstack/react-router";
 import { Mail, FileText } from "lucide-react";
 import { tools } from "@/data/tools";
 import { useSiteConfig } from "@/context/SiteConfigContext";
+import { usePrivacy } from "@/context/PrivacyContext";
 
 export function Footer() {
   const { siteName, contactEmail } = useSiteConfig();
   const topTools = tools.slice(0, 8);
   const year = new Date().getFullYear();
+  const { openSettings } = usePrivacy();
 
   return (
     <footer className="mt-24 bg-section">
@@ -75,13 +77,22 @@ export function Footer() {
                   Cookie Policy
                 </Link>
               </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={openSettings}
+                  className="text-left text-muted-foreground hover:text-primary"
+                >
+                  Privacy settings
+                </button>
+              </li>
             </ul>
           </div>
           <div>
             <h3 className="mb-3 text-sm font-bold uppercase tracking-wider">Contact</h3>
             <a
               href={`mailto:${contactEmail}`}
-              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"
+              className="flex items-center gap-2 break-all text-sm text-muted-foreground hover:text-primary"
             >
               <Mail className="h-4 w-4" aria-hidden /> {contactEmail}
             </a>

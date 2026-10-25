@@ -89,9 +89,8 @@ test("an isolated production build publishes new CMS entries, removes unpublishe
       build.once("error", fail);
       build.once("exit", (code) => {
         log.end();
-        code === 0
-          ? done()
-          : fail(new Error(`Isolated CMS production build exited ${code}; see attached log`));
+        if (code === 0) done();
+        else fail(new Error(`Isolated CMS production build exited ${code}; see attached log`));
       });
     });
     const serve = sirv(join(root, "dist"), { single: true });

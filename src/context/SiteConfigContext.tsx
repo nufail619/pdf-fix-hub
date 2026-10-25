@@ -12,6 +12,7 @@ export type SiteConfig = {
   gaId: string;
   gtmId: string;
   clarityId: string;
+  noIndex: boolean;
 };
 
 // Values come from .env (VITE_*) at build time. See .env.example.
@@ -23,13 +24,14 @@ export const defaultSiteConfig: SiteConfig = {
   defaultTitle: "MY PDF FIX — Free Online PDF Tools",
   defaultDescription:
     "Every tool you need to work with PDFs in one place. Merge, split, compress, convert and edit PDFs for free, right in your browser.",
-  defaultOgImage: "/og-default.svg",
+  defaultOgImage: "/og-default.png",
   contactEmail: env.VITE_CONTACT_EMAIL || "mypdffix@gmail.com",
   adsenseId: env.VITE_ADSENSE_ID ?? "",
   adsenseAutoAdsCode: "",
   gaId: env.VITE_GA_ID ?? "",
   gtmId: env.VITE_GTM_ID ?? "",
   clarityId: env.VITE_CLARITY_ID ?? "",
+  noIndex: env.VITE_NOINDEX === "true",
 };
 
 const SiteConfigContext = createContext<SiteConfig>(defaultSiteConfig);

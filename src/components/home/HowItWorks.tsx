@@ -1,9 +1,21 @@
 import { Upload, Settings2, Download } from "lucide-react";
 
 const steps = [
-  { icon: Upload, title: "Upload", body: "Drag and drop your PDF or pick a file from your device." },
-  { icon: Settings2, title: "Process", body: "Choose your options and run the tool locally in your browser." },
-  { icon: Download, title: "Download", body: "Save the result instantly — no email, no sign-up required." },
+  {
+    icon: Upload,
+    title: "Upload",
+    body: "Drag and drop your PDF or pick a file from your device.",
+  },
+  {
+    icon: Settings2,
+    title: "Process",
+    body: "Choose your options and run the tool locally in your browser.",
+  },
+  {
+    icon: Download,
+    title: "Download",
+    body: "Save the result instantly — no email, no sign-up required.",
+  },
 ];
 
 export function HowItWorks() {

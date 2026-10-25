@@ -30,10 +30,7 @@ export function Button({
     lg: "h-14 px-8 text-base",
   };
   return (
-    <button
-      className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
-      {...rest}
-    >
+    <button className={`${base} ${variants[variant]} ${sizes[size]} ${className}`} {...rest}>
       {loading && <Loader2 className="h-4 w-4 animate-spin" aria-hidden />}
       {children}
     </button>

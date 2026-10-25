@@ -32,6 +32,9 @@ dist-ssr
 *.sw?
 
 .env.local
+.env.*
+!.env.example
+.dev.vars.*
 
 # Browser test artifacts and generated fixtures
 test-results/

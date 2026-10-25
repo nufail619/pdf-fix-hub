@@ -6,7 +6,8 @@ export const Route = createFileRoute("/flatten-pdf")({
   head: () =>
     seoHead({
       title: "Flatten PDF — Lock Form Fields and Annotations — MY PDF FIX",
-      description: "Flatten PDF forms, comments and annotations so they can't be edited. Free, private and processed in your browser.",
+      description:
+        "Flatten PDF forms, comments and annotations so they can't be edited. Free, private and processed in your browser.",
       path: "/flatten-pdf",
     }),
   component: () => <ToolPage slug="flatten-pdf" />,

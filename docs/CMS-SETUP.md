@@ -59,16 +59,20 @@ file. Use GitHub two-factor authentication for editor accounts.
 
 In that Worker's Settings → Variables and Secrets, add:
 
-| Name | Where/value |
-| --- | --- |
-| `GITHUB_CLIENT_ID` | OAuth App Client ID |
-| `GITHUB_CLIENT_SECRET` | OAuth App client secret; encrypted Worker secret |
-| `ALLOWED_DOMAINS` | Exact website hostname(s), comma-separated; no scheme, path, port or wildcards |
+| Name                   | Where/value                                                                    |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| `GITHUB_CLIENT_ID`     | OAuth App Client ID                                                            |
+| `GITHUB_CLIENT_SECRET` | OAuth App client secret; encrypted Worker secret                               |
+| `ALLOWED_DOMAINS`      | Exact website hostname(s), comma-separated; no scheme, path, port or wildcards |
 
 Include only the intended admin hosts. For a Pages preview, copy its stable
 branch-alias hostname from the Cloudflare dashboard. Do not allow every Pages
 preview, `*.pages.dev` or every branch: untrusted preview code must not receive
 editor credentials. The wrapper refuses empty or wildcard allowlists.
+
+Open the admin using that stable branch-alias address when reviewing new builds.
+An individual deployment's hash-based hostname changes on each deployment; allowing
+only an old hash hostname will cause “Your domain is not allowed” on the next one.
 
 The GitHub app requests repository access (`repo`, plus Sveltia's user scope).
 GitHub OAuth Apps cannot limit this scope to one repository. Prefer an editor

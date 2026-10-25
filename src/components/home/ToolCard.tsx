@@ -6,7 +6,7 @@ export function ToolCard({ tool }: { tool: Tool }) {
   const accent = ACCENT_CLASSES[tool.accent];
   return (
     <Link
-      to={"/" + tool.slug as never}
+      to={("/" + tool.slug) as never}
       className="group flex h-full flex-col rounded-2xl border border-border bg-background p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg"
     >
       <div

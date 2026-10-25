@@ -24,7 +24,7 @@ function Contact() {
       </p>
       <a
         href={`mailto:${contactEmail}`}
-        className="mt-8 inline-flex h-12 items-center gap-2 rounded-md bg-primary px-6 font-semibold text-primary-foreground hover:opacity-90"
+        className="mt-8 inline-flex min-h-12 max-w-full items-center gap-2 break-all rounded-md bg-primary px-4 py-3 font-semibold text-primary-foreground hover:opacity-90 sm:px-6"
       >
         <Mail className="h-4 w-4" aria-hidden /> Email {contactEmail}
       </a>

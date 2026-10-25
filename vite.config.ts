@@ -1,9 +1,11 @@
 import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { siteSettings } from "./scripts/site-settings.mjs";
 
 // Generate CMS assets and published-only content for both dev and production.
 execFileSync(process.execPath, ["scripts/prepare-cms.mjs"], { stdio: "inherit" });
+const settings = siteSettings();
 
 // Static SPA build: disable Cloudflare Worker output and enable TanStack Start
 // SPA mode so `vite build` emits a static dist/ (index.html + assets/) servable
@@ -11,12 +13,17 @@ execFileSync(process.execPath, ["scripts/prepare-cms.mjs"], { stdio: "inherit" }
 export default defineConfig({
   cloudflare: false,
   tanstackStart: {
-    spa: { enabled: true },
+    pages: [{ path: "/", prerender: { enabled: true } }],
+    // A separate shell request prevents it from replacing the prerendered homepage.
+    spa: { enabled: true, maskPath: "/?__spa_shell=1" },
     // Prerender every linked page to static HTML so search engines and the
     // AdSense reviewer see full content without running JavaScript.
     prerender: { enabled: true, crawlLinks: true, failOnError: true },
   },
   vite: {
+    define: {
+      "import.meta.env.VITE_NOINDEX": JSON.stringify(String(settings.noIndex)),
+    },
     plugins: [
       {
         name: "cms-content-reload",

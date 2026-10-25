@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { ChevronRight, ShieldCheck } from "lucide-react";
@@ -14,6 +14,8 @@ import { ToolContent } from "./ToolContent";
 import { BrightnessOptions } from "./BrightnessOptions";
 import { PdfEditor } from "./PdfEditor";
 import { UnlockOptions } from "./UnlockOptions";
+import { serializeStructuredData } from "@/lib/structured-data";
+import { defaultSiteConfig } from "@/context/SiteConfigContext";
 
 export function ToolPage({ slug, children }: { slug: string; children?: React.ReactNode }) {
   const tool = toolBySlug(slug)!;
@@ -76,6 +78,42 @@ export function ToolPage({ slug, children }: { slug: string; children?: React.Re
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeStructuredData({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "SoftwareApplication",
+                name: tool.name,
+                description: tool.description,
+                url: `${defaultSiteConfig.siteUrl}/${tool.slug}`,
+                applicationCategory: "UtilitiesApplication",
+                operatingSystem: "Web browser",
+                offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+              },
+              {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "Home",
+                    item: defaultSiteConfig.siteUrl + "/",
+                  },
+                  {
+                    "@type": "ListItem",
+                    position: 2,
+                    name: tool.name,
+                    item: `${defaultSiteConfig.siteUrl}/${tool.slug}`,
+                  },
+                ],
+              },
+            ],
+          }),
+        }}
+      />
       <div className="bg-section py-10">
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <nav aria-label="Breadcrumb" className="mb-4 text-sm text-muted-foreground">
@@ -105,7 +143,7 @@ export function ToolPage({ slug, children }: { slug: string; children?: React.Re
         </div>
       </div>
 
-      <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+      <div data-clarity-mask="true" className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
         {result ? (
           <ResultPanel
             blob={result.blob}
@@ -208,6 +246,7 @@ function ToolOptions({
   options: Record<string, string>;
   setOptions: (next: Record<string, string>) => void;
 }) {
+  const optionId = useId();
   const set = (k: string, v: string) => setOptions({ ...options, [k]: v });
   const input =
     "h-11 w-full rounded-md border border-border bg-background px-3 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30";
@@ -215,8 +254,11 @@ function ToolOptions({
   if (slug === "split-pdf" || slug === "extract-pdf-pages" || slug === "remove-pdf-pages") {
     return (
       <div className="mt-6">
-        <label className="mb-2 block text-sm font-semibold">Page ranges (e.g. 1-3, 5, 7-9)</label>
+        <label htmlFor={`${optionId}-1`} className="mb-2 block text-sm font-semibold">
+          Page ranges (e.g. 1-3, 5, 7-9)
+        </label>
         <input
+          id={`${optionId}-1`}
           className={input}
           placeholder="1-3, 5"
           value={options.ranges ?? ""}
@@ -228,10 +270,11 @@ function ToolOptions({
   if (slug === "reorder-pdf-pages") {
     return (
       <div className="mt-6">
-        <label className="mb-2 block text-sm font-semibold">
+        <label htmlFor={`${optionId}-2`} className="mb-2 block text-sm font-semibold">
           New page order (comma separated, e.g. 3,1,2)
         </label>
         <input
+          id={`${optionId}-2`}
           className={input}
           placeholder="3,1,2"
           value={options.order ?? ""}
@@ -243,8 +286,11 @@ function ToolOptions({
   if (slug === "rotate-pdf") {
     return (
       <div className="mt-6">
-        <label className="mb-2 block text-sm font-semibold">Rotation</label>
+        <label htmlFor={`${optionId}-3`} className="mb-2 block text-sm font-semibold">
+          Rotation
+        </label>
         <select
+          id={`${optionId}-3`}
           className={input}
           value={options.angle ?? "90"}
           onChange={(e) => set("angle", e.target.value)}
@@ -260,8 +306,11 @@ function ToolOptions({
     return (
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm font-semibold">Position</label>
+          <label htmlFor={`${optionId}-4`} className="mb-2 block text-sm font-semibold">
+            Position
+          </label>
           <select
+            id={`${optionId}-4`}
             className={input}
             value={options.position ?? "bottom-center"}
             onChange={(e) => set("position", e.target.value)}
@@ -273,8 +322,11 @@ function ToolOptions({
           </select>
         </div>
         <div>
-          <label className="mb-2 block text-sm font-semibold">Font size</label>
+          <label htmlFor={`${optionId}-5`} className="mb-2 block text-sm font-semibold">
+            Font size
+          </label>
           <input
+            id={`${optionId}-5`}
             type="number"
             className={input}
             value={options.fontSize ?? "12"}
@@ -288,8 +340,11 @@ function ToolOptions({
     return (
       <div className="mt-6 space-y-4">
         <div>
-          <label className="mb-2 block text-sm font-semibold">Text</label>
+          <label htmlFor={`${optionId}-6`} className="mb-2 block text-sm font-semibold">
+            Text
+          </label>
           <input
+            id={`${optionId}-6`}
             className={input}
             value={options.text ?? ""}
             onChange={(e) => set("text", e.target.value)}
@@ -297,8 +352,11 @@ function ToolOptions({
         </div>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div>
-            <label className="mb-2 block text-sm font-semibold">Page</label>
+            <label htmlFor={`${optionId}-7`} className="mb-2 block text-sm font-semibold">
+              Page
+            </label>
             <input
+              id={`${optionId}-7`}
               type="number"
               className={input}
               value={options.page ?? "1"}
@@ -306,8 +364,11 @@ function ToolOptions({
             />
           </div>
           <div>
-            <label className="mb-2 block text-sm font-semibold">X (pt)</label>
+            <label htmlFor={`${optionId}-8`} className="mb-2 block text-sm font-semibold">
+              X (pt)
+            </label>
             <input
+              id={`${optionId}-8`}
               type="number"
               className={input}
               value={options.x ?? "50"}
@@ -315,8 +376,11 @@ function ToolOptions({
             />
           </div>
           <div>
-            <label className="mb-2 block text-sm font-semibold">Y (pt)</label>
+            <label htmlFor={`${optionId}-9`} className="mb-2 block text-sm font-semibold">
+              Y (pt)
+            </label>
             <input
+              id={`${optionId}-9`}
               type="number"
               className={input}
               value={options.y ?? "50"}
@@ -324,8 +388,11 @@ function ToolOptions({
             />
           </div>
           <div>
-            <label className="mb-2 block text-sm font-semibold">Size</label>
+            <label htmlFor={`${optionId}-10`} className="mb-2 block text-sm font-semibold">
+              Size
+            </label>
             <input
+              id={`${optionId}-10`}
               type="number"
               className={input}
               value={options.fontSize ?? "16"}
@@ -339,8 +406,11 @@ function ToolOptions({
   if (slug === "add-blank-page-to-pdf") {
     return (
       <div className="mt-6">
-        <label className="mb-2 block text-sm font-semibold">Insert after page (0 = start)</label>
+        <label htmlFor={`${optionId}-11`} className="mb-2 block text-sm font-semibold">
+          Insert after page (0 = start)
+        </label>
         <input
+          id={`${optionId}-11`}
           type="number"
           className={input}
           value={options.position ?? "0"}
@@ -352,8 +422,11 @@ function ToolOptions({
   if (slug === "add-margin-to-pdf") {
     return (
       <div className="mt-6">
-        <label className="mb-2 block text-sm font-semibold">Margin (points)</label>
+        <label htmlFor={`${optionId}-12`} className="mb-2 block text-sm font-semibold">
+          Margin (points)
+        </label>
         <input
+          id={`${optionId}-12`}
           type="number"
           className={input}
           value={options.margin ?? "36"}
@@ -367,8 +440,11 @@ function ToolOptions({
     return (
       <div className="mt-6 space-y-4">
         <div>
-          <label className="mb-2 block text-sm font-semibold">Watermark text</label>
+          <label htmlFor={`${optionId}-13`} className="mb-2 block text-sm font-semibold">
+            Watermark text
+          </label>
           <input
+            id={`${optionId}-13`}
             className={input}
             placeholder="CONFIDENTIAL"
             value={options.text ?? ""}
@@ -377,8 +453,11 @@ function ToolOptions({
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="mb-2 block text-sm font-semibold">Opacity (0–1)</label>
+            <label htmlFor={`${optionId}-14`} className="mb-2 block text-sm font-semibold">
+              Opacity (0–1)
+            </label>
             <input
+              id={`${optionId}-14`}
               type="number"
               step="0.05"
               min="0"
@@ -389,8 +468,11 @@ function ToolOptions({
             />
           </div>
           <div>
-            <label className="mb-2 block text-sm font-semibold">Font size</label>
+            <label htmlFor={`${optionId}-15`} className="mb-2 block text-sm font-semibold">
+              Font size
+            </label>
             <input
+              id={`${optionId}-15`}
               type="number"
               className={input}
               value={options.fontSize ?? "60"}
@@ -444,8 +526,11 @@ function ToolOptions({
     return (
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm font-semibold">Image quality</label>
+          <label htmlFor={`${optionId}-image-quality`} className="mb-2 block text-sm font-semibold">
+            Image quality
+          </label>
           <select
+            id={`${optionId}-image-quality`}
             className={input}
             value={options.dpi ?? "150"}
             onChange={(e) => set("dpi", e.target.value)}
@@ -456,8 +541,11 @@ function ToolOptions({
           </select>
         </div>
         <div>
-          <label className="mb-2 block text-sm font-semibold">Pages (optional)</label>
+          <label htmlFor={`${optionId}-16`} className="mb-2 block text-sm font-semibold">
+            Pages (optional)
+          </label>
           <input
+            id={`${optionId}-16`}
             className={input}
             placeholder="All pages, or e.g. 1-3, 5"
             value={options.ranges ?? ""}
@@ -471,8 +559,15 @@ function ToolOptions({
     const mode = options.mode ?? "forms";
     return (
       <div className="mt-6">
-        <label className="mb-2 block text-sm font-semibold">What to flatten</label>
-        <select className={input} value={mode} onChange={(e) => set("mode", e.target.value)}>
+        <label htmlFor={`${optionId}-17`} className="mb-2 block text-sm font-semibold">
+          What to flatten
+        </label>
+        <select
+          id={`${optionId}-17`}
+          className={input}
+          value={mode}
+          onChange={(e) => set("mode", e.target.value)}
+        >
           <option value="forms">Form fields only (text stays selectable)</option>
           <option value="full">
             Everything — forms, comments and stamps (pages become images)
@@ -511,8 +606,11 @@ function ToolOptions({
           </div>
         </div>
         <div>
-          <label className="mb-2 block text-sm font-semibold">Pages (optional)</label>
+          <label htmlFor={`${optionId}-18`} className="mb-2 block text-sm font-semibold">
+            Pages (optional)
+          </label>
           <input
+            id={`${optionId}-18`}
             className={input}
             placeholder="All pages, or e.g. 1-3, 5"
             value={options.ranges ?? ""}

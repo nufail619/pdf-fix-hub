@@ -1,6 +1,6 @@
-import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
-import { writeFile } from 'fs/promises';
-import { mkdir } from 'fs/promises';
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import { writeFile } from "fs/promises";
+import { mkdir } from "fs/promises";
 
 async function createTestPdf(name: string, pages: number) {
   const doc = await PDFDocument.create();
@@ -17,11 +17,11 @@ async function createFormPdf(name: string) {
   const doc = await PDFDocument.create();
   const page = doc.addPage([595, 842]);
   const form = doc.getForm();
-  form.createTextField('text-field').addToPage(page, { x: 50, y: 700, width: 200, height: 30 });
+  form.createTextField("text-field").addToPage(page, { x: 50, y: 700, width: 200, height: 30 });
   const bytes = await doc.save();
   await writeFile(`tests/fixtures/${name}`, bytes);
 }
 
-await mkdir('tests/fixtures', { recursive: true });
-await createTestPdf('multi-page.pdf', 5);
-await createFormPdf('form-pdf.pdf');
+await mkdir("tests/fixtures", { recursive: true });
+await createTestPdf("multi-page.pdf", 5);
+await createFormPdf("form-pdf.pdf");
