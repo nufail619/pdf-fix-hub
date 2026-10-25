@@ -4,11 +4,16 @@ export async function reorderPages(file: File, order: string): Promise<Blob> {
   const bytes = new Uint8Array(await file.arrayBuffer());
   const src = await PDFDocument.load(bytes);
   const total = src.getPageCount();
-  const sequence = order
-    .split(",")
-    .map((s) => parseInt(s.trim(), 10))
-    .filter((n) => Number.isFinite(n) && n >= 1 && n <= total);
-  if (sequence.length === 0) throw new Error("Enter a comma-separated page order, e.g. 3,1,2");
+  const parts = order.split(",").map((s) => s.trim());
+  const sequence = parts.map(Number);
+  if (
+    parts.some((s) => !/^\d+$/.test(s)) ||
+    sequence.length !== total ||
+    new Set(sequence).size !== total ||
+    sequence.some((n) => n < 1 || n > total)
+  ) {
+    throw new Error(`Enter every page from 1 to ${total} exactly once, in the order you want.`);
+  }
   const out = await PDFDocument.create();
   const copied = await out.copyPages(
     src,

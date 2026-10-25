@@ -9,6 +9,9 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test:pdf-tools": "playwright test --config playwright.pdf-tools.config.ts",
+    "test:pdf-tools:build": "npm run build && npm run test:pdf-tools",
     "format": "prettier --write ."
   },
   "dependencies": {

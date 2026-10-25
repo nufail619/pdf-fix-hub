@@ -1,0 +1,4 @@
+import { execFileSync } from "node:child_process";
+export default function setup() {
+  execFileSync("python3", ["tests/pdf-tools/fixtures.py"], { stdio: "inherit" });
+}

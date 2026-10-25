@@ -50,7 +50,8 @@ export async function renderPage(
   await page.render({
     canvasContext: ctx,
     viewport,
-    annotationMode: annotations ? pdfjs.AnnotationMode.ENABLE_FORMS : pdfjs.AnnotationMode.DISABLE,
+    // Exports have no HTML form overlay: paint widget appearances into the canvas.
+    annotationMode: annotations ? pdfjs.AnnotationMode.ENABLE : pdfjs.AnnotationMode.DISABLE,
   }).promise;
   page.cleanup();
   return { canvas, widthPt: base.width, heightPt: base.height };

@@ -19,12 +19,20 @@ export function parsePageRanges(input: string, totalPages: number): number[] {
   for (const part of parts) {
     const m = part.match(/^(\d+)\s*-\s*(\d+)$/);
     if (m) {
-      const start = Math.max(1, parseInt(m[1], 10));
-      const end = Math.min(totalPages, parseInt(m[2], 10));
+      const start = Number(m[1]);
+      const end = Number(m[2]);
+      if (start < 1 || end > totalPages || start > end) {
+        throw new Error(`Invalid page range “${part}”. Choose pages from 1 to ${totalPages}.`);
+      }
       for (let i = start; i <= end; i++) result.add(i);
     } else if (/^\d+$/.test(part)) {
       const n = parseInt(part, 10);
-      if (n >= 1 && n <= totalPages) result.add(n);
+      if (n < 1 || n > totalPages) {
+        throw new Error(`Invalid page “${part}”. Choose pages from 1 to ${totalPages}.`);
+      }
+      result.add(n);
+    } else {
+      throw new Error(`Invalid page range “${part}”. Use numbers such as 1-3, 5.`);
     }
   }
   return Array.from(result).sort((a, b) => a - b);

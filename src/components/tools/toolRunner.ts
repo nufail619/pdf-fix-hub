@@ -27,6 +27,28 @@ export async function runTool(
   files: File[],
   options: Record<string, string>,
 ): Promise<RunResult> {
+  const numberOption = (
+    key: string,
+    fallback: number,
+    min: number,
+    max = Infinity,
+    integer = true,
+  ) => {
+    const raw = options[key];
+    const value = raw === undefined ? fallback : Number(raw);
+    if (
+      raw?.trim() === "" ||
+      !Number.isFinite(value) ||
+      value < min ||
+      value > max ||
+      (integer && !Number.isInteger(value))
+    ) {
+      throw new Error(
+        `Enter a valid ${key} between ${min} and ${Number.isFinite(max) ? max : "the supported maximum"}.`,
+      );
+    }
+    return value;
+  };
   const base = files[0]?.name?.replace(/\.[^.]+$/, "") ?? "document";
   switch (tool.slug) {
     case "merge-pdf":
@@ -59,14 +81,14 @@ export async function runTool(
         filename: `${base}-reordered.pdf`,
       };
     case "rotate-pdf": {
-      const angle = (parseInt(options.angle ?? "90", 10) as 90 | 180 | 270) || 90;
+      const angle = numberOption("angle", 90, 90, 270) as 90 | 180 | 270;
       return { blob: await rotatePdf(files[0], angle), filename: `${base}-rotated.pdf` };
     }
     case "add-page-numbers-to-pdf":
       return {
         blob: await addPageNumbers(files[0], {
           position: (options.position as PageNumberPosition) ?? "bottom-center",
-          fontSize: parseInt(options.fontSize ?? "12", 10) || 12,
+          fontSize: numberOption("fontSize", 12, 1, 500),
         }),
         filename: `${base}-numbered.pdf`,
       };
@@ -74,31 +96,31 @@ export async function runTool(
       return {
         blob: await addTextToPdf(files[0], {
           text: options.text ?? "",
-          page: parseInt(options.page ?? "1", 10) || 1,
-          x: parseInt(options.x ?? "50", 10) || 50,
-          y: parseInt(options.y ?? "50", 10) || 50,
-          fontSize: parseInt(options.fontSize ?? "16", 10) || 16,
+          page: numberOption("page", 1, 1),
+          x: numberOption("x", 50, 0, Infinity, false),
+          y: numberOption("y", 50, 0, Infinity, false),
+          fontSize: numberOption("fontSize", 16, 1, 500),
         }),
         filename: `${base}-text.pdf`,
       };
     case "add-blank-page-to-pdf":
       return {
         blob: await addBlankPage(files[0], {
-          position: parseInt(options.position ?? "0", 10) || 0,
+          position: numberOption("position", 0, 0),
         }),
         filename: `${base}-blank.pdf`,
       };
     case "add-margin-to-pdf":
       return {
-        blob: await addMargin(files[0], parseInt(options.margin ?? "36", 10) || 36),
+        blob: await addMargin(files[0], numberOption("margin", 36, 0, 500, false)),
         filename: `${base}-margin.pdf`,
       };
     case "watermark-pdf":
       return {
         blob: await watermarkPdf(files[0], {
           text: options.text ?? "WATERMARK",
-          opacity: parseFloat(options.opacity ?? "0.25") || 0.25,
-          fontSize: parseInt(options.fontSize ?? "60", 10) || 60,
+          opacity: numberOption("opacity", 0.25, 0, 1, false),
+          fontSize: numberOption("fontSize", 60, 1, 500),
         }),
         filename: `${base}-watermarked.pdf`,
       };
@@ -108,19 +130,9 @@ export async function runTool(
       return { blob, note, filename: `${base}-compressed.pdf` };
     }
     case "pdf-to-jpg":
-      return pdfToImages(
-        files[0],
-        "jpg",
-        parseInt(options.dpi ?? "150", 10) || 150,
-        options.ranges ?? "",
-      );
+      return pdfToImages(files[0], "jpg", numberOption("dpi", 150, 36, 300), options.ranges ?? "");
     case "pdf-to-png":
-      return pdfToImages(
-        files[0],
-        "png",
-        parseInt(options.dpi ?? "150", 10) || 150,
-        options.ranges ?? "",
-      );
+      return pdfToImages(files[0], "png", numberOption("dpi", 150, 36, 300), options.ranges ?? "");
     case "pdf-to-text":
       return { blob: await pdfToText(files[0]), filename: `${base}.txt` };
     case "word-to-pdf": {
@@ -137,7 +149,7 @@ export async function runTool(
         filename: `${base}-grayscale.pdf`,
       };
     case "crop-pdf": {
-      const mm = (k: string) => parseFloat(options[k] ?? "10") || 0;
+      const mm = (k: string) => numberOption(k, 10, 0, 1000, false);
       return {
         blob: await cropPdf(
           files[0],

@@ -6,6 +6,7 @@ export async function removePages(file: File, ranges: string): Promise<Blob> {
   const src = await PDFDocument.load(bytes);
   const total = src.getPageCount();
   const remove = new Set(parsePageRanges(ranges, total));
+  if (remove.size === 0) throw new Error("Enter the pages you want to remove.");
   const keep: number[] = [];
   for (let i = 1; i <= total; i++) if (!remove.has(i)) keep.push(i);
   if (keep.length === 0) throw new Error("Cannot remove every page.");

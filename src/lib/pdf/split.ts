@@ -66,7 +66,7 @@ export async function splitPdf(
     }
     const zipped = zipSync(zipData);
     return {
-      blob: new Blob([zipped], { type: "application/zip" }),
+      blob: new Blob([new Uint8Array(zipped)], { type: "application/zip" }),
       filename: `${base}-split.zip`,
     };
   }
