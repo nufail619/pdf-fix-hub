@@ -47,6 +47,7 @@ jobs:
       - run: npm run test:new-tools
       - run: npm run test:cms
       - run: npm run test:website
+      - run: npm run test:pages
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

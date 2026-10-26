@@ -25,7 +25,8 @@ export const defaultSiteConfig: SiteConfig = {
   defaultDescription:
     "Every tool you need to work with PDFs in one place. Merge, split, compress, convert and edit PDFs for free, right in your browser.",
   defaultOgImage: "/og-default.png",
-  contactEmail: env.VITE_CONTACT_EMAIL || "mypdffix@gmail.com",
+  // Keep the owner's address authoritative even if hosting retains a template value.
+  contactEmail: "mypdffix@gmail.com",
   adsenseId: env.VITE_ADSENSE_ID ?? "",
   adsenseAutoAdsCode: "",
   gaId: env.VITE_GA_ID ?? "",

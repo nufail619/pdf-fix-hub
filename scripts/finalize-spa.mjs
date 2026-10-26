@@ -13,7 +13,8 @@ import {
   writeFileSync,
 } from "node:fs";
 import { join } from "node:path";
-import { loadContent } from "./content.mjs";
+import { publicRoutes } from "./public-routes.mjs";
+import { validateStaticPage } from "./validate-static-page.mjs";
 import { siteSettings } from "./site-settings.mjs";
 
 const dist = "dist";
@@ -21,8 +22,7 @@ const clientDir = join(dist, "client");
 const serverDir = join(dist, "server");
 
 if (!existsSync(clientDir)) {
-  console.log("[finalize-spa] no dist/client — skipping");
-  process.exit(0);
+  throw new Error("Missing dist/client: run npm run build to create the complete Pages output.");
 }
 
 // Drop the SSR server bundle — we're shipping a pure static SPA.
@@ -43,10 +43,12 @@ const index = join(dist, "index.html");
 if (existsSync(shell)) {
   // Cloudflare Pages serves 404.html (with a 404 status) for unknown URLs;
   // the client router then renders the "Page not found" screen.
-  const notFound = readFileSync(shell, "utf8")
-    .replace(/<meta[^>]+name="robots"[^>]*>/g, "")
-    .replace("<head>", '<head><meta name="robots" content="noindex,nofollow"/>');
-  writeFileSync(join(dist, "404.html"), notFound);
+  // Keep React's HTML and serialized head state in sync. Rewriting only the
+  // HTML meta tag leaves orphaned tags when an article loader returns notFound.
+  const notFound = readFileSync(shell, "utf8");
+  if (!/<meta[^>]+name="robots"[^>]+content="noindex,nofollow"/.test(notFound))
+    throw new Error("The SPA fallback must render its own noindex metadata.");
+  copyFileSync(shell, join(dist, "404.html"));
   // Preserve the real prerendered homepage; the SPA shell has no page content.
   if (!existsSync(index)) copyFileSync(shell, index);
   rmSync(shell);
@@ -56,18 +58,11 @@ if (existsSync(shell)) {
 // Read VITE_* values from the process env or .env files (same as Vite).
 const { env, siteUrl, noIndex } = siteSettings();
 
-// Every static route file becomes a sitemap entry; blog and guide slugs are
-// read from the data files.
-const routes = readdirSync("src/routes")
-  .filter((f) => f.endsWith(".tsx") && !f.startsWith("__") && !f.includes("$"))
-  .map((f) => f.replace(/\.tsx$/, "").replace(/\.index$/, ""))
-  .map((r) => (r === "index" ? "/" : "/" + r));
-const published = await loadContent();
-for (const [collection, prefix] of [
-  ["blog", "/blog/"],
-  ["guides", "/guides/"],
-]) {
-  for (const article of published[collection]) routes.push(prefix + article.slug);
+const routes = await publicRoutes();
+for (const route of routes) {
+  const html = join(dist, route.slice(1), "index.html");
+  if (!existsSync(html)) throw new Error(`Missing prerendered public page: ${route}`);
+  validateStaticPage(readFileSync(html, "utf8"), route, { noIndex });
 }
 
 // Pages serves route.html at /route, while route/index.html redirects to /route/.

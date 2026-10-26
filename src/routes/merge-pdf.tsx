@@ -32,9 +32,9 @@ export const Route = createFileRoute("/merge-pdf")({
               can add as many PDFs as you need.
             </li>
             <li>
-              <strong className="text-foreground">Arrange the order.</strong> Drag the file
-              thumbnails to reorder them. The order shown is the order they'll appear in the merged
-              document.
+              <strong className="text-foreground">Check the order.</strong> Files merge in the order
+              listed. Select them in your preferred order, or remove a file and add it again to
+              place it at the end.
             </li>
             <li>
               <strong className="text-foreground">Click "Merge PDF".</strong> Our tool combines your
@@ -55,8 +55,9 @@ export const Route = createFileRoute("/merge-pdf")({
               device. All processing happens locally in your browser.
             </li>
             <li>
-              <strong className="text-foreground">No file size limits.</strong> Merge PDFs of any
-              size without paying for a premium plan.
+              <strong className="text-foreground">No upload quota.</strong> There is no server
+              upload or paid file-size tier. The size you can process depends on your device's
+              available memory.
             </li>
             <li>
               <strong className="text-foreground">No registration required.</strong> Just open the

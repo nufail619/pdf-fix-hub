@@ -1,6 +1,15 @@
 import { test, expect } from "@playwright/test";
 import { execFileSync, spawn } from "node:child_process";
-import { mkdtemp, mkdir, copyFile, symlink, rm, readFile, writeFile } from "node:fs/promises";
+import {
+  mkdtemp,
+  mkdir,
+  copyFile,
+  symlink,
+  rm,
+  readFile,
+  writeFile,
+  access,
+} from "node:fs/promises";
 import { createWriteStream } from "node:fs";
 import { join, dirname, resolve } from "node:path";
 import { tmpdir } from "node:os";
@@ -43,6 +52,8 @@ test("isolated Preview and production builds separate indexing and enforce conse
             CF_PAGES_BRANCH: branch,
             VITE_SITE_URL: "https://mypdffix.com",
             VITE_NOINDEX: "false",
+            // Simulate the stale template value reported in hosting settings.
+            VITE_CONTACT_EMAIL: "hello@example.com",
             VITE_GA_ID: "G-TEST123456",
             VITE_GTM_ID: "",
             VITE_CLARITY_ID: "test12345",
@@ -175,12 +186,25 @@ test("isolated Preview and production builds separate indexing and enforce conse
       unavailable.page.getByText("Your choice applies to this visit.", { exact: false }),
     ).toBeVisible();
     expect(unavailable.requests).toEqual([]);
+    await expect(
+      rejected.page.getByRole("contentinfo").getByRole("link", {
+        name: "mypdffix@gmail.com",
+        exact: true,
+      }),
+    ).toHaveAttribute("href", "mailto:mypdffix@gmail.com");
+    await writeFile(join(root, "dist/stale-unpublished.html"), "OLD_PRIVATE_DRAFT_MARKER");
     // Rebuild the same checkout to catch Preview output leaking into production.
     for (const context of contexts) await context.close();
     contexts.length = 0;
     await new Promise<void>((done) => server.close(() => done()));
     server = undefined;
     await buildSite("main", "production-build.log");
+    await expect(access(join(root, "dist/stale-unpublished.html"))).rejects.toThrow();
+    const redirects = (await readFile(join(root, "dist/_redirects"), "utf8"))
+      .split("\n")
+      .filter((line) => line && !line.startsWith("#"));
+    expect(new Set(redirects).size).toBe(redirects.length);
+    expect(redirects).toHaveLength(39);
     expect(await readFile(join(root, "dist/robots.txt"), "utf8")).toBe(
       "User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: https://mypdffix.com/sitemap.xml\n",
     );
@@ -199,6 +223,13 @@ test("isolated Preview and production builds separate indexing and enforce conse
         "content",
         "index,follow",
       );
+      await expect(
+        production.page.getByRole("contentinfo").getByRole("link", {
+          name: "mypdffix@gmail.com",
+          exact: true,
+        }),
+      ).toHaveAttribute("href", "mailto:mypdffix@gmail.com");
+      await expect(production.page.getByText("hello@example.com", { exact: false })).toHaveCount(0);
       await expect(production.page.locator('link[rel="canonical"]')).toHaveAttribute(
         "href",
         `https://mypdffix.com${path}`,
@@ -213,6 +244,9 @@ test("isolated Preview and production builds separate indexing and enforce conse
           indexingBlocked: true,
           productionIndexableAfterPreviewRebuild: true,
           productionAdminRemainsNoindex: true,
+          staleBuildFilesRemoved: true,
+          duplicateRedirectRules: 0,
+          staleContactEnvironmentIgnored: true,
           consentUpdatesAfterChangingPreferences: true,
           requestsBeforeConsent: 0,
           requestsAfterRejection: 0,

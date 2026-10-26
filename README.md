@@ -40,6 +40,7 @@ npm run test:pdf-tools
 npm run test:new-tools
 npm run test:cms
 npm run test:website
+npm run test:pages
 bun audit
 ```
 
@@ -49,6 +50,22 @@ machines can use `npx playwright install --with-deps chromium`. Run browser suit
 sequentially because they share a test-server port. `npm run preview` is unsuitable
 for the finalized static build because its SSR server is intentionally removed;
 the Playwright configurations include static servers for the actual `dist/`.
+`npm run test:pages` starts Cloudflare's local Pages emulator and checks direct
+navigation, refresh, legacy redirects, all tool-card links, 404 recovery and admin
+headers. It does not upload or deploy the website.
+
+Published pages hydrate their prerendered HTML normally. The shared `404.html`
+fallback is marked during rendering and uses client rendering instead: its
+homepage navigation cannot match every missing URL during hydration. Routing
+tests check for React hydration errors, duplicate layouts and indexing metadata
+when opening missing pages and returning home.
+
+Both `npm run build` and `npm run build:dev` use the same complete static build.
+They clear only generated `dist/` first, explicitly prerender every public route,
+and reject incomplete pages or duplicate site layouts. Use `npm run dev` for the
+development server. Uploading `dist/client` or using bare `vite build` bypasses
+the finalized Pages output; the Pages build command must be `npm run build` and
+the output directory must be `dist`.
 
 The GitHub Actions workflow in `.github/workflows/ci.yml` runs these checks on
 development/production branch pushes and pull requests. It has read-only repository
@@ -69,6 +86,8 @@ confirmed after an approved push.
   are currently empty in the committed configuration.
 - `CMS_AUTH_URL` is the public OAuth Worker origin. Client secrets belong only
   in that Worker's encrypted secret settings.
+- The owner-approved contact address is `mypdffix@gmail.com`. It is defined in
+  `SiteConfigContext.tsx`; stale `VITE_CONTACT_EMAIL` hosting values are ignored.
 
 See [CMS setup](docs/CMS-SETUP.md), [PDF verification](tests/pdf-tools/README.md),
 [new PDF tools](docs/NEW-PDF-TOOLS.md), and the

@@ -217,6 +217,7 @@ test("unknown URLs return 404 with one layout and no indexing", async ({ page, r
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", "noindex,nofollow");
   await expect(page).toHaveTitle("Page not found — MY PDF FIX");
   await expect(page.getByRole("heading", { name: "Page not found", exact: true })).toBeVisible();
+  await expect(page.getByText("Requested page: /not-a-page", { exact: true })).toBeVisible();
   await expect(page.locator("main")).toHaveCount(1);
   await expect(page.locator("header")).toHaveCount(1);
 });

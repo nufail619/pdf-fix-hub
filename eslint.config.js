@@ -11,6 +11,7 @@ export default tseslint.config(
       "dist/**",
       ".output/**",
       ".vinxi/**",
+      ".wrangler/**",
       "test-results/**",
       "playwright-report/**",
       "public/admin/vendor/**",

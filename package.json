@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build && node scripts/finalize-spa.mjs",
-    "build:dev": "vite build --mode development",
+    "build": "node scripts/clean-output.mjs && vite build && node scripts/finalize-spa.mjs",
+    "build:dev": "npm run build",
     "preview": "vite preview",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -18,6 +18,7 @@
     "test:new-tools": "playwright test --config playwright.new-tools.config.ts",
     "test:website:unit": "node --test tests/website/*.test.mjs",
     "test:website": "playwright test --config playwright.website.config.ts",
+    "test:pages": "playwright test --config playwright.pages.config.ts",
     "test:pdf-tools": "playwright test --config playwright.pdf-tools.config.ts",
     "test:pdf-tools:build": "npm run build && npm run test:pdf-tools",
     "format": "prettier --write ."

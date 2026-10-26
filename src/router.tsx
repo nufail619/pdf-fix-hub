@@ -4,13 +4,17 @@ import { routeTree } from "./routeTree.gen";
 
 export const getRouter = () => {
   const queryClient = new QueryClient();
+  const context = { queryClient, isSpaShell: (): boolean => false };
 
   const router = createRouter({
     routeTree,
-    context: { queryClient },
+    context,
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
   });
+  // Start sets the request's shell flag after creating the router. Read it
+  // lazily so the fallback's HTML and dehydrated metadata agree.
+  context.isSpaShell = () => router.isShell();
 
   return router;
 };

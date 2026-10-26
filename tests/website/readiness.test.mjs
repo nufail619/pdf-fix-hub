@@ -3,6 +3,45 @@ import assert from "node:assert/strict";
 import { siteSettings } from "../../scripts/site-settings.mjs";
 import { articleDate } from "../../src/lib/article-date.ts";
 import { parsePrivacyChoices, serviceIds } from "../../src/lib/privacy-consent.ts";
+import { publicRoutes } from "../../scripts/public-routes.mjs";
+import { validateStaticPage } from "../../scripts/validate-static-page.mjs";
+
+test("public route inventory includes published articles and all 25 tools without admin or duplicates", async () => {
+  const routes = await publicRoutes();
+  assert.equal(routes.length, 40);
+  assert.equal(new Set(routes).size, routes.length);
+  for (const path of [
+    "/",
+    "/adjust-pdf-brightness",
+    "/edit-pdf",
+    "/unlock-pdf",
+    "/blog/merge-pdfs-without-losing-quality",
+    "/guides/rotating-scanned-pdfs",
+  ])
+    assert.ok(routes.includes(path), path);
+  assert.ok(!routes.some((path) => path.startsWith("/admin")));
+});
+
+test("publication guard rejects empty shells, duplicate layouts, 404s and template contact details", () => {
+  const page =
+    '<meta name="robots" content="index,follow"/><header>Navigation</header><main><h1>Merge PDF</h1></main><footer><a href="mailto:mypdffix@gmail.com">Contact</a></footer>';
+  assert.doesNotThrow(() => validateStaticPage(page, "/merge-pdf"));
+  const preview = page.replace("index,follow", "noindex,nofollow");
+  assert.doesNotThrow(() => validateStaticPage(preview, "/merge-pdf", { noIndex: true }));
+  assert.throws(() => validateStaticPage(preview, "/merge-pdf"), /indexing metadata/);
+  for (const broken of [
+    '<div id="root"></div>',
+    '<html data-spa-fallback="true">' + page + "</html>",
+    page + "<header>Duplicate</header>",
+    page + "<footer>Duplicate</footer>",
+    page.replace("Merge PDF", "404"),
+    page.replace("mypdffix@gmail.com", "hello@example.com"),
+  ])
+    assert.throws(
+      () => validateStaticPage(broken, "/merge-pdf"),
+      /Invalid static page \/merge-pdf/,
+    );
+});
 
 test("privacy choices reject malformed, future, expired and unexpected records", () => {
   const now = Date.now();

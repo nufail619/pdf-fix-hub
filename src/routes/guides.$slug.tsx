@@ -5,8 +5,10 @@ import { seoHead } from "@/components/common/SEO";
 import { guides } from "@/data/guides";
 import { articleDate } from "@/lib/article-date";
 import { defaultSiteConfig } from "@/context/SiteConfigContext";
+import { NotFoundPage } from "@/components/common/NotFoundPage";
 
 export const Route = createFileRoute("/guides/$slug")({
+  notFoundComponent: NotFoundPage,
   loader: ({ params }) => {
     const post = guides.find((p) => p.slug === params.slug);
     if (!post) throw notFound();

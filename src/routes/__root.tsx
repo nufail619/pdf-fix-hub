@@ -1,11 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
-  Link,
   createRootRouteWithContext,
   useRouter,
-  HeadContent,
   Scripts,
+  HeadContent,
 } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
 import { SiteConfigProvider, defaultSiteConfig } from "@/context/SiteConfigContext";
@@ -13,30 +12,9 @@ import { HeadScripts } from "@/components/common/HeadScripts";
 import { Layout } from "@/components/layout/Layout";
 import { serializeStructuredData } from "@/lib/structured-data";
 import { PrivacyPreferences } from "@/components/common/PrivacyPreferences";
+import { NotFoundPage } from "@/components/common/NotFoundPage";
 
 import appCss from "../styles.css?url";
-
-function NotFoundComponent() {
-  return (
-    <div className="flex min-h-[60dvh] items-center justify-center px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-primary">404</h1>
-        <h2 className="mt-4 text-xl font-semibold">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          We couldn't find what you were looking for. Let's get you back on track.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex h-11 items-center justify-center rounded-lg bg-primary px-5 text-sm font-bold text-primary-foreground hover:bg-primary-hover"
-          >
-            Go home
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function ErrorComponent({ error, reset }: { error: unknown; reset: () => void }) {
   console.error(error);
@@ -70,8 +48,11 @@ function ErrorComponent({ error, reset }: { error: unknown; reset: () => void })
   );
 }
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  head: ({ matches }) => ({
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+  isSpaShell: () => boolean;
+}>()({
+  head: ({ matches, match }) => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
@@ -89,6 +70,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "robots",
         content:
           defaultSiteConfig.noIndex ||
+          match.context.isSpaShell() ||
+          matches.some((match) => match.status === "pending") ||
           matches.some((match) => match.status === "notFound" || match._notFound)
             ? "noindex,nofollow"
             : "index,follow",
@@ -114,13 +97,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   }),
   shellComponent: RootShell,
   component: RootComponent,
-  notFoundComponent: NotFoundComponent,
+  notFoundComponent: NotFoundPage,
   errorComponent: ErrorComponent,
 });
 
 function RootShell({ children }: { children: React.ReactNode }) {
+  const isFallback = useRouter().isShell();
   return (
-    <html lang="en">
+    <html lang="en" data-spa-fallback={isFallback ? "true" : undefined}>
       <head>
         <HeadContent />
       </head>
