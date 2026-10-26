@@ -1,5 +1,4 @@
-// Written help content for each tool page. Unique, useful text on every page
-// is what search engines and ad networks (e.g. Google AdSense) look for.
+// Help content describes the current controls, output and limits of each tool.
 // merge-pdf and split-pdf carry their own content inside their route files.
 
 export type ToolContentEntry = {
@@ -13,7 +12,7 @@ export type ToolContentEntry = {
 
 const PRIVATE: [string, string] = [
   "Private by design.",
-  "Your file is processed inside your own browser. It is never uploaded to a server, so nobody else can see it.",
+  "The tool processes your document in your browser without uploading its contents. Loading the website and Google verification can still make network requests; see the Privacy Policy for optional services.",
 ];
 
 export const toolContent: Record<string, ToolContentEntry> = {
@@ -155,8 +154,8 @@ export const toolContent: Record<string, ToolContentEntry> = {
   "compress-pdf": {
     heading: "Compress PDF files online for free",
     intro: [
-      "Large PDFs are hard to email, slow to upload to job portals and often rejected by government or university websites that cap attachments at 1–5 MB. This tool shrinks your PDF so it fits those limits.",
-      "Choose how much to compress. Light compression rewrites the file more efficiently without touching its content, so text stays selectable. Recommended and Strong compression redraw each page as an optimized image, which gives much bigger savings on scanned documents and photo-heavy PDFs.",
+      "Large PDFs are hard to email, slow to upload to job portals and often rejected by government or university websites that cap attachments at 1–5 MB. This tool tries to reduce its size; it cannot guarantee a particular attachment limit.",
+      "Choose how much to compress. Light compression rewrites the file more efficiently without touching its content, so text stays selectable. Recommended and Strong also try an image version of each page, then return the smaller result. The output may lose selectable text, links and form fields if that rasterized version is chosen.",
     ],
     steps: [
       ["Add your PDF.", "Drop the file into the box above or click to choose it."],
@@ -177,7 +176,7 @@ export const toolContent: Record<string, ToolContentEntry> = {
     tips: [
       [
         "Scanned documents shrink the most.",
-        "Scans are usually stored as huge images, so Recommended often cuts them by 70% or more.",
+        "Savings depend on the original images, resolution and existing compression. There is no guaranteed percentage; compare the reported input and output sizes.",
       ],
       [
         "Text-only PDFs are already small.",
@@ -192,15 +191,15 @@ export const toolContent: Record<string, ToolContentEntry> = {
     faqs: [
       {
         q: "Will compressing reduce quality?",
-        a: "Light compression doesn't change quality at all. Recommended keeps documents easy to read on screen and in print. Strong lowers image resolution, so check small text before you send the file.",
+        a: "Light resaves the PDF without rasterizing pages. Recommended and Strong may lower image resolution and remove selectable text. Check small print, charts, links and forms in the downloaded result.",
       },
       {
         q: "Why can't I select text after compressing?",
-        a: "Recommended and Strong turn each page into an image to save space. If you need selectable or searchable text, use the Light level.",
+        a: "Recommended and Strong may return rasterized pages if they are smaller than the lossless result. Use Light to avoid rasterization and keep the original for comparison.",
       },
       {
         q: "Is there a file size limit?",
-        a: "There's no fixed limit because the work happens on your device. Very large files (hundreds of pages) may take a while on older phones.",
+        a: "There's no fixed limit because the work happens on your device. Large files, many pages or high-resolution images can exhaust browser memory, especially on phones. There is no guaranteed maximum size.",
       },
     ],
   },
@@ -209,7 +208,7 @@ export const toolContent: Record<string, ToolContentEntry> = {
     heading: "Convert JPG images to a PDF",
     intro: [
       "Turn photos of documents, receipts, certificates or handwritten notes into one tidy PDF. A single PDF is easier to email, print and upload than a pile of separate images.",
-      "Each image becomes its own page, in the order you add them, at its original size and quality.",
+      "Each image becomes one page in file-list order. Pixel dimensions are used as PDF points, so page sizes vary with the images; there is no A4 or Letter setting.",
     ],
     steps: [
       ["Add your JPG images.", "Select several at once, or add more one after another."],
@@ -237,7 +236,7 @@ export const toolContent: Record<string, ToolContentEntry> = {
       },
       {
         q: "How many images can I add?",
-        a: "As many as your device can handle. Dozens of photos are fine on a normal phone or computer.",
+        a: "The practical limit depends on image dimensions, file sizes and available browser memory. Try a smaller batch if conversion fails.",
       },
       {
         q: "Will the image quality drop?",
@@ -279,7 +278,7 @@ export const toolContent: Record<string, ToolContentEntry> = {
       },
       {
         q: "Does it work on mobile?",
-        a: "Yes. It runs in any modern browser on Android, iPhone, Windows or Mac.",
+        a: "Use an up-to-date browser with file download support. Available memory and browser features vary, especially on mobile; keep the original and try a smaller batch if needed.",
       },
     ],
   },
@@ -302,10 +301,13 @@ export const toolContent: Record<string, ToolContentEntry> = {
     tipsTitle: "Choosing the right settings",
     tips: [
       ["JPG is best for photos and scans.", "Files are small and open everywhere."],
-      ["Need sharp text or transparency?", "Use PDF to PNG instead, which keeps edges crisp."],
+      [
+        "Need lossless image compression?",
+        "Use PDF to PNG for text and diagrams. Both converters render against a white background; neither exports transparent PDF pages.",
+      ],
       [
         "Higher dpi means bigger files.",
-        "300 dpi images are about four times the size of 150 dpi ones.",
+        "At 300 dpi, each dimension is twice that at 150 dpi, giving four times as many pixels. The compressed download size depends on page content and is not necessarily four times larger.",
       ],
       PRIVATE,
     ],
@@ -328,7 +330,7 @@ export const toolContent: Record<string, ToolContentEntry> = {
   "pdf-to-png": {
     heading: "Convert PDF to PNG images",
     intro: [
-      "PNG keeps every detail of a page without compression artifacts, which makes it ideal for documents with small text, line drawings, charts and logos.",
+      "PNG uses lossless image compression, useful for text, line drawings and charts. PDF vectors still become pixels at the chosen resolution, so fine detail can be lost.",
       "Pick the resolution, convert all pages or a selection, and download the images individually or as a ZIP.",
     ],
     steps: [
@@ -339,7 +341,10 @@ export const toolContent: Record<string, ToolContentEntry> = {
     ],
     tipsTitle: "PNG or JPG?",
     tips: [
-      ["Use PNG for text and graphics.", "Edges stay perfectly sharp."],
+      [
+        "Use PNG for text and graphics.",
+        "PNG avoids JPG compression artifacts, but sharpness still depends on rendering resolution. Transparent areas are rendered white.",
+      ],
       ["Use JPG for photos and scans.", "JPG files are much smaller for photographic content."],
       [
         "Making slides or a website?",
@@ -568,7 +573,10 @@ export const toolContent: Record<string, ToolContentEntry> = {
     ],
     tipsTitle: "Tips",
     tips: [
-      ["List every page you want to keep.", "Pages you leave out of the list are dropped."],
+      [
+        "List every original page.",
+        "Include every original page exactly once. Missing pages, duplicates and out-of-range numbers are rejected; use Remove Pages to delete pages.",
+      ],
       ["Reverse a document.", "For a 5-page scan fed in backwards, enter 5,4,3,2,1."],
       [
         "Combine with Merge.",
@@ -579,15 +587,15 @@ export const toolContent: Record<string, ToolContentEntry> = {
     faqs: [
       {
         q: "Can I repeat a page?",
-        a: "Yes. Listing a page number twice includes that page twice.",
+        a: "No. Reorder requires every page exactly once. For a three-page PDF, 3,1,2 is valid; 1,1,2 is rejected.",
       },
       {
         q: "What if I enter a number that doesn't exist?",
-        a: "Numbers higher than the page count are ignored.",
+        a: "The tool reports an error. Use only page numbers from 1 through the document page count, with none missing or repeated.",
       },
       {
         q: "Is there a page limit?",
-        a: "No fixed limit. Very long documents just take a little longer.",
+        a: "There is no fixed page-count quota. Browser memory can still limit large documents; keep the original and verify the output order.",
       },
     ],
   },
@@ -657,13 +665,16 @@ export const toolContent: Record<string, ToolContentEntry> = {
     heading: "Add page numbers to a PDF",
     intro: [
       "Number every page of a PDF automatically — essential for reports, theses, assignments, legal bundles and anything that will be printed or referenced.",
-      "Choose where the numbers go and how big they are.",
+      "Choose Bottom center, Bottom right, Bottom left or Top center, and set the font size. Numbering starts at 1 and uses the format current / total.",
     ],
     steps: [
       ["Add your PDF.", "Choose the document."],
       ["Choose a position.", "Bottom center is the most common; bottom right suits reports."],
       ["Set the font size.", "10–12 is right for most documents."],
-      ["Click Process and download.", "Every page now shows its number."],
+      [
+        "Click Process and download.",
+        "Every page shows its position and total count, such as 1 / 3, 2 / 3 and 3 / 3.",
+      ],
     ],
     tipsTitle: "Tips",
     tips: [
@@ -672,7 +683,10 @@ export const toolContent: Record<string, ToolContentEntry> = {
         "Combine files first.",
         "Merge all parts before numbering so the count runs through the whole document.",
       ],
-      ["Need “Page 1 of 10”?", "The current version prints the page number only."],
+      [
+        "Need “Page 1 of 10”?",
+        "The current format is current / total, such as 1 / 10. Custom wording, Roman numerals, color and starting-number controls are not supported.",
+      ],
       PRIVATE,
     ],
     faqs: [
@@ -686,7 +700,7 @@ export const toolContent: Record<string, ToolContentEntry> = {
       },
       {
         q: "Can I remove the numbers later?",
-        a: "Keep your original file — numbers become part of the page once added.",
+        a: "Keep an unnumbered original. Numbers become page content; running the tool again adds another overlay instead of replacing previous numbers.",
       },
     ],
   },
@@ -770,7 +784,7 @@ export const toolContent: Record<string, ToolContentEntry> = {
   "flatten-pdf": {
     heading: "Flatten a PDF",
     intro: [
-      "Flattening locks a PDF so it can't be changed. Filled-in form fields become ordinary text, so answers can't be edited or accidentally cleared, and the form looks the same in every viewer.",
+      "Flattening replaces interactive form fields with their visible appearances. It does not lock the PDF, prevent later editing, add password protection or securely redact information.",
       "Choose “Everything” to also merge comments, stamps and annotations into the page — useful before printing or submitting a final copy.",
     ],
     steps: [
@@ -780,17 +794,20 @@ export const toolContent: Record<string, ToolContentEntry> = {
         "Form fields only keeps text selectable. Everything converts each page to an image.",
       ],
       ["Click Process.", "The PDF is flattened."],
-      ["Download.", "Send or print the locked copy."],
+      [
+        "Download.",
+        "Check the flattened copy before sending or printing it. Keep the original for future form edits.",
+      ],
     ],
     tipsTitle: "When to flatten",
     tips: [
       [
         "Before submitting forms.",
-        "Government, bank and university forms display reliably once flattened.",
+        "Flattening can help preserve filled field appearances. Check every field in the output; some forms and fonts are not supported.",
       ],
       [
         "Before printing.",
-        "Some printers skip form fields and comments; flattening makes them print.",
+        "If a viewer omits field appearances or annotations when printing, review a flattened copy and print a test page.",
       ],
       ["Keep an editable copy.", "Flattening can't be undone, so save the original too."],
       PRIVATE,
@@ -806,7 +823,7 @@ export const toolContent: Record<string, ToolContentEntry> = {
       },
       {
         q: "Will the file get bigger?",
-        a: "Form-only flattening barely changes the size. “Everything” mode may make it larger because pages become images.",
+        a: "Output size varies. “Everything” mode may make the file larger because pages become images. Compare the download with your original.",
       },
     ],
   },
@@ -853,7 +870,10 @@ export const toolContent: Record<string, ToolContentEntry> = {
     ],
     tipsTitle: "Good to know",
     tips: [
-      ["Save on colour ink.", "Printing in grayscale uses only black ink or toner."],
+      [
+        "Check printer settings.",
+        "The PDF will look gray, but black-ink-only printing depends on your printer and driver. Choose that setting in the print dialog if available.",
+      ],
       [
         "Check your charts.",
         "Colours that look different can become similar greys, so make sure graphs still read clearly.",
@@ -867,7 +887,7 @@ export const toolContent: Record<string, ToolContentEntry> = {
     faqs: [
       {
         q: "Why can't I select text after converting?",
-        a: "Each page is redrawn as a high-resolution grayscale image to guarantee no colour remains.",
+        a: "Each page becomes a grayscale image. This removes selectable text, links and interactive form fields. Keep the original if you need those features.",
       },
       {
         q: "Will the file be bigger?",
@@ -884,12 +904,15 @@ export const toolContent: Record<string, ToolContentEntry> = {
     heading: "Edit or remove PDF metadata",
     intro: [
       "Every PDF stores hidden details such as its title, author and keywords. The title is what browsers and search engines show for the file, and the author field can reveal your name or your company's software.",
-      "View and change these details, or wipe them completely before sharing a document publicly.",
+      "Edit title, author, subject and keywords. The clear option also blanks creator and producer. This is not a full hidden-data sanitizer: an existing creation date, embedded XMP, comments, attachments and page content can remain; the modification date is updated.",
     ],
     steps: [
       ["Add your PDF.", "Its current title, author, subject and keywords appear in the boxes."],
       ["Edit the fields.", "Change any value, or clear a box to remove it."],
-      ["Or remove everything.", "Tick “Remove all metadata” for a clean file."],
+      [
+        "Or clear selected properties.",
+        "Tick “Clear selected document properties” to blank title, author, subject, keywords, creator and producer. Other hidden data may remain.",
+      ],
       ["Click Process and download.", "The content of the pages isn't changed."],
     ],
     tipsTitle: "Why metadata matters",
@@ -898,7 +921,10 @@ export const toolContent: Record<string, ToolContentEntry> = {
         "Better search results.",
         "A clear title helps Google show your PDF properly when it's published online.",
       ],
-      ["Privacy.", "Remove author names before sending CVs, tenders or anonymous documents."],
+      [
+        "Privacy.",
+        "Clear the author property if needed, then inspect the pages and other hidden data separately. This tool cannot guarantee an anonymous document.",
+      ],
       ["Professional files.", "Replace titles like “Document1” with something meaningful."],
       PRIVATE,
     ],
@@ -913,7 +939,7 @@ export const toolContent: Record<string, ToolContentEntry> = {
       },
       {
         q: "Does it remove all hidden data?",
-        a: "It clears the standard document properties. Some files also contain embedded XMP data or comments, which this tool doesn't remove.",
+        a: "No. The clear option blanks six standard text properties. An existing creation date is preserved, the modification date is updated, and embedded XMP data, comments, attachments and page content are not removed.",
       },
     ],
   },

@@ -138,8 +138,11 @@ test("isolated Preview and production builds separate indexing and enforce conse
     const all = await scenario();
     await all.page.goto(origin);
     await all.page.getByRole("button", { name: "Accept optional", exact: true }).click();
-    await expect.poll(() => all.requests.length).toBe(3);
-    await expect(all.page.locator("#head-adsense")).toHaveCount(1);
+    await expect.poll(() => all.requests.length).toBe(2);
+    await expect(all.page.locator("#head-adsense")).toHaveCount(0);
+    await all.page.goto(origin + "/merge-pdf");
+    await expect(all.page.locator('script[src*="/pagead/js/adsbygoogle.js"]')).toHaveCount(0);
+    expect(all.requests).toHaveLength(4);
     const upgraded = await scenario();
     await upgraded.page.goto(origin);
     await upgraded.page.getByRole("button", { name: "Reject optional", exact: true }).click();

@@ -1,4 +1,6 @@
 import { useEffect, useRef } from "react";
+import { useRouter, useRouterState } from "@tanstack/react-router";
+import { isAdvertisingContent } from "@/lib/ad-eligibility";
 import { useSiteConfig } from "@/context/SiteConfigContext";
 import { usePrivacy } from "@/context/PrivacyContext";
 import { serviceIds } from "@/lib/privacy-consent";
@@ -24,9 +26,47 @@ export function HeadScripts() {
   const cfg = useSiteConfig();
   const { choices } = usePrivacy();
   const consentInitialized = useRef(false);
+  const router = useRouter();
+  const eligible =
+    useRouterState({
+      select: (state) =>
+        state.status === "idle" &&
+        state.matches.every((match) => match.status === "success" && !match._notFound) &&
+        isAdvertisingContent(state.location.pathname),
+    }) && !cfg.noIndex;
+  useEffect(() => {
+    // Removing a script cannot stop code it already executed (including Auto ads).
+    // Leave the ad-bearing document entirely before showing an excluded screen.
+    const unblock = router.history.block({
+      enableBeforeUnload: false,
+      blockerFn: ({ nextLocation }) => {
+        const win = window as TrackingWindow;
+        if (
+          !isAdvertisingContent(router.parseLocation(nextLocation).pathname) &&
+          Array.from(document.scripts).some((item) =>
+            item.src.includes("/pagead/js/adsbygoogle.js"),
+          )
+        ) {
+          (win.adsbygoogle ||= []).pauseAdRequests = 1;
+          window.location.assign(nextLocation.href);
+          return true;
+        }
+        return false;
+      },
+    });
+    const pause = () => {
+      ((window as TrackingWindow).adsbygoogle ||= []).pauseAdRequests = 1;
+    };
+    window.addEventListener("pagehide", pause);
+    return () => {
+      unblock();
+      window.removeEventListener("pagehide", pause);
+      pause();
+    };
+  }, [router]);
   useEffect(() => {
     const win = window as TrackingWindow;
-    (win.adsbygoogle ||= []).pauseAdRequests = choices?.advertising ? 0 : 1;
+    (win.adsbygoogle ||= []).pauseAdRequests = choices?.advertising && eligible ? 0 : 1;
     if (!choices) return;
     const ids = serviceIds(cfg);
     win.dataLayer ||= [];
@@ -67,12 +107,12 @@ export function HeadScripts() {
         script("head-clarity", `https://www.clarity.ms/tag/${ids.clarity}`);
       }
     }
-    if (choices.advertising && ids.adsense)
+    if (eligible && choices.advertising && ids.adsense)
       script(
         "head-adsense",
         `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ids.adsense}`,
         "anonymous",
       );
-  }, [cfg, choices]);
+  }, [cfg, choices, eligible]);
   return null;
 }

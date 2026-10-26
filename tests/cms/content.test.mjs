@@ -53,7 +53,9 @@ test("create, edit, publish, unpublish and delete regenerate only published cont
     assert.equal((await loadContent(root)).blog.length, 0);
     assert(!(await readFile(join(root, "src/generated/content.ts"), "utf8")).includes(sample.body));
     await save({ ...sample, status: "published", title: "Edited title" });
-    assert.equal((await prepareContent(root)).blog[0].title, "Edited title");
+    const published = (await prepareContent(root)).blog[0];
+    assert.equal(published.title, "Edited title");
+    assert.equal(published.readTime, "1 min read", "The stale manual 3-minute value is ignored");
     await save({ ...sample, status: "draft" });
     assert.equal((await prepareContent(root)).blog.length, 0);
     await unlink(file);

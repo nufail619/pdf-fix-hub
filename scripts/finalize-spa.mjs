@@ -16,7 +16,7 @@ import { join } from "node:path";
 import { publicRoutes } from "./public-routes.mjs";
 import { validateStaticPage } from "./validate-static-page.mjs";
 import { siteSettings } from "./site-settings.mjs";
-import { ADSENSE_PUBLISHER_ID, addAdSenseVerification } from "./adsense.mjs";
+import { ADSENSE_PUBLISHER_ID, addAdSenseVerification, isAdEligiblePath } from "./adsense.mjs";
 
 const dist = "dist";
 const clientDir = join(dist, "client");
@@ -64,7 +64,13 @@ for (const route of routes) {
   const html = join(dist, route.slice(1), "index.html");
   if (!existsSync(html)) throw new Error(`Missing prerendered public page: ${route}`);
   validateStaticPage(readFileSync(html, "utf8"), route, { noIndex });
-  if (!noIndex) writeFileSync(html, addAdSenseVerification(readFileSync(html, "utf8")));
+  if (!noIndex)
+    writeFileSync(
+      html,
+      addAdSenseVerification(readFileSync(html, "utf8"), {
+        allowAds: isAdEligiblePath(route, routes),
+      }),
+    );
 }
 
 // Pages serves route.html at /route, while route/index.html redirects to /route/.

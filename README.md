@@ -83,11 +83,13 @@ confirmed after an approved push.
   noindex; `VITE_NOINDEX=true` can also disable indexing explicitly.
 - Analytics IDs are validated and remain inactive until analytics consent.
   AdSense publisher `ca-pub-1040851064865171` is configured in `scripts/adsense.mjs`.
-  Public production HTML includes its verification loader once, after denied
-  Google consent defaults and paused ad requests. The loader contacts Google
-  before a choice; advertising consent controls ad requests. Preview/admin/404
-  HTML does not receive that verification injection. Privacy settings remain in
-  the footer. Analytics IDs are currently empty.
+  Public production HTML includes its ownership meta tag. Eligible content pages
+  also include one verification loader after denied Google consent defaults and
+  paused ad requests. Searchable listings, utilities and missing pages remain
+  ad-free even with saved consent. Navigation from an ad-bearing document to an
+  excluded URL uses a fresh document. Preview/admin/404 HTML does not receive the
+  verification injection. Privacy settings remain in the footer. Analytics IDs
+  are currently empty. See [AdSense setup](docs/ADSENSE-VERIFICATION.md).
 - `CMS_AUTH_URL` is the public OAuth Worker origin. Client secrets belong only
   in that Worker's encrypted secret settings.
 - The owner-approved contact address is `mypdffix@gmail.com`. It is defined in

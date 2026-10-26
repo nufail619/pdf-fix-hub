@@ -2,6 +2,7 @@ import { readdir, readFile, mkdir, writeFile } from "node:fs/promises";
 import { resolve, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
+import { estimateReadTime } from "./reading-time.mjs";
 
 const safeSlug = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const localImage = /^\/uploads\/[a-zA-Z0-9/_-]+\.(?:jpe?g|png|webp|gif|avif)$/i;
@@ -62,7 +63,7 @@ export async function loadContent(root = process.cwd()) {
       // Never place draft text in public HTML, client bundles, or the sitemap.
       if (article.status === "published") {
         const { status: _status, ...published } = article;
-        result[collection].push(published);
+        result[collection].push({ ...published, readTime: estimateReadTime(published.body) });
       }
     }
     result[collection].sort((a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug));

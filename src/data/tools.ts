@@ -53,7 +53,7 @@ export const tools: Tool[] = [
   {
     slug: "compress-pdf",
     name: "Compress PDF",
-    description: "Reduce PDF file size while keeping quality.",
+    description: "Try to reduce PDF size, with selectable-text and image-quality tradeoffs.",
     category: "Optimize",
     accent: "green",
     icon: "Minimize2",
@@ -161,7 +161,7 @@ export const tools: Tool[] = [
   {
     slug: "add-page-numbers-to-pdf",
     name: "Add Page Numbers",
-    description: "Insert page numbers anywhere on your PDF.",
+    description: "Add current / total page numbers in one of four positions.",
     category: "Edit",
     accent: "purple",
     icon: "Hash",
@@ -233,7 +233,7 @@ export const tools: Tool[] = [
   {
     slug: "pdf-to-png",
     name: "PDF to PNG",
-    description: "Turn PDF pages into sharp, lossless PNG images.",
+    description: "Render PDF pages as PNG images at a chosen resolution.",
     category: "Convert",
     accent: "blue",
     icon: "FileImage",
@@ -245,7 +245,7 @@ export const tools: Tool[] = [
   {
     slug: "pdf-to-text",
     name: "PDF to Text",
-    description: "Extract all the text from a PDF into a plain .txt file.",
+    description: "Extract embedded PDF text into a .txt file; no OCR for scanned pages.",
     category: "Convert",
     accent: "green",
     icon: "FileType",
@@ -269,7 +269,7 @@ export const tools: Tool[] = [
   {
     slug: "grayscale-pdf",
     name: "Grayscale PDF",
-    description: "Convert a colour PDF to black and white for cheaper printing.",
+    description: "Render PDF pages as grayscale images; printer ink use depends on settings.",
     category: "Optimize",
     accent: "purple",
     icon: "Contrast",

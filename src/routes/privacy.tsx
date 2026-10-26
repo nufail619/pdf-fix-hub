@@ -41,12 +41,13 @@ function Privacy() {
         <h2 className="mt-8 text-2xl font-bold text-foreground">Analytics and advertising</h2>
         <p>
           Optional analytics and ad requests stay disabled until you accept the corresponding
-          category. Google's AdSense site-verification script loads on public production pages and
-          may send Google standard request information, such as your IP address, before you choose.
-          Ad requests start paused and Google consent defaults are denied. You can reject optional
-          services or change your choice through Privacy settings in the footer. We remember that
-          choice in browser storage for up to 180 days. Global Privacy Control and Do Not Track
-          signals keep optional services off.
+          category. Google's AdSense site-verification script loads on eligible production content
+          pages and may send Google standard request information, such as your IP address, before
+          you choose. Ad requests start paused and Google consent defaults are denied. Searchable
+          listings, missing pages and utility pages do not load the ad script, even with saved
+          advertising consent. You can reject optional services or change your choice through
+          Privacy settings in the footer. We remember that choice in browser storage for up to 180
+          days. Global Privacy Control and Do Not Track signals keep optional services off.
         </p>
         <p>
           We may use Google Analytics to understand, in aggregate, which pages and tools are used.

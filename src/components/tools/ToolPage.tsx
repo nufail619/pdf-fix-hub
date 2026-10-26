@@ -215,7 +215,7 @@ export function ToolPage({ slug, children }: { slug: string; children?: React.Re
             )}
             <p className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <ShieldCheck className="h-4 w-4 text-green-600" aria-hidden />
-              Processed locally in your browser — your files never leave your device.
+              Document processing stays in your browser — document contents are not uploaded.
             </p>
           </>
         )}
@@ -650,8 +650,13 @@ function ToolOptions({
             checked={clear}
             onChange={(e) => set("clear", e.target.checked ? "true" : "false")}
           />
-          Remove all metadata (for privacy before sharing)
+          Clear selected document properties
         </label>
+        <p className="text-xs text-muted-foreground">
+          Clears title, author, subject, keywords, creator and producer. An existing creation date
+          is retained and the modification date is updated. XMP, comments, attachments and page
+          content are not removed; this is not a full hidden-data sanitizer.
+        </p>
       </div>
     );
   }

@@ -14,7 +14,7 @@ const steps = [
   {
     icon: Download,
     title: "Download",
-    body: "Save the result instantly — no email, no sign-up required.",
+    body: "Download the completed result — no email, no sign-up required.",
   },
 ];
 

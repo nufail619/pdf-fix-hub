@@ -7,7 +7,7 @@ export const Route = createFileRoute("/grayscale-pdf")({
     seoHead({
       title: "Grayscale PDF — Convert PDF to Black and White — MY PDF FIX",
       description:
-        "Convert a colour PDF to black and white (grayscale) for cheaper printing. Free, private and processed in your browser.",
+        "Render PDF pages as grayscale images in your browser. Text is no longer selectable; black-ink-only printing depends on your printer settings.",
       path: "/grayscale-pdf",
     }),
   component: () => <ToolPage slug="grayscale-pdf" />,

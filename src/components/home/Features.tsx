@@ -4,17 +4,17 @@ const items = [
   {
     icon: ShieldCheck,
     title: "Privacy-first",
-    body: "Your PDFs are processed locally on your device. We never upload, store, or peek at your files.",
+    body: "The PDF tools process document contents in your browser without uploading them. Website requests and optional tracking are explained in our Privacy Policy.",
   },
   {
     icon: Sparkles,
-    title: "Free forever",
-    body: "All client-side tools are 100% free. No accounts, no daily limits, no watermarks.",
+    title: "Free to use",
+    body: "All 25 tools are currently free, with no account required or branding watermark added.",
   },
   {
     icon: MonitorOff,
     title: "No installation",
-    body: "Works in your browser on any device. Nothing to download, install, or update.",
+    body: "Runs in an up-to-date browser without installing an app. Large files may exceed device memory.",
   },
 ];
 

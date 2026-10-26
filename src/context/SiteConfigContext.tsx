@@ -23,7 +23,7 @@ export const defaultSiteConfig: SiteConfig = {
   siteUrl: (env.VITE_SITE_URL || "https://mypdffix.com").replace(/\/$/, ""),
   defaultTitle: "MY PDF FIX — Free Online PDF Tools",
   defaultDescription:
-    "Every tool you need to work with PDFs in one place. Merge, split, compress, convert and edit PDFs for free, right in your browser.",
+    "25 free browser-based PDF tools. Merge, split, compress, convert and add overlays without uploading document contents.",
   defaultOgImage: "/og-default.png",
   // Keep the owner's address authoritative even if hosting retains a template value.
   contactEmail: "mypdffix@gmail.com",

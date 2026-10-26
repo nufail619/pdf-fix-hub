@@ -12,7 +12,7 @@ export const Route = createFileRoute("/")({
     ...seoHead({
       title: "MY PDF FIX — Free Online PDF Tools, In Your Browser",
       description:
-        "Every tool you need to work with PDFs in one place. Merge, split, compress, convert and edit PDFs for free — all processed locally in your browser.",
+        "25 free browser-based PDF tools to merge, split, compress, convert and add overlays without uploading document contents.",
       path: "/",
     }),
     scripts: [

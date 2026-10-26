@@ -8,9 +8,12 @@ credentials, public write endpoints or anonymous content writes.
 
 - Separate Blog posts and Guides collections, with create/edit/delete and live
   editor previews. Existing content is migrated to `content/blog/*.json` and
-  `content/guides/*.json`, retaining all six original URLs and paragraphs.
-- Title, URL slug, summary, SEO description, date, author, reading time, image,
-  alternative text, categories and Markdown body fields.
+  `content/guides/*.json`, retaining all six original URLs. Article text can be improved without changing its slug.
+- Title, URL slug, summary, SEO description, date, author, image,
+  alternative text, categories and Markdown body fields. Public reading time is calculated
+  from the article text at 200 words per minute, rounded up (minimum one minute);
+  it excludes time spent carrying out a task. The legacy JSON reading-time field
+  is retained for compatibility and hidden in the CMS.
 - Publication status defaults to Draft. Only Published entries reach public
   HTML, JavaScript bundles, listings and the sitemap. Source JSON is not copied
   into the public site. Markdown HTML is skipped, and unsafe link protocols are

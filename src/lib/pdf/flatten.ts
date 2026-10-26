@@ -5,7 +5,7 @@ export async function flattenPdf(file: File, mode: "forms" | "full") {
   if (mode === "full") {
     return {
       blob: await rasterizePdf(file, { scale: 2, quality: 0.85, annotations: true }),
-      note: "Every page was flattened into an image. Forms, comments and layers can no longer be edited.",
+      note: "Every page was rendered as an image, including supported visible annotation appearances. Text is no longer selectable. This does not prevent later editing or securely redact content.",
     };
   }
   const doc = await PDFDocument.load(new Uint8Array(await file.arrayBuffer()));

@@ -1,11 +1,19 @@
-# AdSense verification
+# AdSense ownership and advertising eligibility
 
 The owner-approved public publisher ID is `ca-pub-1040851064865171`, defined once
-in `scripts/adsense.mjs`. Vite uses the same value in client configuration and the
-static build generates the matching `ads.txt` record. An old or blank hosting
-`VITE_ADSENSE_ID` cannot substitute a different publisher.
+in `scripts/adsense.mjs`. Vite uses that same value in client configuration, and
+the static build generates the matching `ads.txt` record. Old or blank hosting
+`VITE_ADSENSE_ID` values cannot substitute a different publisher.
 
-The finalized initial HTML of each public production page contains exactly:
+Every public production page has this ownership tag in its initial HTML head:
+
+```html
+<meta name="google-adsense-account" content="ca-pub-1040851064865171" />
+```
+
+Google documents this verification option in
+[Connect your site to AdSense](https://support.google.com/adsense/answer/7584263?hl=en).
+The same publisher's loader is also retained on eligible content pages:
 
 ```html
 <script
@@ -15,36 +23,53 @@ The finalized initial HTML of each public production page contains exactly:
 ></script>
 ```
 
-The verification loader is added inside the HTML head after Google's denied
-consent defaults and `adsbygoogle.pauseAdRequests = 1`. It is not injected into
-Preview/noindex builds, the admin entry, or the shared 404 fallback. The existing
-client loader checks script URLs as well as IDs, so advertising consent and
-client navigation do not add a second copy.
+The loader follows denied Google consent defaults and
+`adsbygoogle.pauseAdRequests = 1`. It is excluded from Preview/noindex builds,
+admin, missing pages, the homepage and article listings, Contact, and legal pages.
+Searchable listings stay ad-free even when they have results, so typing or
+changing a filter cannot leave a previously loaded ad runtime on an empty screen.
+Ownership metadata and `ads.txt` do not require loading the advertising runtime.
+At the current inventory, all 40 public pages have ownership metadata and 32
+content pages have the verification loader (25 tools, six articles and About).
 
-Loading verification contacts Google before a visitor chooses privacy settings.
-The privacy notice and policies disclose that request. Ad requests remain paused
-until advertising consent, browser opt-out signals keep them paused, and
-withdrawing advertising consent reloads with denied defaults. This is site
-verification configuration, not a claim of approval for monetization or a
-replacement for provider-required account/consent configuration.
+Runtime eligibility requires a known published content URL, successful settled
+router matches, an indexable production build and advertising consent. This gate
+also applies to the reusable manual ad-slot component, which is currently unused.
+Navigating from a document containing Google's loader to an excluded URL pauses
+requests and uses a full document navigation. This is necessary because removing
+a script element does not undo code it already ran, including Auto ads. Eligible
+content-to-content navigation can still use the client router without adding a
+second loader. Privacy revocation retains the existing reload behavior.
 
-Expected production `https://mypdffix.com/ads.txt` content:
+Loading verification on eligible pages contacts Google before a privacy choice.
+The privacy notice and policies disclose that request. Browser opt-out signals
+keep advertising paused. Analytics consent handling remains separate from page
+advertising eligibility. A custom preference dialog and a pause flag do not by
+themselves establish compliance with any Google-certified CMP requirement.
+Review the account's applicable consent requirements before monetization.
+
+Production `https://mypdffix.com/ads.txt` remains:
 
 ```text
 google.com, pub-1040851064865171, DIRECT, f08c47fec0942fa0
 ```
 
-Automated checks inspect all 40 public pages' initial HTML, publisher ID, head
-placement, script count and attributes. Browser checks verify paused defaults,
-acceptance, navigation, revocation and browser opt-out behavior. The browser
-suites use an inert substitute for Google's external loader to avoid creating
-real ad traffic; production ships the actual Google URL above.
+Automated tests inspect all 40 pages' initial ownership markup, eligible loader
+placement, ID and attributes. Browser tests cover denied defaults, advertising
+consent, revocation, opt-out, direct 404s, missing article routes, empty searches,
+client navigation and back/forward navigation with saved consent. The tests use
+an inert Google loader substitute and record requests without generating real ad
+traffic. They do not prove actual ad fill or Google account approval.
 
-The production build command remains `npm run build`, with output `dist`.
-Cloudflare Pages publishes production from GitHub `main`; development Preview
-builds remain on `develop/pdf-tools-repair`. Publishing the tested commit to
-production requires the owner's authorization, supplied for this change.
+The production build remains `npm run build`, output `dist`. Cloudflare Pages
+production tracks `main`; development Preview tracks `develop/pdf-tools-repair`.
+The current readiness changes must not be committed, pushed or deployed without
+owner approval. After an approved release, recheck the live head and `ads.txt`,
+then complete verification/review in the owner's AdSense account as needed.
 
-After publishing, verify the initial live HTML and `ads.txt`, then select Verify
-in the owner's AdSense account if Google still requests confirmation. Installing
-the code does not itself establish Google's account-side verification/approval.
+Policy reference checked during this improvement task:
+[Google-served ads on screens without publisher-content](https://support.google.com/publisherpolicies/answer/11112688?hl=en).
+Google excludes screens without publisher content or with low-value content,
+and screens for alerts, navigation or other behavioral purposes. Its examples
+include error and other dead-end screens. These exclusions are not a statement
+that every short page violates policy or that these fixes guarantee approval.

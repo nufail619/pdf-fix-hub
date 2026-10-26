@@ -20,15 +20,16 @@ function About() {
       <h1 className="text-4xl font-bold sm:text-5xl">About MY PDF FIX</h1>
       <p className="mt-6 text-lg text-muted-foreground">
         MY PDF FIX is a set of free PDF tools that run in your web browser. Your files are processed
-        on your own device and never leave it.
+        on your own device without uploading their contents. Loading the website and Google
+        verification can still make network requests.
       </p>
 
       <h2 className="mt-12 text-2xl font-bold">Why it exists</h2>
       <p className="mt-3 text-muted-foreground">
-        Many online PDF tools ask you to upload your files to a server you know nothing about, or to
-        sign up and pay. Contracts, ID copies and bank statements are not something most of us want
-        to hand over for a quick merge or compress. So MY PDF FIX does the work inside your browser.
-        Nothing is uploaded, and no account is needed.
+        MY PDF FIX provides common document tasks without requiring a file-processing server or a
+        user account. Each tool explains its controls and limits, including when the output becomes
+        an image or an overlay leaves the original content underneath. Keep your originals and
+        inspect the downloaded result before sharing it.
       </p>
 
       <h2 className="mt-10 text-2xl font-bold">Who builds it</h2>

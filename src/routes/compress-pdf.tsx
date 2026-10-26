@@ -7,7 +7,7 @@ export const Route = createFileRoute("/compress-pdf")({
     seoHead({
       title: "Compress PDF — Reduce PDF File Size Online — MY PDF FIX",
       description:
-        "Reduce PDF file size for free. Choose light, recommended or strong compression to meet email and upload limits. Files never leave your device.",
+        "Reduce PDF file size for free. Try light, recommended or strong compression and compare the output size. Document contents are processed without upload.",
       path: "/compress-pdf",
     }),
   component: () => <ToolPage slug="compress-pdf" />,

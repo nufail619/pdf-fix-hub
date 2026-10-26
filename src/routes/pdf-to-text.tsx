@@ -7,7 +7,7 @@ export const Route = createFileRoute("/pdf-to-text")({
     seoHead({
       title: "PDF to Text — Extract Text from PDF — MY PDF FIX",
       description:
-        "Extract all text from a PDF into a .txt file for free. Fast, private and works in your browser with no upload.",
+        "Extract embedded text from PDF pages into a .txt file in your browser. Scanned images need OCR, which this tool does not provide.",
       path: "/pdf-to-text",
     }),
   component: () => <ToolPage slug="pdf-to-text" />,

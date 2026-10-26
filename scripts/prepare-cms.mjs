@@ -41,7 +41,7 @@ export function createCmsConfig(authUrl = "") {
       hint: "Display date only. Publication is controlled by Publication status, not scheduled by this date.",
     },
     { name: "author", label: "Author", widget: "string", default: "The MY PDF FIX Team" },
-    { name: "readTime", label: "Reading time", widget: "string", default: "5 min read" },
+    { name: "readTime", widget: "hidden", default: "Auto" },
     {
       name: "featuredImage",
       label: "Featured image",

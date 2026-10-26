@@ -13,140 +13,51 @@ export const Route = createFileRoute("/merge-pdf")({
     <ToolPage slug="merge-pdf">
       <article className="mx-auto max-w-3xl py-12 space-y-8 text-foreground">
         <section className="space-y-4">
-          <h2 className="text-3xl font-bold">Merge PDF Files Online — Free, Fast, and Private</h2>
-          <p className="text-base leading-relaxed text-muted-foreground">
-            Combining multiple PDF documents into a single file is one of the most common tasks for
-            students, professionals, and anyone who works with digital paperwork. Whether you need
-            to assemble a report from several drafts, bundle invoices for a client, or compile
-            research papers into one easy-to-share document, our free Merge PDF tool gets it done in
-            seconds — right in your browser, with no uploads to any server.
+          <h2 className="text-3xl font-bold">Combine PDFs in file-list order</h2>
+          <p className="leading-relaxed text-muted-foreground">
+            Use Merge PDF to assemble a report and appendix, or collect several invoices in one
+            document. The tool copies pages without rendering them as images. It does not upload
+            your document contents, but loading the website and Google verification can still make
+            network requests.
           </p>
         </section>
-
         <section className="space-y-4">
-          <h3 className="text-2xl font-semibold">How to Merge PDF Files</h3>
-          <ol className="list-decimal space-y-3 pl-6 text-base leading-relaxed text-muted-foreground">
+          <h3 className="text-2xl font-semibold">How to merge</h3>
+          <ol className="list-decimal space-y-3 pl-6 text-muted-foreground">
+            <li>Add your PDFs and check the displayed file list.</li>
+            <li>Files merge in that order. Remove and re-add a file to place it at the end.</li>
             <li>
-              <strong className="text-foreground">Upload your PDFs.</strong> Drag and drop your
-              files into the upload area, or click to browse and select them from your device. You
-              can add as many PDFs as you need.
+              Click <strong>Process</strong>, then Download to save the combined PDF.
             </li>
-            <li>
-              <strong className="text-foreground">Check the order.</strong> Files merge in the order
-              listed. Select them in your preferred order, or remove a file and add it again to
-              place it at the end.
-            </li>
-            <li>
-              <strong className="text-foreground">Click "Merge PDF".</strong> Our tool combines your
-              files into a single PDF in seconds.
-            </li>
-            <li>
-              <strong className="text-foreground">Download your merged file.</strong> Save the
-              combined PDF to your device — ready to share, print, or archive.
-            </li>
+            <li>Open the download and check the first page, file boundaries and final page.</li>
           </ol>
         </section>
-
         <section className="space-y-4">
-          <h3 className="text-2xl font-semibold">Why Use MY PDF FIX to Merge PDFs</h3>
-          <ul className="list-disc space-y-2 pl-6 text-base leading-relaxed text-muted-foreground">
-            <li>
-              <strong className="text-foreground">100% private.</strong> Your files never leave your
-              device. All processing happens locally in your browser.
-            </li>
-            <li>
-              <strong className="text-foreground">No upload quota.</strong> There is no server
-              upload or paid file-size tier. The size you can process depends on your device's
-              available memory.
-            </li>
-            <li>
-              <strong className="text-foreground">No registration required.</strong> Just open the
-              page and start merging — no email, no account.
-            </li>
-            <li>
-              <strong className="text-foreground">Works on any device.</strong> Windows, Mac, Linux,
-              Android, iOS — if it runs a modern browser, it runs our tool.
-            </li>
-          </ul>
-        </section>
-
-        <section className="space-y-4">
-          <h3 className="text-2xl font-semibold">Common Use Cases</h3>
-          <p className="text-base leading-relaxed text-muted-foreground">
-            Merging PDFs is useful in countless situations. Job seekers combine their resume, cover
-            letter, and portfolio into one document for cleaner submissions. Accountants merge
-            monthly invoices into quarterly statements. Legal teams compile case files, exhibits,
-            and correspondence into a single reference document. Students combine lecture notes,
-            assignment drafts, and research articles into one study packet. Real estate
-            professionals bundle property listings, contracts, and inspection reports for clients.
+          <h3 className="text-2xl font-semibold">Example: a report and appendix</h3>
+          <p className="text-muted-foreground">
+            For a three-page report followed by a two-page appendix, add the report first. The
+            expected output has five pages, with the appendix beginning on page four. This is a
+            workflow example, not a claim that your documents have been tested. Check searchable
+            text, links and form fields that matter to you; document-wide bookmarks, signatures and
+            interactive behavior may not survive a merge unchanged.
           </p>
         </section>
-
         <section className="space-y-4">
-          <h3 className="text-2xl font-semibold">Tips for Better Results</h3>
-          <ul className="list-disc space-y-2 pl-6 text-base leading-relaxed text-muted-foreground">
+          <h3 className="text-2xl font-semibold">Limits and next steps</h3>
+          <ul className="list-disc space-y-3 pl-6 text-muted-foreground">
             <li>
-              Rename your source files clearly before uploading so the merge order is easier to
-              track.
+              There is no upload quota, but browser memory limits the files you can combine. On a
+              phone, use smaller batches if processing fails.
+            </li>
+            <li>Keep your originals. Rewriting a signed PDF can invalidate its signature.</li>
+            <li>
+              Unlock supported encrypted files first, using a known password and authorization.
             </li>
             <li>
-              If your final merged file is large, use our Compress PDF tool afterward to reduce its
-              size for email or web sharing.
-            </li>
-            <li>
-              Check the page orientation of each source PDF — mixing portrait and landscape pages is
-              fine, but the final document will retain each page's original layout.
-            </li>
-            <li>
-              For sensitive documents, our browser-based processing means nothing is ever
-              transmitted online — perfect for legal, medical, or financial files.
+              Use Reorder Pages to rearrange the result, or Compress PDF to try to reduce its size.
+              Neither a fixed output size nor a compression percentage is guaranteed.
             </li>
           </ul>
-        </section>
-
-        <section className="space-y-4">
-          <h3 className="text-2xl font-semibold">Frequently Asked Questions</h3>
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <p className="font-semibold text-foreground">Q: Is it safe to merge PDFs online?</p>
-              <p className="text-base leading-relaxed text-muted-foreground">
-                A: With MY PDF FIX, yes — completely. We process everything in your browser, so your
-                files are never uploaded to our servers or stored anywhere.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <p className="font-semibold text-foreground">Q: How many PDFs can I merge at once?</p>
-              <p className="text-base leading-relaxed text-muted-foreground">
-                A: There's no fixed limit. You can merge dozens of PDFs in a single operation,
-                limited only by your device's available memory.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <p className="font-semibold text-foreground">
-                Q: Will merging affect the quality of my PDFs?
-              </p>
-              <p className="text-base leading-relaxed text-muted-foreground">
-                A: No. The original pages are preserved exactly as they were — same resolution, same
-                fonts, same images.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <p className="font-semibold text-foreground">
-                Q: Can I merge password-protected PDFs?
-              </p>
-              <p className="text-base leading-relaxed text-muted-foreground">
-                A: You'll need to remove the password protection first. Once unlocked, the files can
-                be merged normally.
-              </p>
-            </div>
-            <div className="space-y-2">
-              <p className="font-semibold text-foreground">Q: Does this work on my phone?</p>
-              <p className="text-base leading-relaxed text-muted-foreground">
-                A: Yes. The tool is fully mobile responsive and processes files directly in your
-                mobile browser.
-              </p>
-            </div>
-          </div>
         </section>
       </article>
     </ToolPage>

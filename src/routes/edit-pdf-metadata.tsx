@@ -7,7 +7,7 @@ export const Route = createFileRoute("/edit-pdf-metadata")({
     seoHead({
       title: "Edit PDF Metadata — Change Title, Author and Keywords — MY PDF FIX",
       description:
-        "View, edit or remove PDF metadata such as title, author, subject and keywords. Free, private and runs in your browser.",
+        "Edit title, author, subject and keywords, or clear selected document properties. Not a full hidden-data sanitizer. Runs in your browser.",
       path: "/edit-pdf-metadata",
     }),
   component: () => <ToolPage slug="edit-pdf-metadata" />,

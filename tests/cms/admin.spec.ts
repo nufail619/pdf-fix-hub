@@ -19,17 +19,17 @@ test("admin responses apply Pages security headers", async ({ request }) => {
 });
 
 test("existing articles retain content, SEO and public URLs", async ({ page, request }) => {
-  for (const [collection, slug, title] of [
-    ["blog", "merge-pdfs-without-losing-quality", "How to merge PDFs without losing quality"],
-    [
-      "guides",
-      "complete-guide-to-pdf-page-numbers",
-      "The complete guide to adding page numbers to a PDF",
-    ],
+  for (const [collection, slug] of [
+    ["blog", "merge-pdfs-without-losing-quality"],
+    ["blog", "pdf-privacy-where-files-go"],
+    ["blog", "splitting-pdfs-the-right-way"],
+    ["guides", "complete-guide-to-pdf-page-numbers"],
+    ["guides", "image-to-pdf-best-practices"],
+    ["guides", "rotating-scanned-pdfs"],
   ]) {
     const article = JSON.parse(await readFile(`content/${collection}/${slug}.json`, "utf8"));
     await page.goto(`/${collection}/${slug}`);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(title);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(article.title);
     await expect(page.locator('meta[name="description"]')).toHaveAttribute(
       "content",
       article.seoDescription,
@@ -38,7 +38,15 @@ test("existing articles retain content, SEO and public URLs", async ({ page, req
       "href",
       new RegExp(`/${collection}/${slug}$`),
     );
-    await expect(page.locator("article")).toContainText(article.body.split("\n\n")[0]);
+    const heading = article.body.match(/^## (.+)$/m)?.[1];
+    expect(heading, "The published Markdown contains useful section headings").toBeTruthy();
+    await expect(page.getByRole("heading", { level: 2, name: heading, exact: true })).toBeVisible();
+    const paragraph = article.body
+      .split("\n\n")
+      .find((block) => !block.startsWith("#"))!
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+      .replace(/[`*_]/g, "");
+    await expect(page.locator("article")).toContainText(paragraph);
     expect((await request.get(`/${collection}/${slug}`)).status()).toBe(200);
   }
 });

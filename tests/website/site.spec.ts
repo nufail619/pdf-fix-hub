@@ -1,5 +1,4 @@
 import { test, expect } from "../browser";
-import { ADSENSE_SCRIPT_URL } from "../../scripts/adsense.mjs";
 import AxeBuilder from "@axe-core/playwright";
 import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -251,7 +250,7 @@ test("security headers, local fonts, social image and sitemap are production-rea
   });
   await page.goto("/");
   await page.evaluate(() => document.fonts.ready);
-  expect(external).toEqual([ADSENSE_SCRIPT_URL]);
+  expect(external).toEqual([]);
   const response = await request.get("/");
   expect(response.headers()["x-content-type-options"]).toBe("nosniff");
   expect(response.headers()["content-security-policy"]).toContain("frame-ancestors 'none'");

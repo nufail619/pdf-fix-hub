@@ -44,9 +44,11 @@ function CookiePolicy() {
         </p>
         <h2 className="mt-8 text-2xl font-bold text-foreground">Google AdSense</h2>
         <p>
-          Google's site-verification script loads on public production pages before a privacy
-          choice. Loading it contacts Google. Ad requests start paused, with Google consent defaults
-          denied, and are enabled only after you accept advertising.
+          Google's site-verification script loads on eligible production content pages before a
+          privacy choice. Loading it contacts Google. Ad requests start paused, with Google consent
+          defaults denied, and are enabled only after you accept advertising on an eligible page.
+          Searchable listings and utility or missing pages do not load the ad script, even with
+          saved consent.
         </p>
         <p>
           We may show ads through Google AdSense. Google and its advertising partners may use
