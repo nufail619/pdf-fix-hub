@@ -18,7 +18,7 @@ function Privacy() {
   return (
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <h1 className="text-4xl font-bold">Privacy Policy</h1>
-      <p className="mt-2 text-sm text-muted-foreground">Last updated: 25 October 2026</p>
+      <p className="mt-2 text-sm text-muted-foreground">Last updated: 26 October 2026</p>
       <section className="mt-10 space-y-4 text-muted-foreground">
         <p>
           MY PDF FIX (mypdffix.com) is operated by Mohamed Nufail, Founder of WOWZOO (PVT) LTD, Sri
@@ -40,10 +40,13 @@ function Privacy() {
         </p>
         <h2 className="mt-8 text-2xl font-bold text-foreground">Analytics and advertising</h2>
         <p>
-          Optional analytics and advertising scripts stay disabled until you accept the
-          corresponding category. You can reject them or change your choice through Privacy settings
-          in the footer. We remember that choice in browser storage for up to 180 days. Global
-          Privacy Control and Do Not Track signals keep optional services off.
+          Optional analytics and ad requests stay disabled until you accept the corresponding
+          category. Google's AdSense site-verification script loads on public production pages and
+          may send Google standard request information, such as your IP address, before you choose.
+          Ad requests start paused and Google consent defaults are denied. You can reject optional
+          services or change your choice through Privacy settings in the footer. We remember that
+          choice in browser storage for up to 180 days. Global Privacy Control and Do Not Track
+          signals keep optional services off.
         </p>
         <p>
           We may use Google Analytics to understand, in aggregate, which pages and tools are used.

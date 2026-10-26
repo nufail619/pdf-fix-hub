@@ -16,6 +16,7 @@ import { join } from "node:path";
 import { publicRoutes } from "./public-routes.mjs";
 import { validateStaticPage } from "./validate-static-page.mjs";
 import { siteSettings } from "./site-settings.mjs";
+import { ADSENSE_PUBLISHER_ID, addAdSenseVerification } from "./adsense.mjs";
 
 const dist = "dist";
 const clientDir = join(dist, "client");
@@ -56,13 +57,14 @@ if (existsSync(shell)) {
 
 // ---- SEO / AdSense files -------------------------------------------------
 // Read VITE_* values from the process env or .env files (same as Vite).
-const { env, siteUrl, noIndex } = siteSettings();
+const { siteUrl, noIndex } = siteSettings();
 
 const routes = await publicRoutes();
 for (const route of routes) {
   const html = join(dist, route.slice(1), "index.html");
   if (!existsSync(html)) throw new Error(`Missing prerendered public page: ${route}`);
   validateStaticPage(readFileSync(html, "utf8"), route, { noIndex });
+  if (!noIndex) writeFileSync(html, addAdSenseVerification(readFileSync(html, "utf8")));
 }
 
 // Pages serves route.html at /route, while route/index.html redirects to /route/.
@@ -121,7 +123,7 @@ if (noIndex) {
   console.log("[finalize-spa] Preview indexing disabled in robots.txt, HTML and headers");
 }
 
-const pub = (env.VITE_ADSENSE_ID || "").replace(/^ca-/, "");
+const pub = ADSENSE_PUBLISHER_ID.replace(/^ca-/, "");
 if (/^pub-\d{16}$/.test(pub)) {
   writeFileSync(join(dist, "ads.txt"), `google.com, ${pub}, DIRECT, f08c47fec0942fa0\n`);
   console.log("[finalize-spa] ads.txt written");

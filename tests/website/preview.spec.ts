@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../browser";
 import { execFileSync, spawn } from "node:child_process";
 import {
   mkdtemp,

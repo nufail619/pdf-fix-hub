@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../browser";
 import { readFile } from "node:fs/promises";
 import { installGitHubMock } from "./github-mock.mjs";
 import { articleSchema } from "../../scripts/content.mjs";

@@ -6,10 +6,12 @@ import { serviceIds } from "@/lib/privacy-consent";
 type TrackingWindow = Window & {
   dataLayer?: unknown[];
   clarity?: ((...args: unknown[]) => void) & { q?: unknown[][] };
+  adsbygoogle?: unknown[] & { pauseAdRequests?: number };
 };
 
 function script(id: string, src: string, crossOrigin?: string) {
-  if (document.getElementById(id)) return;
+  if (document.getElementById(id) || Array.from(document.scripts).some((item) => item.src === src))
+    return;
   const element = document.createElement("script");
   element.id = id;
   element.async = true;
@@ -23,16 +25,19 @@ export function HeadScripts() {
   const { choices } = usePrivacy();
   const consentInitialized = useRef(false);
   useEffect(() => {
+    const win = window as TrackingWindow;
+    (win.adsbygoogle ||= []).pauseAdRequests = choices?.advertising ? 0 : 1;
     if (!choices) return;
     const ids = serviceIds(cfg);
-    const win = window as TrackingWindow;
     win.dataLayer ||= [];
     function gtag(..._args: unknown[]) {
       // Google's documented queue format uses the function's argument record.
       // eslint-disable-next-line prefer-rest-params
       win.dataLayer!.push(arguments);
     }
-    gtag("consent", consentInitialized.current ? "update" : "default", {
+    const initialized =
+      consentInitialized.current || !!document.getElementById("adsense-consent-default");
+    gtag("consent", initialized ? "update" : "default", {
       analytics_storage: choices.analytics ? "granted" : "denied",
       ad_storage: choices.advertising ? "granted" : "denied",
       ad_user_data: choices.advertising ? "granted" : "denied",

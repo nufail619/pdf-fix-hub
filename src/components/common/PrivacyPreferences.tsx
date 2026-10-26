@@ -70,8 +70,8 @@ export function PrivacyPreferences({ children }: { children: ReactNode }) {
         >
           <h2 className="text-lg font-bold">Your privacy choices</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            PDF processing needs no tracking cookies. Optional analytics and advertising stay off
-            until you choose.{" "}
+            PDF processing needs no tracking cookies. Optional analytics and ad requests stay off
+            until you choose. Google's site-verification script may load before this choice.{" "}
             <Link to="/cookie-policy" className="text-primary underline">
               Cookie Policy
             </Link>

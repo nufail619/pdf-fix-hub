@@ -81,9 +81,13 @@ confirmed after an approved push.
 - `VITE_SITE_URL` is the canonical HTTPS origin. It stays the production origin
   for Preview builds. Cloudflare branches other than `main` are automatically
   noindex; `VITE_NOINDEX=true` can also disable indexing explicitly.
-- Optional tracking IDs are validated and remain inactive until the relevant
-  visitor consent. Privacy settings are available in the footer. Tracking IDs
-  are currently empty in the committed configuration.
+- Analytics IDs are validated and remain inactive until analytics consent.
+  AdSense publisher `ca-pub-1040851064865171` is configured in `scripts/adsense.mjs`.
+  Public production HTML includes its verification loader once, after denied
+  Google consent defaults and paused ad requests. The loader contacts Google
+  before a choice; advertising consent controls ad requests. Preview/admin/404
+  HTML does not receive that verification injection. Privacy settings remain in
+  the footer. Analytics IDs are currently empty.
 - `CMS_AUTH_URL` is the public OAuth Worker origin. Client secrets belong only
   in that Worker's encrypted secret settings.
 - The owner-approved contact address is `mypdffix@gmail.com`. It is defined in

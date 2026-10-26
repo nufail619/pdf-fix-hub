@@ -5,6 +5,19 @@ import { articleDate } from "../../src/lib/article-date.ts";
 import { parsePrivacyChoices, serviceIds } from "../../src/lib/privacy-consent.ts";
 import { publicRoutes } from "../../scripts/public-routes.mjs";
 import { validateStaticPage } from "../../scripts/validate-static-page.mjs";
+import { addAdSenseVerification, ADSENSE_SCRIPT_URL } from "../../scripts/adsense.mjs";
+
+test("AdSense verification uses the approved publisher once, after denied consent defaults", () => {
+  const html = addAdSenseVerification("<html><head></head><body>Content</body></html>");
+  assert.ok(
+    html.includes(`<script async src="${ADSENSE_SCRIPT_URL}" crossorigin="anonymous"></script>`),
+  );
+  assert.equal((html.match(/<script async src=/g) || []).length, 1);
+  assert.ok(html.indexOf("pauseAdRequests=1") < html.indexOf(ADSENSE_SCRIPT_URL));
+  assert.ok(html.indexOf('ad_storage:"denied"') < html.indexOf(ADSENSE_SCRIPT_URL));
+  assert.throws(() => addAdSenseVerification(html), /duplicate AdSense loader/);
+  assert.throws(() => addAdSenseVerification("<body>No head</body>"), /HTML head/);
+});
 
 test("public route inventory includes published articles and all 25 tools without admin or duplicates", async () => {
   const routes = await publicRoutes();

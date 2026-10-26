@@ -18,7 +18,7 @@ function CookiePolicy() {
   return (
     <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
       <h1 className="text-4xl font-bold">Cookie Policy</h1>
-      <p className="mt-2 text-sm text-muted-foreground">Last updated: 25 October 2026</p>
+      <p className="mt-2 text-sm text-muted-foreground">Last updated: 26 October 2026</p>
       <section className="mt-10 space-y-4 text-muted-foreground">
         <p>
           A cookie is a small text file stored on your device by a website. This policy explains
@@ -43,6 +43,11 @@ function CookiePolicy() {
           viewed, device type and approximate location.
         </p>
         <h2 className="mt-8 text-2xl font-bold text-foreground">Google AdSense</h2>
+        <p>
+          Google's site-verification script loads on public production pages before a privacy
+          choice. Loading it contacts Google. Ad requests start paused, with Google consent defaults
+          denied, and are enabled only after you accept advertising.
+        </p>
         <p>
           We may show ads through Google AdSense. Google and its advertising partners may use
           cookies to show and measure ads, including personalised ads. Learn more in{" "}
@@ -70,7 +75,7 @@ function CookiePolicy() {
           You can delete or block cookies in your browser settings. Blocking cookies will not stop
           the PDF tools from working. When optional services are configured, a privacy message lets
           you accept or reject them. Use Privacy settings in the footer to change your choices.
-          Withdrawing permission reloads the page to stop previously loaded optional scripts;
+          Withdrawing permission reloads the page to stop optional analytics and pause ad requests;
           existing third-party cookies can be removed in browser settings. Global Privacy Control
           and Do Not Track signals keep optional services off.
         </p>

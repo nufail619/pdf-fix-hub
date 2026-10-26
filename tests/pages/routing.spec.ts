@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../browser";
 import { publicRoutes } from "../../scripts/public-routes.mjs";
 import { tools } from "../../src/data/tools";
 

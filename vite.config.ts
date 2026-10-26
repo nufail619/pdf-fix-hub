@@ -3,6 +3,7 @@ import { resolve } from "node:path";
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { siteSettings } from "./scripts/site-settings.mjs";
 import { publicRoutes } from "./scripts/public-routes.mjs";
+import { ADSENSE_PUBLISHER_ID } from "./scripts/adsense.mjs";
 
 // Generate CMS assets and published-only content for both dev and production.
 execFileSync(process.execPath, ["scripts/prepare-cms.mjs"], { stdio: "inherit" });
@@ -26,6 +27,7 @@ export default defineConfig({
   vite: {
     define: {
       "import.meta.env.VITE_NOINDEX": JSON.stringify(String(settings.noIndex)),
+      "import.meta.env.VITE_ADSENSE_ID": JSON.stringify(ADSENSE_PUBLISHER_ID),
     },
     plugins: [
       {

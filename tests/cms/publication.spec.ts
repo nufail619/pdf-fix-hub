@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, stubAdSense } from "../browser";
 import { execFileSync, spawn } from "node:child_process";
 import { createServer } from "node:http";
 import {
@@ -98,6 +98,7 @@ test("an isolated production build publishes new CMS entries, removes unpublishe
     await new Promise<void>((done) => server.listen(0, "127.0.0.1", done));
     const origin = `http://127.0.0.1:${server.address().port}`;
     context = await browser.newContext();
+    await stubAdSense(context);
     const page = await context.newPage();
     for (const collection of ["blog", "guides"]) {
       await page.goto(`${origin}/${collection}/cms-demo`);

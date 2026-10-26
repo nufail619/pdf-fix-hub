@@ -1,4 +1,4 @@
-import { test, expect, type Page, type TestInfo } from "@playwright/test";
+import { test, expect, type Page, type TestInfo } from "../browser";
 import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
 
