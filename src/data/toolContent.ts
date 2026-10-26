@@ -58,20 +58,20 @@ export const toolContent: Record<string, ToolContentEntry> = {
     ],
   },
   "edit-pdf": {
-    heading: "Add visual overlays to your PDF pages",
+    heading: "Replace supported text and add visual annotations",
     intro: [
       "Add notes, rectangles, ellipses, highlights and whiteout overlays without uploading your document. Choose any page, then drag elements into place or use the percentage position controls.",
-      "Original page content stays in the PDF. This is an overlay editor, so it does not rewrite existing text, edit original images or securely redact information.",
+      "Select Existing text to replace simple supported text objects, adjust their size, color and position, or delete them. The original font is retained; embedded fonts can only reuse characters present in that selected text. Unsupported layouts and scans are reported. Added boxes and shapes are overlays, not secure redaction.",
     ],
     steps: [
       ["Add a PDF.", "Wait for the visual page preview."],
       [
         "Add an element.",
-        "Choose text, rectangle, ellipse, highlight or whiteout. Select a text element to edit its wording, font size and color.",
+        "Choose an existing text object for genuine replacement, or add a text box, rectangle, ellipse, highlight or whiteout. Added text supports font family, bold, italic, alignment and explicit line breaks.",
       ],
       [
         "Position and review.",
-        "Drag elements or adjust their position and size. Use Added elements to revisit an element on any page. Delete selected element removes an added overlay.",
+        "Drag and resize added elements, or use their percentage position controls. Use Undo, Redo, zoom and page navigation to review. Wait for the actual replacement preview before export.",
       ],
       ["Export.", "Click Process and download the edited copy. The original file is preserved."],
     ],
@@ -98,7 +98,7 @@ export const toolContent: Record<string, ToolContentEntry> = {
     faqs: [
       {
         q: "Can I change the original text?",
-        a: "No. You can add and arrange overlays. Existing text remains unchanged and selectable.",
+        a: "Yes, for supported simple text objects. Select Existing text and apply a replacement. Basic Latin text and the current font are supported; embedded fonts are limited to characters already in the selected text. Scans, nested graphics and complex text are not universally editable. Replacement must fit the original width and does not reflow paragraphs.",
       },
       {
         q: "Can I remove confidential information with whiteout?",

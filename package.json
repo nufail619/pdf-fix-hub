@@ -21,10 +21,13 @@
     "test:pages": "playwright test --config playwright.pages.config.ts",
     "test:pdf-tools": "playwright test --config playwright.pdf-tools.config.ts",
     "test:pdf-tools:build": "npm run build && npm run test:pdf-tools",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test:editor:unit": "node --test tests/editor/*.test.mjs",
+    "test:editor": "playwright test --config playwright.editor.config.ts"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "1.33.1",
+    "@embedpdf/pdfium": "2.15.1",
     "@hookform/resolvers": "5.2.2",
     "@neslinesli93/qpdf-wasm": "0.3.0",
     "@radix-ui/react-accordion": "1.2.12",

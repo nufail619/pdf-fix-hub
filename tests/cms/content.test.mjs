@@ -31,9 +31,9 @@ const sample = {
 
 test("all six migrated articles keep their original slugs and are published", async () => {
   const content = await loadContent();
-  assert.equal(content.blog.length, 3);
+  assert.equal(content.blog.length, 13);
   assert.equal(content.guides.length, 3);
-  assert.equal(content.blog[0].slug, "merge-pdfs-without-losing-quality");
+  assert(content.blog.some((post) => post.slug === "merge-pdfs-without-losing-quality"));
   assert.equal(content.guides[0].slug, "complete-guide-to-pdf-page-numbers");
   for (const article of [...content.blog, ...content.guides]) {
     assert.equal(article.seoDescription, article.excerpt);

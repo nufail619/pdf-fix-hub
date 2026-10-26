@@ -68,17 +68,22 @@ test("reading time is a text estimate, not a stale manual value or a task-durati
     assert.equal(article.readTime, estimateReadTime(article.body));
 });
 
-test("all six revised articles retain their URLs, useful sections and valid contextual tool links", async () => {
+test("all original and new articles retain their URLs, useful sections and valid contextual tool links", async () => {
   const { blog, guides } = await loadContent();
   const routes = new Set(await publicRoutes());
-  assert.equal(blog.length + guides.length, 6);
+  assert.equal(blog.length, 13);
+  assert.equal(guides.length, 3);
   for (const article of [...blog, ...guides]) {
     assert((article.body.match(/^## /gm) || []).length >= 3, article.slug);
     const links = [...article.body.matchAll(/\]\((\/[^)#]+)(?:#[^)]*)?\)/g)].map(
       (match) => match[1],
     );
     assert(links.length >= 2, article.slug);
-    for (const path of links) assert(routes.has(path), `${article.slug}: ${path}`);
+    for (const path of links) {
+      if (path.startsWith("/samples/") || path.startsWith("/uploads/"))
+        await readFile("public" + path);
+      else assert(routes.has(path), `${article.slug}: ${path}`);
+    }
     assert(
       !/copies pages byte-for-byte|millions of PDFs|triples the file size|wrong more often|10 times larger/.test(
         article.body,

@@ -35,7 +35,7 @@ async function navigate(page: Page, href: string) {
   }, href);
 }
 
-test("all 40 production pages retain ownership metadata; only content pages contain one paused verification loader", async ({
+test("all 50 production pages retain ownership metadata; only content pages contain one paused verification loader", async ({
   request,
   page,
 }) => {

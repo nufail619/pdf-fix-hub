@@ -70,9 +70,10 @@ export async function runTool(
           files[0],
           JSON.parse(options.elements || "[]"),
           options.flattenForms === "true",
+          JSON.parse(options.textEdits || "[]"),
         ),
         filename: `${base}-edited.pdf`,
-        note: "Added elements are saved as page overlays. Whiteout is not secure redaction: covered content remains extractable.",
+        note: "Supported existing-text edits replace actual text objects. Added elements are overlays. Whiteout is not secure redaction. Keep the original and review every edited page.",
       };
     case "unlock-pdf":
       return {

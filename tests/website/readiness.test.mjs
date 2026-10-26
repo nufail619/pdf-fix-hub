@@ -21,7 +21,7 @@ test("AdSense verification uses the approved publisher once, after denied consen
 
 test("public route inventory includes published articles and all 25 tools without admin or duplicates", async () => {
   const routes = await publicRoutes();
-  assert.equal(routes.length, 40);
+  assert.equal(routes.length, 50);
   assert.equal(new Set(routes).size, routes.length);
   for (const path of [
     "/",

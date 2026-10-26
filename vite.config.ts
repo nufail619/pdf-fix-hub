@@ -22,7 +22,15 @@ export default defineConfig({
     spa: { enabled: true, maskPath: "/?__spa_shell=1" },
     // Prerender every linked page to static HTML so search engines and the
     // AdSense reviewer see full content without running JavaScript.
-    prerender: { enabled: true, crawlLinks: true, failOnError: true },
+    prerender: {
+      enabled: true,
+      crawlLinks: true,
+      failOnError: true,
+      // Crawl published HTML routes only. Binary sample/image downloads must
+      // stay byte-identical; prerendering them would decode them as HTML text.
+      filter: (page: { path: string }) =>
+        routes.includes(page.path.replace(/\/$/, "") || "/") || page.path === "/?__spa_shell=1",
+    },
   },
   vite: {
     define: {

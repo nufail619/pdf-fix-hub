@@ -176,11 +176,20 @@ for (const kind of ["blog", "guides"]) {
     await search.fill("zz-no-article");
     await expect(page.getByText("No articles match your search.")).toBeVisible();
     await page.getByRole("button", { name: "Show all articles" }).click();
-    await expect(page.locator("main time")).toHaveCount(3);
+    await expect(page.locator("main time")).toHaveCount(kind === "blog" ? 13 : 3);
     const category = page.getByLabel("Category", { exact: true });
     const value = await category.locator("option").nth(1).getAttribute("value");
     await category.selectOption(value!);
-    await expect(page.getByRole("status")).toContainText("articles found");
+    const expected = readdirSync(`content/${kind}`)
+      .filter((file) => file.endsWith(".json"))
+      .map((file) => JSON.parse(readFileSync(`content/${kind}/${file}`, "utf8")))
+      .filter(
+        (article) => article.status === "published" && article.categories.includes(value),
+      ).length;
+    await expect(page.locator("main time")).toHaveCount(expected);
+    await expect(page.getByRole("status")).toHaveText(
+      `${expected} ${expected === 1 ? "article" : "articles"} found`,
+    );
   });
 }
 
@@ -259,7 +268,7 @@ test("security headers, local fonts, social image and sitemap are production-rea
   expect(image.headers()["content-type"]).toContain("image/png");
   expect((await image.body()).subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
   const sitemap = await (await request.get("/sitemap.xml")).text();
-  expect(sitemap.match(/<loc>/g) || []).toHaveLength(40);
+  expect(sitemap.match(/<loc>/g) || []).toHaveLength(50);
   expect(sitemap).not.toContain("/admin");
   expect(sitemap).not.toContain("<lastmod>");
   const robots = await (await request.get("/robots.txt")).text();

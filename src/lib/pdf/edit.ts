@@ -6,6 +6,8 @@ import {
   popGraphicsState,
   concatTransformationMatrix,
 } from "pdf-lib";
+import { nativeText } from "./nativeTextClient.ts";
+import type { TextEdit } from "./nativeTextCore.ts";
 
 export type Overlay = {
   id: string;
@@ -19,6 +21,10 @@ export type Overlay = {
   text: string;
   fontSize: number;
   color: string;
+  family?: "Helvetica" | "Times" | "Courier";
+  bold?: boolean;
+  italic?: boolean;
+  align?: "left" | "center" | "right";
 };
 
 export function validateOverlays(value: unknown, pageCount: number): asserts value is Overlay[] {
@@ -43,34 +49,32 @@ export function validateOverlays(value: unknown, pageCount: number): asserts val
       item.fontSize > 96 ||
       typeof item.text !== "string" ||
       item.text.length > 500 ||
+      (item.family !== undefined && !["Helvetica", "Times", "Courier"].includes(item.family)) ||
+      (item.bold !== undefined && typeof item.bold !== "boolean") ||
+      (item.italic !== undefined && typeof item.italic !== "boolean") ||
+      (item.align !== undefined && !["left", "center", "right"].includes(item.align)) ||
       !/^#[0-9a-f]{6}$/i.test(item.color)
     )
       throw new Error("Invalid editor element. Keep elements inside a valid page.");
   }
 }
 
-/** Map display coordinates to PDF coordinates, including cropped/rotated pages. */
-export function displayGeometry(
-  crop: { x: number; y: number; width: number; height: number },
-  rotation: number,
-) {
-  const { x, y, width: w, height: h } = crop;
-  const angle = ((rotation % 360) + 360) % 360;
-  const matrices: Record<number, [number, number, number, number, number, number]> = {
-    0: [1, 0, 0, 1, x, y],
-    90: [0, 1, -1, 0, x + w, y],
-    180: [-1, 0, 0, -1, x + w, y + h],
-    270: [0, -1, 1, 0, x, y + h],
-  };
-  if (!matrices[angle]) throw new Error("Unsupported page rotation.");
-  return { width: angle % 180 ? h : w, height: angle % 180 ? w : h, matrix: matrices[angle] };
-}
+export { displayGeometry } from "./editorGeometry.ts";
+import { displayGeometry } from "./editorGeometry.ts";
 
-export async function editPdf(file: File, elements: unknown, flattenForms = false) {
-  const document = await PDFDocument.load(await file.arrayBuffer());
+export async function editPdf(
+  file: File,
+  elements: unknown,
+  flattenForms = false,
+  textEdits: TextEdit[] = [],
+) {
+  const bytes = textEdits.length
+    ? ((await nativeText(file, textEdits)) as Uint8Array)
+    : await file.arrayBuffer();
+  const document = await PDFDocument.load(bytes);
   validateOverlays(elements, document.getPageCount());
   if (flattenForms) document.getForm().flatten();
-  const font = await document.embedFont(StandardFonts.Helvetica);
+  const fonts = new Map<string, Awaited<ReturnType<typeof document.embedFont>>>();
   for (const element of elements) {
     const page = document.getPage(element.page - 1);
     const { width, height, matrix } = displayGeometry(page.getCropBox(), page.getRotation().angle);
@@ -86,28 +90,64 @@ export async function editPdf(file: File, elements: unknown, flattenForms = fals
     );
     page.pushOperators(pushGraphicsState(), concatTransformationMatrix(...matrix));
     if (element.kind === "text") {
+      const family = element.family || "Helvetica";
+      const name =
+        family === "Times"
+          ? element.bold
+            ? element.italic
+              ? StandardFonts.TimesRomanBoldItalic
+              : StandardFonts.TimesRomanBold
+            : element.italic
+              ? StandardFonts.TimesRomanItalic
+              : StandardFonts.TimesRoman
+          : family === "Courier"
+            ? element.bold
+              ? element.italic
+                ? StandardFonts.CourierBoldOblique
+                : StandardFonts.CourierBold
+              : element.italic
+                ? StandardFonts.CourierOblique
+                : StandardFonts.Courier
+            : element.bold
+              ? element.italic
+                ? StandardFonts.HelveticaBoldOblique
+                : StandardFonts.HelveticaBold
+              : element.italic
+                ? StandardFonts.HelveticaOblique
+                : StandardFonts.Helvetica;
+      if (!fonts.has(name)) fonts.set(name, await document.embedFont(name));
+      const font = fonts.get(name)!;
+      const lines = element.text.split(/\r?\n/);
       try {
-        font.encodeText(element.text);
+        lines.forEach((line) => font.encodeText(line));
       } catch {
         throw new Error(
           "Added text supports Latin characters. Replace unsupported characters and try again.",
         );
       }
-      if (font.widthOfTextAtSize(element.text, element.fontSize) > w + 0.1)
+      if (lines.some((line) => font.widthOfTextAtSize(line, element.fontSize) > w + 0.1))
         throw new Error(
           "Added text is too wide. Use fewer characters, a smaller font, or a wider element.",
         );
-      if (element.fontSize > h + 0.1)
+      if (element.fontSize * (1 + (lines.length - 1) * 1.2) > h + 0.1)
         throw new Error(
           "The text element is too short. Increase its height or reduce the text size.",
         );
-      page.drawText(element.text, {
-        x,
-        y: (1 - element.y) * height - element.fontSize,
-        font,
-        size: element.fontSize,
-        color,
-        lineHeight: element.fontSize,
+      lines.forEach((line, index) => {
+        const textWidth = font.widthOfTextAtSize(line, element.fontSize);
+        page.drawText(line, {
+          x:
+            x +
+            (element.align === "center"
+              ? (w - textWidth) / 2
+              : element.align === "right"
+                ? w - textWidth
+                : 0),
+          y: (1 - element.y) * height - element.fontSize - index * element.fontSize * 1.2,
+          font,
+          size: element.fontSize,
+          color,
+        });
       });
     } else if (element.kind === "ellipse") {
       page.drawEllipse({

@@ -41,10 +41,11 @@ jobs:
       - run: bun audit
       - run: npm run lint
       - run: npm run typecheck
-      - run: npm run test:cms:unit && npm run test:new-tools:unit && npm run test:website:unit
+      - run: npm run test:cms:unit && npm run test:new-tools:unit && npm run test:website:unit && npm run test:editor:unit
       - run: npm run build
       - run: npm run test:pdf-tools
       - run: npm run test:new-tools
+      - run: npm run test:editor
       - run: npm run test:cms
       - run: npm run test:website
       - run: npm run test:pages

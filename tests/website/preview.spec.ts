@@ -14,6 +14,7 @@ import { createWriteStream } from "node:fs";
 import { join, dirname, resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { websiteServer } from "./serve.mjs";
+import { publicRoutes } from "../../scripts/public-routes.mjs";
 
 test("isolated Preview and production builds separate indexing and enforce consent/loading/revocation", async ({
   browser,
@@ -207,7 +208,9 @@ test("isolated Preview and production builds separate indexing and enforce conse
       .split("\n")
       .filter((line) => line && !line.startsWith("#"));
     expect(new Set(redirects).size).toBe(redirects.length);
-    expect(redirects).toHaveLength(39);
+    expect(redirects).toHaveLength(
+      (await publicRoutes(root)).filter((path) => path !== "/").length,
+    );
     expect(await readFile(join(root, "dist/robots.txt"), "utf8")).toBe(
       "User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: https://mypdffix.com/sitemap.xml\n",
     );

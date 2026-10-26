@@ -305,7 +305,7 @@ export const tools: Tool[] = [
   {
     slug: "edit-pdf",
     name: "Edit PDF",
-    description: "Add and position text, shapes, highlights and whiteout overlays visually.",
+    description: "Replace supported text and add formatted boxes, shapes and highlights.",
     category: "Edit",
     accent: "blue",
     icon: "Pencil",

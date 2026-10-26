@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { PDFDocumentProxy } from "pdfjs-dist";
 import { openPdf, renderPage } from "@/lib/pdf/pdfjs";
 
-export function usePdfPreview(file: File | undefined, page: number) {
+export function usePdfPreview(file: File | undefined, page: number, resolution = 1) {
   const [document, setDocument] = useState<PDFDocumentProxy | null>(null);
   const [rendered, setRendered] = useState<{
     canvas: HTMLCanvasElement;
@@ -47,7 +47,9 @@ export function usePdfPreview(file: File | undefined, page: number) {
     (async () => {
       const source = await document.getPage(Math.min(page, document.numPages));
       const viewport = source.getViewport({ scale: 1 });
-      const scale = Math.min(1.5, 1200 / Math.max(viewport.width, viewport.height));
+      const scale =
+        Math.min(1.5, 1200 / Math.max(viewport.width, viewport.height)) *
+        Math.min(2, Math.max(0.5, resolution));
       const value = await renderPage(document, Math.min(page, document.numPages), scale);
       canvas = value.canvas;
       if (cancelled) canvas.width = canvas.height = 0;
@@ -63,7 +65,7 @@ export function usePdfPreview(file: File | undefined, page: number) {
       cancelled = true;
       if (canvas) canvas.width = canvas.height = 0;
     };
-  }, [document, page]);
+  }, [document, page, resolution]);
   return { rendered, count: document?.numPages || 0, loading, error };
 }
 
