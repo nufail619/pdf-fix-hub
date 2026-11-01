@@ -1,1 +1,1 @@
-# ads.txt — populate when AdSense is configured
+google.com, pub-1040851064865171, DIRECT, f08c47fec0942fa0
